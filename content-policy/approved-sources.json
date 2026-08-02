@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "approvals": [
+    {
+      "id": "jackies-window-part-one-chapters",
+      "collection": "chronicles",
+      "publicationState": "published",
+      "sourcePaths": [
+        "Book 1 - Jackie's Window/Part 1/Chapter 01.md",
+        "Book 1 - Jackie's Window/Part 1/Chapter 02.md",
+        "Book 1 - Jackie's Window/Part 1/Chapter 03.md",
+        "Book 1 - Jackie's Window/Part 1/Chapter 04.md",
+        "Book 1 - Jackie's Window/Part 1/Chapter 05.md",
+        "Book 1 - Jackie's Window/Part 1/Chapter 06.md",
+        "Book 1 - Jackie's Window/Part 1/Chapter 07.md",
+        "Book 1 - Jackie's Window/Part 1/Chapter 08.md"
+      ],
+      "requirements": {
+        "publish": true,
+        "type": "chapter",
+        "book": 1,
+        "part": 1
+      },
+      "approvedFields": [
+        "series",
+        "type",
+        "title",
+        "book",
+        "part",
+        "order",
+        "chapter",
+        "status",
+        "body"
+      ],
+      "approvalBasis": "Explicit product-owner directive to make the chapters in Part One available to read.",
+      "approvedOn": "2026-07-26",
+      "notes": "The source editorial status remains visible as working-draft metadata. This approval changes public eligibility only; it does not edit or reinterpret manuscript text."
+    }
+  ]
+}

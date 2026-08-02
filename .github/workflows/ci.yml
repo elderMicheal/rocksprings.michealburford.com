@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+
+      - name: Verify generated Worker types
+        run: |
+          npm run types
+          git diff --exit-code -- worker-configuration.d.ts
+
+      - name: Type-check
+        run: npm run check
+
+      - name: Validate published chapter package
+        run: |
+          npm run content:audit
+          npm run content:check
+          npm run public:check
+
+      - name: Validate presentation scene
+        run: |
+          npm run scene:generate
+          git diff --exit-code -- public/assets/scenes/jackies-window/rock-springs-jackies-window.glb
+          npm run scene:check
+
+      - name: Run unit and responsive browser tests
+        run: npm test
+
+      - name: Build production bundle
+        run: npm run build

@@ -1,0 +1,419 @@
+{
+  "schemaVersion": 2,
+  "id": "jackies-window-part-one-spatial-evidence-v5",
+  "source": {
+    "work": "Jackie's Window",
+    "part": 1,
+    "chapters": [1, 2, 3, 4, 5, 6, 7, 8],
+    "writingRevision": "00350c94f1152116e1d27250dfb0674c5ccfea37"
+  },
+  "coordinates": {
+    "handedness": "right",
+    "x": "east",
+    "y": "elevation",
+    "z": "north",
+    "horizontalFeetPerUnit": 10,
+    "horizontalMetersPerUnit": 3.048,
+    "verticalMetersPerUnit": 1,
+    "origin": "PRESENTATION_Downtown_Center",
+    "originPosition": [80, 0, 30]
+  },
+  "bounds": {
+    "minX": -180,
+    "maxX": 200,
+    "minZ": -130,
+    "maxZ": 260
+  },
+  "policy": {
+    "architecture": "interpretive",
+    "absoluteCoordinates": "presentation-only",
+    "distances": "source-stated distances are preserved at the declared coordinate scale",
+    "localArchitectureScale": "consistent with the inter-district coordinate scale",
+    "publicLandmarkInteraction": false
+  },
+  "requiredGroups": [
+    "Town_Ground",
+    "River",
+    "Downtown",
+    "Residential",
+    "New_Beginnings",
+    "Abby_District",
+    "Police_District",
+    "Parade_District",
+    "Chalmers_Farm",
+    "Woods",
+    "Ruins",
+    "Landmarks",
+    "Lighting_Proxies",
+    "Authored_Cameras",
+    "Authored_Paths"
+  ],
+  "roads": [
+    {
+      "id": "main-street",
+      "nodeName": "CANON_Main_Street",
+      "landmarkId": "main-street",
+      "axis": "x",
+      "length": 230,
+      "width": 6.6,
+      "classification": "canon-feature-inferred-bearing",
+      "source": ["Chapter 3:15", "Chapter 3:69-73", "Chapter 8:52"]
+    },
+    {
+      "id": "school-street",
+      "nodeName": "PRESENTATION_School_Street",
+      "position": [55, 3.2, 108.5],
+      "axis": "x",
+      "length": 90,
+      "width": 4.2,
+      "classification": "presentation-infrastructure",
+      "source": ["Chapter 8:18-20"]
+    },
+    {
+      "id": "bakery-street",
+      "nodeName": "PRESENTATION_Bakery_Street",
+      "position": [154, 2.2, -35],
+      "axis": "z",
+      "length": 34,
+      "width": 5,
+      "classification": "canon-relationship-presentation-infrastructure",
+      "source": ["Chapter 3:37-47"]
+    },
+    {
+      "id": "franklin-street",
+      "nodeName": "PRESENTATION_Franklin_Street",
+      "position": [123, 2.6, 38],
+      "axis": "z",
+      "length": 122,
+      "width": 5.2,
+      "classification": "canon-name-inferred-placement",
+      "source": ["Chapter 3:69-73"]
+    }
+  ],
+  "landmarks": [
+    {
+      "id": "st-thomas",
+      "nodeName": "CANON_St_Thomas_Cathedral",
+      "classification": "canon-location-inferred-placement",
+      "position": [35, 2.6, 32],
+      "footprint": [14.8, 19],
+      "source": ["Chapter 1:15", "Chapter 1:111", "Chapter 4:31", "Chapter 4:39"]
+    },
+    {
+      "id": "new-beginnings",
+      "nodeName": "CANON_New_Beginnings",
+      "classification": "canon-location-relative-placement",
+      "position": [55, 3.5, 113],
+      "footprint": [116, 11],
+      "source": ["Chapter 1:17", "Chapter 3:81-83", "Chapter 8:18-20"]
+    },
+    {
+      "id": "jackies-house",
+      "nodeName": "CANON_Jackies_House",
+      "classification": "canon-location-relative-placement",
+      "position": [61, 3.5, 113],
+      "footprint": [6, 7.8],
+      "source": ["Chapter 1:17", "Chapter 1:39", "Chapter 8:18-20"]
+    },
+    {
+      "id": "jackies-window",
+      "nodeName": "CANON_Jackies_Window",
+      "classification": "canon-feature-interpretive-placement",
+      "position": [61, 8.85, 111.72],
+      "source": ["Chapter 1:17-19", "Chapter 8:30", "Chapter 8:48-50", "Chapter 8:92-94"]
+    },
+    {
+      "id": "abbys-apartment",
+      "nodeName": "CANON_Abbys_Apartment",
+      "classification": "canon-location-relative-placement",
+      "position": [158, 2.2, -35],
+      "footprint": [9, 11],
+      "source": ["Chapter 3:15", "Chapter 3:33"]
+    },
+    {
+      "id": "bakery-storefront",
+      "nodeName": "CANON_Bakery_Storefront",
+      "classification": "canon-location-relative-placement",
+      "position": [150, 2.1, -35],
+      "footprint": [7, 9],
+      "source": ["Chapter 3:37-47"]
+    },
+    {
+      "id": "old-school",
+      "nodeName": "CANON_Old_Elementary_School",
+      "classification": "canon-location-relative-placement",
+      "position": [67, 3, 104],
+      "footprint": [20.6, 9],
+      "source": ["Chapter 3:69-71", "Chapter 3:81-83", "Chapter 8:84"]
+    },
+    {
+      "id": "old-school-staging-lot",
+      "nodeName": "CANON_Old_School_Asphalt_Staging_Lot",
+      "classification": "canon-feature-relative-placement",
+      "position": [59, 2.95, 104],
+      "footprint": [31, 7.5],
+      "source": ["Chapter 3:69-71", "Chapter 8:18-20", "Chapter 8:52", "Chapter 8:84-88"]
+    },
+    {
+      "id": "police-station",
+      "nodeName": "CANON_Police_Station",
+      "classification": "canon-location-inferred-placement",
+      "position": [105, 2.7, 72],
+      "footprint": [17, 22],
+      "source": ["Chapter 3:69-73"]
+    },
+    {
+      "id": "sheriffs-sons-house",
+      "nodeName": "CANON_Sheriffs_Sons_House",
+      "classification": "canon-location-relative-placement",
+      "position": [145, 2.4, 45],
+      "footprint": [10, 12],
+      "source": ["Chapter 2:17-23"]
+    },
+    {
+      "id": "detective-position",
+      "nodeName": "INFERRED_Detective_Position",
+      "classification": "inferred-viewpoint",
+      "position": [85, 2.5, 45],
+      "footprint": [14, 15],
+      "source": ["Chapter 2:23", "Chapter 2:57-63"]
+    },
+    {
+      "id": "chalmers-property",
+      "nodeName": "CANON_Chalmers_Property",
+      "classification": "canon-location-inferred-placement",
+      "position": [-45, 7.2, 155],
+      "footprint": [68, 46],
+      "source": ["Chapter 4:43-65"]
+    },
+    {
+      "id": "city-park",
+      "nodeName": "CANON_City_Park",
+      "classification": "canon-location-inferred-placement",
+      "position": [143, 3.2, -73],
+      "footprint": [32, 24],
+      "source": ["Chapter 2:63", "Chapter 3:65", "Chapter 8:56"]
+    },
+    {
+      "id": "old-ruins",
+      "nodeName": "CANON_Old_Ruins",
+      "classification": "canon-location-inferred-placement",
+      "position": [-125, -0.5, 220],
+      "footprint": [16, 16],
+      "source": ["Chapter 3:33-35"]
+    },
+    {
+      "id": "main-street",
+      "nodeName": "CANON_Main_Street",
+      "classification": "canon-feature-inferred-bearing",
+      "position": [65, 2.2, 88],
+      "source": ["Chapter 3:15", "Chapter 3:69-73", "Chapter 8:52"]
+    },
+    {
+      "id": "river",
+      "nodeName": "CANON_River",
+      "classification": "canon-feature-interpretive-course",
+      "position": [60, -3.2, -100],
+      "source": ["Chapter 1:15", "Chapter 3:33"]
+    }
+  ],
+  "map2d": {
+    "title": "Part One spatial relationships",
+    "description": "Topological evidence diagram from Chapters 1–8. Positions show only stated direction, adjacency, sightline, or approximate distance; line courses and shapes are not geographic data.",
+    "extent": {
+      "minX": -155,
+      "maxX": 185,
+      "minZ": -120,
+      "maxZ": 240
+    },
+    "roads": ["main-street"],
+    "routes": ["PATH_Abby_Sightline", "PATH_Detective_Surveillance", "PATH_Boys_Bicycle_Route"],
+    "regions": [],
+    "landmarks": [
+      { "id": "st-thomas", "label": "St. Thomas Cathedral", "confidence": "inferred", "labelOffset": [-16, -22] },
+      { "id": "new-beginnings", "label": "New Beginnings", "confidence": "relative", "labelOffset": [-16, -16] },
+      { "id": "old-school-staging-lot", "label": "Old school lot", "confidence": "relative", "labelOffset": [16, 30] },
+      { "id": "abbys-apartment", "label": "Abby's apartment", "confidence": "relative", "labelOffset": [-16, -16] },
+      { "id": "bakery-storefront", "label": "Bakery storefront", "confidence": "relative", "labelOffset": [-16, 30] },
+      { "id": "police-station", "label": "Police station", "confidence": "inferred", "labelOffset": [16, 34] },
+      { "id": "sheriffs-sons-house", "label": "Sheriff's son's house", "confidence": "relative", "labelOffset": [-16, -60] },
+      { "id": "detective-position", "label": "Detective position", "confidence": "inferred", "labelOffset": [-16, 30] },
+      { "id": "city-park", "label": "City park", "confidence": "inferred", "labelOffset": [-16, -16] },
+      { "id": "chalmers-property", "label": "Chalmers property", "confidence": "inferred", "labelOffset": [16, 30] },
+      { "id": "old-ruins", "label": "Old ruins", "confidence": "inferred", "labelOffset": [16, -16] }
+    ]
+  },
+  "cameras": [
+    {
+      "name": "Camera_Town_Overview",
+      "label": "Town overview",
+      "position": [160, 175, 200],
+      "target": [75, 3, 45],
+      "source": ["Chapter 1:15-17", "Chapter 3:33", "Chapter 4:15-17"]
+    },
+    {
+      "name": "Camera_Abby_POV",
+      "label": "Abby's viewpoint",
+      "position": [158, 15, -35],
+      "target": [61, 8.85, 111.72],
+      "source": ["Chapter 3:33-47", "Chapter 3:81-83"]
+    },
+    {
+      "name": "Camera_Jackie_Window",
+      "label": "Jackie's window",
+      "position": [61, 9, 111.6],
+      "target": [59, 3.5, 104],
+      "source": ["Chapter 8:18-20", "Chapter 8:48-50"]
+    },
+    {
+      "name": "Camera_Downtown",
+      "label": "Downtown",
+      "position": [140, 90, 100],
+      "target": [77, 5, 35],
+      "source": ["Chapter 1:15", "Chapter 3:33"]
+    },
+    {
+      "name": "Camera_New_Beginnings",
+      "label": "New Beginnings",
+      "position": [85, 45, 132],
+      "target": [55, 6, 108],
+      "source": ["Chapter 1:17", "Chapter 3:81-83"]
+    },
+    {
+      "name": "Camera_Parade_Staging",
+      "label": "Staging area",
+      "position": [90, 48, 133],
+      "target": [61, 3.5, 108],
+      "source": ["Chapter 3:69-73", "Chapter 8:18-20"]
+    },
+    {
+      "name": "Camera_Chalmers_Route",
+      "label": "Bicycle route",
+      "position": [10, 110, 230],
+      "target": [-62, 4, 180],
+      "source": ["Chapter 4:15-17", "Chapter 4:43-63"]
+    },
+    {
+      "name": "Camera_Ruins",
+      "label": "Old ruins",
+      "position": [-90, 45, 245],
+      "target": [-125, 0, 220],
+      "source": ["Chapter 3:33-35"]
+    },
+    {
+      "name": "Camera_Descent_Start",
+      "label": "Descent start",
+      "position": [160, 175, 200],
+      "target": [75, 3, 45],
+      "source": ["Chapter 1:15-17", "Chapter 3:33", "Chapter 4:15-17"]
+    },
+    {
+      "name": "Camera_Descent_End",
+      "label": "Descent end",
+      "position": [130, 100, 140],
+      "target": [75, 3, 45],
+      "source": ["Chapter 1:15-17", "Chapter 3:33", "Chapter 4:15-17"]
+    }
+  ],
+  "routes": [
+    {
+      "name": "PATH_Abby_Sightline",
+      "classification": "canon-relationship-approximate-distance",
+      "source": ["Chapter 3:33", "Chapter 3:69-83"],
+      "points": [[158, 15, -35], [126, 12, 18], [96, 10, 72], [67, 9, 104], [61, 8.85, 111.72]]
+    },
+    {
+      "name": "PATH_Jackie_Downtown_View",
+      "classification": "canon-view-inferred-bearing",
+      "source": ["Chapter 1:15-19"],
+      "points": [[61, 9, 111.72], [72, 8, 92], [88, 7, 68], [102, 6, 46]]
+    },
+    {
+      "name": "PATH_Jackie_Staging_Sightline",
+      "classification": "canon-view-presentation-geometry",
+      "source": ["Chapter 8:18-20", "Chapter 8:30", "Chapter 8:92-94"],
+      "points": [[61, 8.85, 111.72], [60, 6, 108.5], [59, 3.4, 104]]
+    },
+    {
+      "name": "PATH_Detective_Surveillance",
+      "classification": "canon-relationship-inferred-geometry",
+      "source": ["Chapter 2:23", "Chapter 2:57-63"],
+      "points": [[85, 3.6, 45], [123, 3.6, 45], [145, 5.8, 45]]
+    },
+    {
+      "name": "PATH_Boys_Bicycle_Route",
+      "classification": "canon-sequence-inferred-route",
+      "source": ["Chapter 4:15-17", "Chapter 4:43-63"],
+      "points": [[20, 3, 112], [-5, 4, 132], [-45, 7.5, 155], [-82, 7, 185], [-115, -1, 210]]
+    },
+    {
+      "name": "PATH_Parade_Route",
+      "classification": "canon-event-inferred-route",
+      "source": ["Chapter 3:65-73", "Chapter 8:52"],
+      "points": [[172, 2.8, 88], [125, 2.8, 88], [65, 2.8, 88], [5, 2.8, 88]]
+    },
+    {
+      "name": "PATH_Downtown_New_Beginnings",
+      "classification": "inferred-connector",
+      "source": ["Chapter 1:17", "Chapter 3:81-83"],
+      "points": [[82, 3, 66], [72, 3.5, 88], [62, 4, 100], [55, 4, 113]]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "abby-to-new-beginnings",
+      "subject": "CANON_Abbys_Apartment",
+      "relation": "northwest-approximately-1800-feet",
+      "object": "CANON_New_Beginnings",
+      "classification": "canon-relationship-scaled",
+      "source": ["Chapter 3:81-83"],
+      "constraint": {
+        "kind": "center-distance",
+        "feet": 1800,
+        "toleranceFeet": 75,
+        "direction": "northwest"
+      }
+    },
+    {
+      "id": "jackies-house-across-from-staging-lot",
+      "subject": "CANON_Jackies_House",
+      "relation": "across-street-less-than-100-feet",
+      "object": "CANON_Old_School_Asphalt_Staging_Lot",
+      "classification": "canon-relationship-scaled",
+      "source": ["Chapter 8:18-20"],
+      "constraint": {
+        "kind": "closest-footprint-distance",
+        "maxFeet": 100
+      }
+    },
+    {
+      "id": "jackies-window-overlooks-staging-lot",
+      "subject": "CANON_Jackies_Window",
+      "relation": "overlooks",
+      "object": "CANON_Old_School_Asphalt_Staging_Lot",
+      "classification": "canon-view-presentation-geometry",
+      "source": ["Chapter 8:30", "Chapter 8:92-94"]
+    },
+    {
+      "id": "park-behind-detectives",
+      "subject": "INFERRED_Detective_Position",
+      "relation": "approximately-quarter-mile-from",
+      "object": "CANON_City_Park",
+      "classification": "canon-distance-inferred-bearing",
+      "source": ["Chapter 2:63"],
+      "constraint": {
+        "kind": "center-distance",
+        "feet": 1320,
+        "toleranceFeet": 90
+      }
+    },
+    {
+      "id": "labor-day-circus-at-city-park",
+      "subject": "INFERRED_Labor_Day_Circus_Grounds",
+      "relation": "placed-within",
+      "object": "CANON_City_Park",
+      "classification": "inferred-event-placement",
+      "source": ["Chapter 3:65", "Chapter 8:56"]
+    }
+  ]
+}

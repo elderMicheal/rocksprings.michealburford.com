@@ -1,0 +1,28 @@
+# Dependencies and build output
+node_modules/
+dist/
+build/
+.next/
+.astro/
+.wrangler/
+
+# Environment and local configuration
+.env
+.env.*
+!.env.example
+
+# Editors and operating systems
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+
+# Local repository backups
+/RSC.zip
+
+# Logs and test output
+*.log
+coverage/
+playwright-report/
+test-results/

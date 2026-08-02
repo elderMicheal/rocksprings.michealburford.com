@@ -1,0 +1,32 @@
+:root {
+  --ink: #e2d4b9;
+  --ink-soft: #9f9789;
+  --paper: #080d0f;
+  --paper-light: #10171a;
+  --paper-dark: #05090a;
+  --red: #8f3e32;
+  --red-dark: #4e201c;
+  --rule: #504735;
+  --rule-light: #292f2d;
+  --map: #102328;
+  --shadow: rgb(0 0 0 / 0.6);
+  --brass: #b79758;
+  --rust: #a45c38;
+  --teal: #4f9991;
+  --fog: #78909b;
+  --plum: #74597f;
+  --font-masthead: Georgia, "Times New Roman", serif;
+  --font-headline: Georgia, "Times New Roman", serif;
+  --font-body: Georgia, "Times New Roman", serif;
+  --font-label: "Courier New", Courier, monospace;
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-meta: 0.75rem;
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --touch-target: 2.75rem;
+  --page-max: 1600px;
+}
