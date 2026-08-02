@@ -1,0 +1,67 @@
+{
+  "name": "rocksprings-michealburford-com",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "npm@11.5.2",
+  "overrides": {
+    "miniflare": {
+      "sharp": "0.35.3"
+    }
+  },
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "npm run build && vite preview",
+    "deploy": "npm run build && wrangler deploy",
+    "check": "tsc --noEmit",
+    "typecheck": "npm run check",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:update": "playwright test --update-snapshots",
+    "content:audit": "node scripts/audit-rsc-source.mjs --check",
+    "content:audit:source": "node scripts/audit-rsc-source.mjs --write",
+    "content:build": "node scripts/sync-part-one-chapters.mjs --write",
+    "content:sync": "npm run content:build",
+    "content:check": "node scripts/sync-part-one-chapters.mjs --check",
+    "content:check:source": "node scripts/sync-part-one-chapters.mjs --check-source",
+    "public:check": "node scripts/check-phase-2-integrity.mjs",
+    "phase2:check": "npm run public:check",
+    "scene:generate": "node scripts/generate-town-scene.mjs",
+    "scene:check": "node scripts/validate-scene.mjs",
+    "types": "wrangler types"
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+<<<<<<< HEAD
+    "@cloudflare/vite-plugin": "1.46.0",
+    "@cloudflare/vitest-pool-workers": "0.18.7",
+    "@playwright/test": "1.61.1",
+    "@types/node": "22.20.1",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@types/three": "0.180.0",
+    "@vitejs/plugin-react": "6.0.4",
+    "typescript": "7.0.2",
+    "vite": "8.1.5",
+    "vitest": "4.1.10",
+    "wrangler": "4.113.0"
+=======
+    "@cloudflare/vite-plugin": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vitejs/plugin-react": "latest",
+    "typescript": "latest",
+    "vite": "latest",
+    "wrangler": "latest"
+>>>>>>> 65770f3f2baf7aac60f1a3d01672b89c3141eb80
+  }
+}

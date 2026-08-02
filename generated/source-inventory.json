@@ -1,0 +1,5938 @@
+{
+  "schemaVersion": 1,
+  "scope": "Rock Springs Chronicles",
+  "source": {
+    "repository": "https://github.com/elderMicheal/micheal-writes.git",
+    "branch": "primary",
+    "revision": "00350c94f1152116e1d27250dfb0674c5ccfea37",
+    "revisionDate": "2026-07-26T05:04:12-04:00",
+    "relativeRoot": "Rock Springs Chronicles",
+    "rscWorktreeStatus": "clean"
+  },
+  "policy": {
+    "manuscriptBodiesIncluded": false,
+    "defaultPublicEligibility": false,
+    "approvalManifest": "content-policy/approved-sources.json",
+    "note": "Inventory metadata alone does not grant publication approval. Only exact paths admitted by the versioned approval manifest can become publicly eligible."
+  },
+  "summary": {
+    "totalFiles": 103,
+    "markdownFiles": 101,
+    "nonMarkdownFiles": 2,
+    "topLevelCounts": {
+      "Anthologies": 8,
+      "Assets": 4,
+      "Back Matter": 16,
+      "Book 1 - Jackie's Window": 15,
+      "Book 2 - Hunter's Hunted": 11,
+      "Book 3 - Three Little Witches": 11,
+      "Book 4 - The Feud of the Vampires": 11,
+      "Book 5 - Paradox": 11,
+      "Book 6 - Shaman": 12,
+      "Series Introduction.md": 1,
+      "Series Overview.md": 1,
+      "Templates": 1,
+      "Untitled.base": 1
+    },
+    "publicationClassifications": {
+      "ambiguous-publish-flag": 70,
+      "conflict": 2,
+      "explicit-draft": 5,
+      "explicit-owner-approval": 8,
+      "published-without-publish-flag": 3,
+      "unclassified": 13
+    },
+    "wikiLinkResolutions": {
+      "ambiguous": 6,
+      "resolved": 178,
+      "resolved-by-unique-name": 17,
+      "unresolved": 356
+    }
+  },
+  "files": [
+    {
+      "path": "Anthologies/Anthology 2 - Title TBD/01 - Page 01.md",
+      "extension": ".md",
+      "bytes": 351,
+      "sha256": "c3fd880c18d9c243f74b5e47a0f732e53be7c8862c8a4475e41dfd9bae751150",
+      "sourceKind": "anthology",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "anthology-page",
+        "title": "Page 01",
+        "book": "Anthology 2 - Title TBD",
+        "order": 1
+      },
+      "firstHeading": "Anthology 2 - Anthology 2 - Title TBD",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Anthology 2 - Title TBD/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Anthology 2 - Title TBD/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Anthologies/Anthology 2 - Title TBD/02 - Page 02.md",
+      "extension": ".md",
+      "bytes": 351,
+      "sha256": "f6195da2bf3ecfe97adff335a5eeeb27e9a989b29be8e77185032ba721677680",
+      "sourceKind": "anthology",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "anthology-page",
+        "title": "Page 02",
+        "book": "Anthology 2 - Title TBD",
+        "order": 2
+      },
+      "firstHeading": "Anthology 2 - Anthology 2 - Title TBD",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Anthology 2 - Title TBD/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Anthology 2 - Title TBD/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Anthologies/Anthology 2 - Title TBD/03 - Page 03.md",
+      "extension": ".md",
+      "bytes": 351,
+      "sha256": "b2acf74a717d823416b82559e40e9f840cea2d1eaf8e92fe9086c97313637708",
+      "sourceKind": "anthology",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "anthology-page",
+        "title": "Page 03",
+        "book": "Anthology 2 - Title TBD",
+        "order": 3
+      },
+      "firstHeading": "Anthology 2 - Anthology 2 - Title TBD",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Anthology 2 - Title TBD/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Anthology 2 - Title TBD/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Anthologies/Anthology 2 - Title TBD/README.md",
+      "extension": ".md",
+      "bytes": 563,
+      "sha256": "3d8095af410eb68d92fdcf833b8a014f959a8ee69f66b5f6034ff3b082900996",
+      "sourceKind": "anthology",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "anthology",
+        "title": "Anthology 2 - Title TBD",
+        "book": "Anthology 2 - Title TBD",
+        "order": 0
+      },
+      "firstHeading": "Anthology 2 - Anthology 2 - Title TBD",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Anthology 2 - Title TBD/01 - Page 01",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Anthology 2 - Title TBD/01 - Page 01.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Anthology 2 - Title TBD/02 - Page 02",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Anthology 2 - Title TBD/02 - Page 02.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Anthology 2 - Title TBD/03 - Page 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Anthology 2 - Title TBD/03 - Page 03.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Anthologies/Hometown Nightmares/01 - Page 01.md",
+      "extension": ".md",
+      "bytes": 326,
+      "sha256": "95d73f76ddfe429027a16c9933b26a7826cea400bd009e25616c82916b210fa1",
+      "sourceKind": "anthology",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "anthology-page",
+        "title": "Page 01",
+        "book": "Anthology 1 - Title TBD",
+        "order": 1
+      },
+      "firstHeading": "Anthology 1 - Anthology 1 - Title TBD",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Hometown Nightmares/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Hometown Nightmares/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Anthologies/Hometown Nightmares/02 - Page 02.md",
+      "extension": ".md",
+      "bytes": 347,
+      "sha256": "270e9ccf3db5178307ee9e461171af9fdff2419489ee10a082313f7b571b227e",
+      "sourceKind": "anthology",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "anthology-page",
+        "title": "Page 02",
+        "book": "Anthology 1 - Title TBD",
+        "order": 2
+      },
+      "firstHeading": "Anthology 1 - Anthology 1 - Title TBD",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Hometown Nightmares/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Hometown Nightmares/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Anthologies/Hometown Nightmares/03 - Page 03.md",
+      "extension": ".md",
+      "bytes": 347,
+      "sha256": "b97ddf1691c976f7fd8c8d89fcdf286f09cab58e615903d8c47a1e9b2328b420",
+      "sourceKind": "anthology",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "anthology-page",
+        "title": "Page 03",
+        "book": "Anthology 1 - Title TBD",
+        "order": 3
+      },
+      "firstHeading": "Anthology 1 - Anthology 1 - Title TBD",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Hometown Nightmares/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Hometown Nightmares/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Anthologies/Hometown Nightmares/README.md",
+      "extension": ".md",
+      "bytes": 551,
+      "sha256": "ac69ff36b5229712272d09c0707eb39c27365b9deca5896ccdc70968859df553",
+      "sourceKind": "anthology",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "anthology",
+        "title": "Anthology 1 - Title TBD",
+        "book": "Anthology 1 - Title TBD",
+        "order": 0
+      },
+      "firstHeading": "Anthology 1 - Anthology 1 - Title TBD",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Hometown Nightmares/01 - Page 01",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Hometown Nightmares/01 - Page 01.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Hometown Nightmares/02 - Page 02",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Hometown Nightmares/02 - Page 02.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Hometown Nightmares/03 - Page 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Hometown Nightmares/03 - Page 03.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Assets/covers/README.md",
+      "extension": ".md",
+      "bytes": 60,
+      "sha256": "2e8bf833b189c997598777a61d7f7247f66675773d4531e658fb04591b6eeb89",
+      "sourceKind": "asset-document",
+      "frontMatter": {},
+      "firstHeading": null,
+      "publication": {
+        "classification": "unclassified",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Assets/README.md",
+      "extension": ".md",
+      "bytes": 165,
+      "sha256": "5c2e901abd897d63f10b909b038ce8bd7c5fa324edcd0bfd1bb782419cfd3308",
+      "sourceKind": "asset-document",
+      "frontMatter": {},
+      "firstHeading": null,
+      "publication": {
+        "classification": "unclassified",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Assets/snippets/Begin Again.md",
+      "extension": ".md",
+      "bytes": 4819,
+      "sha256": "1446497b716c50d7f96c1ec9b71a6d9909748d7f0e11f178829ae155d2cfbda1",
+      "sourceKind": "snippet",
+      "frontMatter": {},
+      "firstHeading": "Chapter 1",
+      "publication": {
+        "classification": "unclassified",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Assets/snippets/The Night of Flames.md",
+      "extension": ".md",
+      "bytes": 78,
+      "sha256": "778a1cc9e439e57c7c9573d6605e6a087baa18ae298f09092567a77c52586d08",
+      "sourceKind": "snippet",
+      "frontMatter": {},
+      "firstHeading": "The Night of Flames",
+      "publication": {
+        "classification": "unclassified",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Back Matter/Author.md",
+      "extension": ".md",
+      "bytes": 468,
+      "sha256": "27e2fd32d5b0c86c3ca7b1aa80de9c1b667d0c4838d861bbd74a886d0e0f62fb",
+      "sourceKind": "back-matter",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "author",
+        "title": "Author"
+      },
+      "firstHeading": "Micheal Burford",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Assets/headshot.jpg",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Series Overview",
+          "resolution": {
+            "status": "resolved",
+            "path": "Series Overview.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 1 - Jackie's Window/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 1 - Jackie's Window/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Back Matter/Bestiary.md",
+      "extension": ".md",
+      "bytes": 618,
+      "sha256": "1d581dbf69e4928966d8521157011a7e938c3e54b279ec6fa8dfe0303f772bd9",
+      "sourceKind": "back-matter",
+      "frontMatter": {
+        "status": "published",
+        "type": "non-fiction",
+        "title": "Bestiary",
+        "collection": "rock-springs-chronicles",
+        "excerpt": "Catalog of creatures, entities, and supernatural beings in Rock Springs"
+      },
+      "firstHeading": "Characters",
+      "publication": {
+        "classification": "published-without-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Maggie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Boys",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Boys.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Back Matter/Character Shorts/Dvorak.md",
+      "extension": ".md",
+      "bytes": 14937,
+      "sha256": "765e4ffb0df7d7a5714870eae736145ec032a61c36227d44c654e669fa8f267e",
+      "sourceKind": "back-matter",
+      "frontMatter": {
+        "status": "draft",
+        "type": "fiction",
+        "title": "Dvorak",
+        "collection": "rock-springs-chronicles",
+        "excerpt": "Character profile and backstory for Dvorak"
+      },
+      "firstHeading": "“Rule of 16”",
+      "publication": {
+        "classification": "explicit-draft",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Back Matter/Character Shorts/Hawthorne.md",
+      "extension": ".md",
+      "bytes": 3555,
+      "sha256": "dc702fd7d5c0fc21b49b3b77751666857e86886eec5d4fce05bdc124f2fc0055",
+      "sourceKind": "back-matter",
+      "frontMatter": {},
+      "firstHeading": "Personal Life / Story Arc",
+      "publication": {
+        "classification": "unclassified",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "RSC/Back Matter/Character Shorts/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Back Matter/Character Shorts/Jackie French.md",
+      "extension": ".md",
+      "bytes": 526,
+      "sha256": "f3d6ec7a7a3480f2e2747c47bc4c0b2c59645cf88172b9fd843907979b768aa6",
+      "sourceKind": "back-matter",
+      "frontMatter": {},
+      "firstHeading": "Jackie French — Recovered Character Note",
+      "publication": {
+        "classification": "unclassified",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Back Matter/Character Shorts 1/Boys.md",
+      "extension": ".md",
+      "bytes": 1354,
+      "sha256": "76f86141241ce15e5b49620961acdfd44df559712986aa6690b79b6756f40388",
+      "sourceKind": "back-matter",
+      "frontMatter": {},
+      "firstHeading": null,
+      "publication": {
+        "classification": "unclassified",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Back Matter/Character Shorts 1/Dvorak.md",
+      "extension": ".md",
+      "bytes": 14937,
+      "sha256": "765e4ffb0df7d7a5714870eae736145ec032a61c36227d44c654e669fa8f267e",
+      "sourceKind": "back-matter",
+      "frontMatter": {
+        "status": "draft",
+        "type": "fiction",
+        "title": "Dvorak",
+        "collection": "rock-springs-chronicles",
+        "excerpt": "Character profile and backstory for Dvorak"
+      },
+      "firstHeading": "“Rule of 16”",
+      "publication": {
+        "classification": "explicit-draft",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Back Matter/Character Shorts 1/Hawthorne.md",
+      "extension": ".md",
+      "bytes": 3557,
+      "sha256": "afbff507aa5d16a0287d62f9dc1a662499d5a628b8b80b6c2e2ce9d1c5307502",
+      "sourceKind": "back-matter",
+      "frontMatter": {},
+      "firstHeading": "Personal Life / Story Arc",
+      "publication": {
+        "classification": "unclassified",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Back Matter/Final Complete Outline.md",
+      "extension": ".md",
+      "bytes": 495,
+      "sha256": "66febf2af228a3ae6dbb04315df60647ae6590bed58526f75d011cb1a390c7a6",
+      "sourceKind": "back-matter",
+      "frontMatter": {
+        "status": "draft",
+        "type": "fiction",
+        "title": "Untitled Draft 1",
+        "collection": "rock-springs-chronicles",
+        "excerpt": "Additional draft content for The Rock Springs Chronicles"
+      },
+      "firstHeading": "Monday Morning",
+      "publication": {
+        "classification": "explicit-draft",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Back Matter/NewMadridFault.png",
+      "extension": ".png",
+      "bytes": 458249,
+      "sha256": "6c4d0d90ed53846af8acb42c8d15e9fa147da6fdc7d1eeadd4d452ee1aeaaebb"
+    },
+    {
+      "path": "Back Matter/Questions a Reader Might Ask.md",
+      "extension": ".md",
+      "bytes": 25745,
+      "sha256": "26e83489853f9d039e483bf253348f82acf93cda2c41f996f730b339a6e249d9",
+      "sourceKind": "back-matter",
+      "frontMatter": {
+        "status": "draft",
+        "type": "fiction",
+        "title": "Untitled Draft",
+        "collection": "rock-springs-chronicles",
+        "excerpt": "Draft content for The Rock Springs Chronicles"
+      },
+      "firstHeading": "Deep Dive Analysis of _The Rock Springs Chronicles_",
+      "publication": {
+        "classification": "explicit-draft",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Back Matter/Research/Recovered Development Conversations.md",
+      "extension": ".md",
+      "bytes": 2714757,
+      "sha256": "67a54d6385991610ff5b83da587f6661cf9aca41e9bd7e8ebb87216b65968054",
+      "sourceKind": "research",
+      "frontMatter": {},
+      "firstHeading": "Recovered Rock Springs Development Conversations",
+      "publication": {
+        "classification": "unclassified",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Back Matter/Series Introduction.md",
+      "extension": ".md",
+      "bytes": 10307,
+      "sha256": "64d6b4b0da30740e4999b5300a077d0c0a476f13bc929fd450e69fe257ae9380",
+      "sourceKind": "back-matter",
+      "frontMatter": {},
+      "firstHeading": "[[Books]]",
+      "publication": {
+        "classification": "unclassified",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Books",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Bestiary",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Bestiary.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Back Matter/Series Outline.md",
+      "extension": ".md",
+      "bytes": 499,
+      "sha256": "0f1c229c9c81c6bd6a2989a7700b7eafdf01906732cf26826b90aff3940cb8aa",
+      "sourceKind": "back-matter",
+      "frontMatter": {
+        "publish": true,
+        "status": "draft",
+        "type": "fiction",
+        "title": "Series Outline",
+        "collection": "rock-springs-chronicles",
+        "excerpt": "Additional draft content for The Rock Springs Chronicles"
+      },
+      "firstHeading": null,
+      "publication": {
+        "classification": "conflict",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Back Matter/Series Synopsis 1.md",
+      "extension": ".md",
+      "bytes": 93574,
+      "sha256": "d922f016665dff45b168b7a3f9e843f3ec78626f25d8a617e9f4864002cf876f",
+      "sourceKind": "back-matter",
+      "frontMatter": {
+        "status": "published",
+        "type": "non-fiction",
+        "title": "Series Synopsis",
+        "collection": "rock-springs-chronicles",
+        "excerpt": "A comprehensive codification of everything about The Rock Springs Chronicles - the complete brain dump of ideas, research, and worldbuilding."
+      },
+      "firstHeading": "Contents",
+      "publication": {
+        "classification": "published-without-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/NewMadridFault.png",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Otis",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Otis",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Otis",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Christopher",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Christopher",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Christopher",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jacob",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "Jacob",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jacob",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jacob",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jason",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jason",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jason",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jason",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Maggie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Michelle",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Michelle",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Michelle",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Dvorak",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Dvorak.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Dvorak",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Dvorak.md"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abigail Hubbard",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Back Matter/Series Synopsis.md",
+      "extension": ".md",
+      "bytes": 94148,
+      "sha256": "04b9aa639e7e416265132a0f8391a7074e132a2f40f16903d286d54d14789ae3",
+      "sourceKind": "back-matter",
+      "frontMatter": {
+        "status": "published",
+        "type": "non-fiction",
+        "title": "Series Synopsis",
+        "collection": "rock-springs-chronicles",
+        "excerpt": "A comprehensive codification of everything about The Rock Springs Chronicles - the complete brain dump of ideas, research, and worldbuilding."
+      },
+      "firstHeading": "Contents",
+      "publication": {
+        "classification": "published-without-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/NewMadridFault.png",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Otis",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Otis",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Otis",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Christopher",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Christopher",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Christopher",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jacob",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "Jacob",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jacob",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jacob",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jason",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jason",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jason",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jason",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Maggie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Michelle",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Michelle",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Michelle",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Dvorak",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Dvorak.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Dvorak",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Dvorak.md"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Rebecca",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Hawthorne",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Character Shorts 1/Hawthorne.md"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/McMurtry",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Sheryl",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abigail Hubbard",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Abby",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Stephenson",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Character Shorts 1/Bobbi",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Jackie",
+          "resolution": {
+            "status": "unresolved"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Part 1/Chapter 01.md",
+      "extension": ".md",
+      "bytes": 11271,
+      "sha256": "5caf60da32dc49af8edeac7f1899e05f07e654632000bdb873b756d8ac9f84fe",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "status": "draft",
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 1",
+        "book": 1,
+        "part": 1,
+        "chapter": 1,
+        "order": 1
+      },
+      "firstHeading": "Jackie's Window",
+      "publication": {
+        "classification": "explicit-owner-approval",
+        "publicEligible": true,
+        "approvalId": "jackies-window-part-one-chapters",
+        "sourceEditorialStatus": "draft"
+      },
+      "links": [
+        {
+          "target": "Chapter 02",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 02.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Part 1/Chapter 02.md",
+      "extension": ".md",
+      "bytes": 7373,
+      "sha256": "b0a8b5eb0ebee5ca0d1ce9ac4b56aa6075a7b36b036af083194ab3bd264057e6",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "status": "draft",
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 2",
+        "book": 1,
+        "part": 1,
+        "chapter": 2,
+        "order": 2
+      },
+      "firstHeading": "Jackie's Window",
+      "publication": {
+        "classification": "explicit-owner-approval",
+        "publicEligible": true,
+        "approvalId": "jackies-window-part-one-chapters",
+        "sourceEditorialStatus": "draft"
+      },
+      "links": [
+        {
+          "target": "Chapter 01",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 01.md"
+          }
+        },
+        {
+          "target": "Chapter 03",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 03.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Part 1/Chapter 03.md",
+      "extension": ".md",
+      "bytes": 11843,
+      "sha256": "2e8502a3820676ec1899ebda096c6a037b4f926c077a444f9581e6d149d4c8fa",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "status": "draft",
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 3",
+        "book": 1,
+        "part": 1,
+        "chapter": 3,
+        "order": 3
+      },
+      "firstHeading": "Jackie's Window",
+      "publication": {
+        "classification": "explicit-owner-approval",
+        "publicEligible": true,
+        "approvalId": "jackies-window-part-one-chapters",
+        "sourceEditorialStatus": "draft"
+      },
+      "links": [
+        {
+          "target": "Chapter 02",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 02.md"
+          }
+        },
+        {
+          "target": "Chapter 04",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 04.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Part 1/Chapter 04.md",
+      "extension": ".md",
+      "bytes": 7285,
+      "sha256": "0adfa89e1f27a368b18e9c970ce5442ee012595a7f87af61371371404ddc56e5",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "status": "draft",
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 4",
+        "book": 1,
+        "part": 1,
+        "chapter": 4,
+        "order": 4
+      },
+      "firstHeading": "Jackie's Window",
+      "publication": {
+        "classification": "explicit-owner-approval",
+        "publicEligible": true,
+        "approvalId": "jackies-window-part-one-chapters",
+        "sourceEditorialStatus": "draft"
+      },
+      "links": [
+        {
+          "target": "Chapter 03",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 03.md"
+          }
+        },
+        {
+          "target": "Chapter 05",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 05.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Part 1/Chapter 05.md",
+      "extension": ".md",
+      "bytes": 1265,
+      "sha256": "a42a77590d4b1391964af337579153f009f65b40ebcb6eac01179531e99ad4e6",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "status": "draft",
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 5",
+        "book": 1,
+        "part": 1,
+        "chapter": 5,
+        "order": 5
+      },
+      "firstHeading": "Jackie's Window",
+      "publication": {
+        "classification": "explicit-owner-approval",
+        "publicEligible": true,
+        "approvalId": "jackies-window-part-one-chapters",
+        "sourceEditorialStatus": "draft"
+      },
+      "links": [
+        {
+          "target": "Chapter 04",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 04.md"
+          }
+        },
+        {
+          "target": "Chapter 06",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 06.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Part 1/Chapter 06.md",
+      "extension": ".md",
+      "bytes": 11691,
+      "sha256": "1d7bea500b8186adfd36d8e6e7a54c5a244cc6d3bc592eacc31566d3310a5d6d",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "status": "draft",
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 6",
+        "book": 1,
+        "part": 1,
+        "chapter": 6,
+        "order": 6
+      },
+      "firstHeading": "Jackie's Window",
+      "publication": {
+        "classification": "explicit-owner-approval",
+        "publicEligible": true,
+        "approvalId": "jackies-window-part-one-chapters",
+        "sourceEditorialStatus": "draft"
+      },
+      "links": [
+        {
+          "target": "Chapter 05",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 05.md"
+          }
+        },
+        {
+          "target": "Chapter 07",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 07.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Part 1/Chapter 07.md",
+      "extension": ".md",
+      "bytes": 241,
+      "sha256": "e17260d8c68b7fb8e62c2f4484b3d85bb80c343812ff0e44bf3f6b1e5adc2452",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "status": "draft",
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 7",
+        "book": 1,
+        "part": 1,
+        "chapter": 7,
+        "order": 7
+      },
+      "firstHeading": "Jackie's Window",
+      "publication": {
+        "classification": "explicit-owner-approval",
+        "publicEligible": true,
+        "approvalId": "jackies-window-part-one-chapters",
+        "sourceEditorialStatus": "draft"
+      },
+      "links": [
+        {
+          "target": "Chapter 06",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 06.md"
+          }
+        },
+        {
+          "target": "Chapter 08",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 08.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Part 1/Chapter 08.md",
+      "extension": ".md",
+      "bytes": 9165,
+      "sha256": "0e00c1f66342ece5e761a9f530133a453a464626f51e69accd748b03f17f9111",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "status": "draft",
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 8",
+        "book": 1,
+        "part": 1,
+        "chapter": 8,
+        "order": 8
+      },
+      "firstHeading": "Jackie's Window",
+      "publication": {
+        "classification": "explicit-owner-approval",
+        "publicEligible": true,
+        "approvalId": "jackies-window-part-one-chapters",
+        "sourceEditorialStatus": "draft"
+      },
+      "links": [
+        {
+          "target": "Chapter 07",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 07.md"
+          }
+        },
+        {
+          "target": "Chapter 09",
+          "resolution": {
+            "status": "unresolved"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Part 1/Interlude.md",
+      "extension": ".md",
+      "bytes": 319,
+      "sha256": "07428970e166365bed0622a0f89e802678a910301d3131d10af923bd23772d7d",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "status": "draft",
+        "series": "The Rock Springs Chronicles",
+        "type": "interlude",
+        "title": "Interlude",
+        "book": 1,
+        "part": 1,
+        "chapter": "n/a",
+        "order": 6
+      },
+      "firstHeading": "Jackie's Window",
+      "publication": {
+        "classification": "conflict",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Chapter 05",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Book 1 - Jackie's Window/Part 1/Chapter 05.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Part 2/01 - Chapter 01.md",
+      "extension": ".md",
+      "bytes": 420,
+      "sha256": "85828e28306a3b965bc2c0b9e65401f9bf0f89baa2d928a9648411cd61a89bbe",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 01",
+        "book": "Jackie's Window",
+        "part": "Part 2",
+        "order": 1
+      },
+      "firstHeading": "Book 1 - Jackie's Window",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 2/README",
+          "resolution": {
+            "status": "ambiguous",
+            "candidates": [
+              "Anthologies/Anthology 2 - Title TBD/README.md",
+              "Anthologies/Hometown Nightmares/README.md",
+              "Assets/covers/README.md",
+              "Assets/README.md",
+              "Book 1 - Jackie's Window/README.md",
+              "Book 2 - Hunter's Hunted/Part 1/README.md",
+              "Book 2 - Hunter's Hunted/Part 2/README.md",
+              "Book 2 - Hunter's Hunted/README.md",
+              "Book 3 - Three Little Witches/Part 1/README.md",
+              "Book 3 - Three Little Witches/Part 2/README.md",
+              "Book 3 - Three Little Witches/README.md",
+              "Book 4 - The Feud of the Vampires/Part 1/README.md",
+              "Book 4 - The Feud of the Vampires/Part 2/README.md",
+              "Book 4 - The Feud of the Vampires/README.md",
+              "Book 5 - Paradox/Part 1/README.md",
+              "Book 5 - Paradox/Part 2/README.md",
+              "Book 5 - Paradox/README.md",
+              "Book 6 - Shaman/Part 1/README.md",
+              "Book 6 - Shaman/Part 2/README.md",
+              "Book 6 - Shaman/README.md"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Part 2/02 - Chapter 02.md",
+      "extension": ".md",
+      "bytes": 420,
+      "sha256": "45a23cb4608d98fe90f9011fec660b657133a47bf8791522770be6c58334a227",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 02",
+        "book": "Jackie's Window",
+        "part": "Part 2",
+        "order": 2
+      },
+      "firstHeading": "Book 1 - Jackie's Window",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 2/README",
+          "resolution": {
+            "status": "ambiguous",
+            "candidates": [
+              "Anthologies/Anthology 2 - Title TBD/README.md",
+              "Anthologies/Hometown Nightmares/README.md",
+              "Assets/covers/README.md",
+              "Assets/README.md",
+              "Book 1 - Jackie's Window/README.md",
+              "Book 2 - Hunter's Hunted/Part 1/README.md",
+              "Book 2 - Hunter's Hunted/Part 2/README.md",
+              "Book 2 - Hunter's Hunted/README.md",
+              "Book 3 - Three Little Witches/Part 1/README.md",
+              "Book 3 - Three Little Witches/Part 2/README.md",
+              "Book 3 - Three Little Witches/README.md",
+              "Book 4 - The Feud of the Vampires/Part 1/README.md",
+              "Book 4 - The Feud of the Vampires/Part 2/README.md",
+              "Book 4 - The Feud of the Vampires/README.md",
+              "Book 5 - Paradox/Part 1/README.md",
+              "Book 5 - Paradox/Part 2/README.md",
+              "Book 5 - Paradox/README.md",
+              "Book 6 - Shaman/Part 1/README.md",
+              "Book 6 - Shaman/Part 2/README.md",
+              "Book 6 - Shaman/README.md"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Part 2/03 - Chapter 03.md",
+      "extension": ".md",
+      "bytes": 420,
+      "sha256": "01a6b89e47e2d34902555f54583a4eb58eb5796b79bdafbcc7303525cc1b7ff8",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 03",
+        "book": "Jackie's Window",
+        "part": "Part 2",
+        "order": 3
+      },
+      "firstHeading": "Book 1 - Jackie's Window",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 2/README",
+          "resolution": {
+            "status": "ambiguous",
+            "candidates": [
+              "Anthologies/Anthology 2 - Title TBD/README.md",
+              "Anthologies/Hometown Nightmares/README.md",
+              "Assets/covers/README.md",
+              "Assets/README.md",
+              "Book 1 - Jackie's Window/README.md",
+              "Book 2 - Hunter's Hunted/Part 1/README.md",
+              "Book 2 - Hunter's Hunted/Part 2/README.md",
+              "Book 2 - Hunter's Hunted/README.md",
+              "Book 3 - Three Little Witches/Part 1/README.md",
+              "Book 3 - Three Little Witches/Part 2/README.md",
+              "Book 3 - Three Little Witches/README.md",
+              "Book 4 - The Feud of the Vampires/Part 1/README.md",
+              "Book 4 - The Feud of the Vampires/Part 2/README.md",
+              "Book 4 - The Feud of the Vampires/README.md",
+              "Book 5 - Paradox/Part 1/README.md",
+              "Book 5 - Paradox/Part 2/README.md",
+              "Book 5 - Paradox/README.md",
+              "Book 6 - Shaman/Part 1/README.md",
+              "Book 6 - Shaman/Part 2/README.md",
+              "Book 6 - Shaman/README.md"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Part 2/04 - Interlude.md",
+      "extension": ".md",
+      "bytes": 514,
+      "sha256": "295f5af44eb7735d4ce7f1ed2d01384f8ee801ed4e583b146daaac88344d8b7d",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "interlude",
+        "title": "Interlude",
+        "book": "Jackie's Window",
+        "part": "Part 2",
+        "order": 4
+      },
+      "firstHeading": "Book 1 - Jackie's Window",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 2/README",
+          "resolution": {
+            "status": "ambiguous",
+            "candidates": [
+              "Anthologies/Anthology 2 - Title TBD/README.md",
+              "Anthologies/Hometown Nightmares/README.md",
+              "Assets/covers/README.md",
+              "Assets/README.md",
+              "Book 1 - Jackie's Window/README.md",
+              "Book 2 - Hunter's Hunted/Part 1/README.md",
+              "Book 2 - Hunter's Hunted/Part 2/README.md",
+              "Book 2 - Hunter's Hunted/README.md",
+              "Book 3 - Three Little Witches/Part 1/README.md",
+              "Book 3 - Three Little Witches/Part 2/README.md",
+              "Book 3 - Three Little Witches/README.md",
+              "Book 4 - The Feud of the Vampires/Part 1/README.md",
+              "Book 4 - The Feud of the Vampires/Part 2/README.md",
+              "Book 4 - The Feud of the Vampires/README.md",
+              "Book 5 - Paradox/Part 1/README.md",
+              "Book 5 - Paradox/Part 2/README.md",
+              "Book 5 - Paradox/README.md",
+              "Book 6 - Shaman/Part 1/README.md",
+              "Book 6 - Shaman/Part 2/README.md",
+              "Book 6 - Shaman/README.md"
+            ]
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 2/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 1 - Jackie's Window/Part 2/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Assets/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Assets/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/README.md",
+      "extension": ".md",
+      "bytes": 483,
+      "sha256": "544181e8cb405fcbc0a5a2b99e7347bc74564d37a55ba1c456577e34eae6c01c",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "book",
+        "title": "Jackie's Window",
+        "book": "Jackie's Window",
+        "order": 0
+      },
+      "firstHeading": "Book 1 - Jackie's Window",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/README",
+          "resolution": {
+            "status": "ambiguous",
+            "candidates": [
+              "Anthologies/Anthology 2 - Title TBD/README.md",
+              "Anthologies/Hometown Nightmares/README.md",
+              "Assets/covers/README.md",
+              "Assets/README.md",
+              "Book 1 - Jackie's Window/README.md",
+              "Book 2 - Hunter's Hunted/Part 1/README.md",
+              "Book 2 - Hunter's Hunted/Part 2/README.md",
+              "Book 2 - Hunter's Hunted/README.md",
+              "Book 3 - Three Little Witches/Part 1/README.md",
+              "Book 3 - Three Little Witches/Part 2/README.md",
+              "Book 3 - Three Little Witches/README.md",
+              "Book 4 - The Feud of the Vampires/Part 1/README.md",
+              "Book 4 - The Feud of the Vampires/Part 2/README.md",
+              "Book 4 - The Feud of the Vampires/README.md",
+              "Book 5 - Paradox/Part 1/README.md",
+              "Book 5 - Paradox/Part 2/README.md",
+              "Book 5 - Paradox/README.md",
+              "Book 6 - Shaman/Part 1/README.md",
+              "Book 6 - Shaman/Part 2/README.md",
+              "Book 6 - Shaman/README.md"
+            ]
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 2/README",
+          "resolution": {
+            "status": "ambiguous",
+            "candidates": [
+              "Anthologies/Anthology 2 - Title TBD/README.md",
+              "Anthologies/Hometown Nightmares/README.md",
+              "Assets/covers/README.md",
+              "Assets/README.md",
+              "Book 1 - Jackie's Window/README.md",
+              "Book 2 - Hunter's Hunted/Part 1/README.md",
+              "Book 2 - Hunter's Hunted/Part 2/README.md",
+              "Book 2 - Hunter's Hunted/README.md",
+              "Book 3 - Three Little Witches/Part 1/README.md",
+              "Book 3 - Three Little Witches/Part 2/README.md",
+              "Book 3 - Three Little Witches/README.md",
+              "Book 4 - The Feud of the Vampires/Part 1/README.md",
+              "Book 4 - The Feud of the Vampires/Part 2/README.md",
+              "Book 4 - The Feud of the Vampires/README.md",
+              "Book 5 - Paradox/Part 1/README.md",
+              "Book 5 - Paradox/Part 2/README.md",
+              "Book 5 - Paradox/README.md",
+              "Book 6 - Shaman/Part 1/README.md",
+              "Book 6 - Shaman/Part 2/README.md",
+              "Book 6 - Shaman/README.md"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 1 - Jackie's Window/Recovered Drafts/Recovered Opening - Jackie Blue.md",
+      "extension": ".md",
+      "bytes": 900,
+      "sha256": "724e0f2f74e126e82e98e403c42b905e66eb3edcf84257045f6198e32a8e8ab7",
+      "sourceKind": "recovered-draft",
+      "frontMatter": {},
+      "firstHeading": "Jackie’s Window — Recovered Opening",
+      "publication": {
+        "classification": "unclassified",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Book 2 - Hunter's Hunted/Part 1/01 - Chapter 01.md",
+      "extension": ".md",
+      "bytes": 420,
+      "sha256": "b6839954c44d4c99bb78152cbd4d61feb6bb0bde528189b72cc022a758437eac",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 01",
+        "book": "Hunter's Hunted",
+        "part": "Part 1",
+        "order": 1
+      },
+      "firstHeading": "Book 2 - Hunter's Hunted",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 2 - Hunter's Hunted/Part 1/02 - Chapter 02.md",
+      "extension": ".md",
+      "bytes": 420,
+      "sha256": "388e7fa65545d1ed16e1f5f0362facaa4c8e2f65abcc5bc9d6dc4b6884033651",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 02",
+        "book": "Hunter's Hunted",
+        "part": "Part 1",
+        "order": 2
+      },
+      "firstHeading": "Book 2 - Hunter's Hunted",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 2 - Hunter's Hunted/Part 1/03 - Chapter 03.md",
+      "extension": ".md",
+      "bytes": 420,
+      "sha256": "4b4d0e31b83c673d0085ecaf79b0d4634c7d8d49896f266c708469754e418265",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 03",
+        "book": "Hunter's Hunted",
+        "part": "Part 1",
+        "order": 3
+      },
+      "firstHeading": "Book 2 - Hunter's Hunted",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 2 - Hunter's Hunted/Part 1/04 - Interlude.md",
+      "extension": ".md",
+      "bytes": 514,
+      "sha256": "954f9d158bc7348e55d13eb20861f6d634e7e5cd47220095ee29c26da8ae011e",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "interlude",
+        "title": "Interlude",
+        "book": "Hunter's Hunted",
+        "part": "Part 1",
+        "order": 4
+      },
+      "firstHeading": "Book 2 - Hunter's Hunted",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 1/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 1/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 1/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Assets/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Assets/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 2 - Hunter's Hunted/Part 1/README.md",
+      "extension": ".md",
+      "bytes": 709,
+      "sha256": "82e79945b727a83d37019dc54c8310f4471968f5aa8b8aab761d1d823af10664",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "part",
+        "title": "Hunter's Hunted - Part 1",
+        "book": "Hunter's Hunted",
+        "part": "Part 1",
+        "order": 0
+      },
+      "firstHeading": "Book 2 - Hunter's Hunted",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 1/01 - Chapter 01",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 1/01 - Chapter 01.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 1/02 - Chapter 02",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 1/02 - Chapter 02.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 1/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 1/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 1/04 - Interlude",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 1/04 - Interlude.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 2 - Hunter's Hunted/Part 2/01 - Chapter 01.md",
+      "extension": ".md",
+      "bytes": 420,
+      "sha256": "ea788f18edb1e629c29065358f10bc624b5054a3c2ae8d3ea4860f3efddb92cf",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 01",
+        "book": "Hunter's Hunted",
+        "part": "Part 2",
+        "order": 1
+      },
+      "firstHeading": "Book 2 - Hunter's Hunted",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 2 - Hunter's Hunted/Part 2/02 - Chapter 02.md",
+      "extension": ".md",
+      "bytes": 420,
+      "sha256": "8c72cebbeb57c3ef3c2925ee79821fbd7faa0cab119d3e285e0ee4ad469a07c1",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 02",
+        "book": "Hunter's Hunted",
+        "part": "Part 2",
+        "order": 2
+      },
+      "firstHeading": "Book 2 - Hunter's Hunted",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 2 - Hunter's Hunted/Part 2/03 - Chapter 03.md",
+      "extension": ".md",
+      "bytes": 420,
+      "sha256": "5ad4b53b8b32149a7e35ad16fce16486bf4770b31cce8f9adc73788282f37ac3",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 03",
+        "book": "Hunter's Hunted",
+        "part": "Part 2",
+        "order": 3
+      },
+      "firstHeading": "Book 2 - Hunter's Hunted",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 2 - Hunter's Hunted/Part 2/04 - Interlude.md",
+      "extension": ".md",
+      "bytes": 514,
+      "sha256": "9f7da438ad3b1790709143473206ca52819335f1dc1dd0b6cf546c3974fc9640",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "interlude",
+        "title": "Interlude",
+        "book": "Hunter's Hunted",
+        "part": "Part 2",
+        "order": 4
+      },
+      "firstHeading": "Book 2 - Hunter's Hunted",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 2/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 2/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 2/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Assets/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Assets/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 2 - Hunter's Hunted/Part 2/README.md",
+      "extension": ".md",
+      "bytes": 709,
+      "sha256": "dee0cc1f05574ebd8a36a59cea745fabc55e1e91957e0e11aeebfd9b2783666f",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "part",
+        "title": "Hunter's Hunted - Part 2",
+        "book": "Hunter's Hunted",
+        "part": "Part 2",
+        "order": 0
+      },
+      "firstHeading": "Book 2 - Hunter's Hunted",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 2/01 - Chapter 01",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 2/01 - Chapter 01.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 2/02 - Chapter 02",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 2/02 - Chapter 02.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 2/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 2/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 2/04 - Interlude",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 2/04 - Interlude.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 2 - Hunter's Hunted/README.md",
+      "extension": ".md",
+      "bytes": 483,
+      "sha256": "28baf1826d222bc78fb62c7e00b58390d48cfd3e12233941433ce4e2c17bcaf1",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "book",
+        "title": "Hunter's Hunted",
+        "book": "Hunter's Hunted",
+        "order": 0
+      },
+      "firstHeading": "Book 2 - Hunter's Hunted",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 1/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 3 - Three Little Witches/Part 1/01 - Chapter 01.md",
+      "extension": ".md",
+      "bytes": 435,
+      "sha256": "faf9b618550535adf1667d4c179889d26cf8e5e40af61bdd56b0c9a34481ecf1",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 01",
+        "book": "Three Little Witches",
+        "part": "Part 1",
+        "order": 1
+      },
+      "firstHeading": "Book 3 - Three Little Witches",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 3 - Three Little Witches/Part 1/02 - Chapter 02.md",
+      "extension": ".md",
+      "bytes": 435,
+      "sha256": "0c5c949611df1b07f30fdd4ee352bdc620e6c8a599eb2386121649d67e6ce0cc",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 02",
+        "book": "Three Little Witches",
+        "part": "Part 1",
+        "order": 2
+      },
+      "firstHeading": "Book 3 - Three Little Witches",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 3 - Three Little Witches/Part 1/03 - Chapter 03.md",
+      "extension": ".md",
+      "bytes": 435,
+      "sha256": "e02e073ef2c6ed991f6ba130c4bda769813d5b4335f434c2362db3f6ee6787e2",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 03",
+        "book": "Three Little Witches",
+        "part": "Part 1",
+        "order": 3
+      },
+      "firstHeading": "Book 3 - Three Little Witches",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 3 - Three Little Witches/Part 1/04 - Interlude.md",
+      "extension": ".md",
+      "bytes": 534,
+      "sha256": "ae78526130adc69ef8b48d8a96ce58420944625b40cd6dfca8d680a938d955ef",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "interlude",
+        "title": "Interlude",
+        "book": "Three Little Witches",
+        "part": "Part 1",
+        "order": 4
+      },
+      "firstHeading": "Book 3 - Three Little Witches",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 1/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 1/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 1/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Assets/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Assets/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 3 - Three Little Witches/Part 1/README.md",
+      "extension": ".md",
+      "bytes": 749,
+      "sha256": "e8794fc4350524edb5e11e3ae656ac8890cc4bc9f3767fdee4f54890e0158988",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "part",
+        "title": "Three Little Witches - Part 1",
+        "book": "Three Little Witches",
+        "part": "Part 1",
+        "order": 0
+      },
+      "firstHeading": "Book 3 - Three Little Witches",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 1/01 - Chapter 01",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 1/01 - Chapter 01.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 1/02 - Chapter 02",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 1/02 - Chapter 02.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 1/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 1/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 1/04 - Interlude",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 1/04 - Interlude.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 3 - Three Little Witches/Part 2/01 - Chapter 01.md",
+      "extension": ".md",
+      "bytes": 435,
+      "sha256": "487130dae6815e3d4da16143eaf80a4a29eacdc21b2f021b85a83dbb857dd9f8",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 01",
+        "book": "Three Little Witches",
+        "part": "Part 2",
+        "order": 1
+      },
+      "firstHeading": "Book 3 - Three Little Witches",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 3 - Three Little Witches/Part 2/02 - Chapter 02.md",
+      "extension": ".md",
+      "bytes": 435,
+      "sha256": "c9937263312b32ddd20691700fa7621b25d411f9c57a788f56128f76930d5136",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 02",
+        "book": "Three Little Witches",
+        "part": "Part 2",
+        "order": 2
+      },
+      "firstHeading": "Book 3 - Three Little Witches",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 3 - Three Little Witches/Part 2/03 - Chapter 03.md",
+      "extension": ".md",
+      "bytes": 435,
+      "sha256": "261211480d052ec3e36d5fe55d591021cb0feb5c6b88a5c92c94a388a82031cb",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 03",
+        "book": "Three Little Witches",
+        "part": "Part 2",
+        "order": 3
+      },
+      "firstHeading": "Book 3 - Three Little Witches",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 3 - Three Little Witches/Part 2/04 - Interlude.md",
+      "extension": ".md",
+      "bytes": 534,
+      "sha256": "daf976fd81b57a7024952ad3861b37044b47e63a0311c5a6ac06fbd9a8738ee6",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "interlude",
+        "title": "Interlude",
+        "book": "Three Little Witches",
+        "part": "Part 2",
+        "order": 4
+      },
+      "firstHeading": "Book 3 - Three Little Witches",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 2/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 2/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 2/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Assets/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Assets/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 3 - Three Little Witches/Part 2/README.md",
+      "extension": ".md",
+      "bytes": 749,
+      "sha256": "edbd1d23d718190e5c262e37da195d07dc25b427eadb609d7d6c1ede81161a26",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "part",
+        "title": "Three Little Witches - Part 2",
+        "book": "Three Little Witches",
+        "part": "Part 2",
+        "order": 0
+      },
+      "firstHeading": "Book 3 - Three Little Witches",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 2/01 - Chapter 01",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 2/01 - Chapter 01.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 2/02 - Chapter 02",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 2/02 - Chapter 02.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 2/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 2/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 2/04 - Interlude",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 2/04 - Interlude.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 3 - Three Little Witches/README.md",
+      "extension": ".md",
+      "bytes": 530,
+      "sha256": "c7f5e4e29e370b59c40e8708a6cb1b20047dde68fa50a151330224948c09f18f",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "book",
+        "title": "Three Little Witches",
+        "book": "Three Little Witches",
+        "order": 0
+      },
+      "firstHeading": "Book 3 - Three Little Witches",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 1/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 4 - The Feud of the Vampires/Part 1/01 - Chapter 01.md",
+      "extension": ".md",
+      "bytes": 447,
+      "sha256": "b1c6f776cbe813d9a0b77eb12b66361b6b12e5e7624d5cc6123e002a60db700c",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 01",
+        "book": "The Feud of the Vampires",
+        "part": "Part 1",
+        "order": 1
+      },
+      "firstHeading": "Book 4 - The Feud of the Vampires",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 4 - The Feud of the Vampires/Part 1/02 - Chapter 02.md",
+      "extension": ".md",
+      "bytes": 447,
+      "sha256": "671ab41c4419d3bcdbe91fb94507ad34f465549611e2202f6d7f7bcfe4c97553",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 02",
+        "book": "The Feud of the Vampires",
+        "part": "Part 1",
+        "order": 2
+      },
+      "firstHeading": "Book 4 - The Feud of the Vampires",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 4 - The Feud of the Vampires/Part 1/03 - Chapter 03.md",
+      "extension": ".md",
+      "bytes": 447,
+      "sha256": "8011787c8cd0995fce99bd0f9544aae09cd29c5f8ff1cebfc72f6516a3f8af72",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 03",
+        "book": "The Feud of the Vampires",
+        "part": "Part 1",
+        "order": 3
+      },
+      "firstHeading": "Book 4 - The Feud of the Vampires",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 4 - The Feud of the Vampires/Part 1/04 - Interlude.md",
+      "extension": ".md",
+      "bytes": 550,
+      "sha256": "4eecd309325aa57ab535fc53f28020a1a3f8304428bd3727be9a9a441b21cf99",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "interlude",
+        "title": "Interlude",
+        "book": "The Feud of the Vampires",
+        "part": "Part 1",
+        "order": 4
+      },
+      "firstHeading": "Book 4 - The Feud of the Vampires",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 1/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 1/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 1/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Assets/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Assets/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 4 - The Feud of the Vampires/Part 1/README.md",
+      "extension": ".md",
+      "bytes": 781,
+      "sha256": "e17894b9c0e24ff63068ab84eee9019e5ea419936bca3d0d645a9023375fa075",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "part",
+        "title": "The Feud of the Vampires - Part 1",
+        "book": "The Feud of the Vampires",
+        "part": "Part 1",
+        "order": 0
+      },
+      "firstHeading": "Book 4 - The Feud of the Vampires",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 1/01 - Chapter 01",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 1/01 - Chapter 01.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 1/02 - Chapter 02",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 1/02 - Chapter 02.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 1/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 1/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 1/04 - Interlude",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 1/04 - Interlude.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 4 - The Feud of the Vampires/Part 2/01 - Chapter 01.md",
+      "extension": ".md",
+      "bytes": 447,
+      "sha256": "5ab3ea81c0533bcaf9600d7e47caf939171bf66aa753a679bee8acde9778babd",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 01",
+        "book": "The Feud of the Vampires",
+        "part": "Part 2",
+        "order": 1
+      },
+      "firstHeading": "Book 4 - The Feud of the Vampires",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 4 - The Feud of the Vampires/Part 2/02 - Chapter 02.md",
+      "extension": ".md",
+      "bytes": 447,
+      "sha256": "985820d6b52835886a5ff026e681d653b6031b98e2162e36f0ebba99bf87f457",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 02",
+        "book": "The Feud of the Vampires",
+        "part": "Part 2",
+        "order": 2
+      },
+      "firstHeading": "Book 4 - The Feud of the Vampires",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 4 - The Feud of the Vampires/Part 2/03 - Chapter 03.md",
+      "extension": ".md",
+      "bytes": 447,
+      "sha256": "1dff963406dea5a30367c6b54376545b1bff6081371ed66fc6ae10a80240d95b",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 03",
+        "book": "The Feud of the Vampires",
+        "part": "Part 2",
+        "order": 3
+      },
+      "firstHeading": "Book 4 - The Feud of the Vampires",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 4 - The Feud of the Vampires/Part 2/04 - Interlude.md",
+      "extension": ".md",
+      "bytes": 550,
+      "sha256": "38c708f3da2d2917afa4c5c17e8a9a7a9ccfcf5c0bfc09ce3b95e8eda6efb958",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "interlude",
+        "title": "Interlude",
+        "book": "The Feud of the Vampires",
+        "part": "Part 2",
+        "order": 4
+      },
+      "firstHeading": "Book 4 - The Feud of the Vampires",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 2/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 2/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 2/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Assets/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Assets/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 4 - The Feud of the Vampires/Part 2/README.md",
+      "extension": ".md",
+      "bytes": 781,
+      "sha256": "598e02d7677a8eeaa87bb848ac15d73c8c808149f3bad1070fe5e6cff6695779",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "part",
+        "title": "The Feud of the Vampires - Part 2",
+        "book": "The Feud of the Vampires",
+        "part": "Part 2",
+        "order": 0
+      },
+      "firstHeading": "Book 4 - The Feud of the Vampires",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 2/01 - Chapter 01",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 2/01 - Chapter 01.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 2/02 - Chapter 02",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 2/02 - Chapter 02.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 2/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 2/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 2/04 - Interlude",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 2/04 - Interlude.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 4 - The Feud of the Vampires/README.md",
+      "extension": ".md",
+      "bytes": 550,
+      "sha256": "c54edbe942c12be8712342946e7ddf99134f47742d72f2cd4690756c0460151f",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "book",
+        "title": "The Feud of the Vampires",
+        "book": "The Feud of the Vampires",
+        "order": 0
+      },
+      "firstHeading": "Book 4 - The Feud of the Vampires",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 1/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 5 - Paradox/Part 1/01 - Chapter 01.md",
+      "extension": ".md",
+      "bytes": 396,
+      "sha256": "d3c3fb2a56da07bc3d1cc32988a2af94c974d150b202be2da23b3eed4afc459b",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 01",
+        "book": "Paradox",
+        "part": "Part 1",
+        "order": 1
+      },
+      "firstHeading": "Book 5 - Paradox",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 5 - Paradox/Part 1/02 - Chapter 02.md",
+      "extension": ".md",
+      "bytes": 396,
+      "sha256": "bd918a0f0c3c2de5179b83089f5210ffabbe02f80a5c44a2797e163ee92330d2",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 02",
+        "book": "Paradox",
+        "part": "Part 1",
+        "order": 2
+      },
+      "firstHeading": "Book 5 - Paradox",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 5 - Paradox/Part 1/03 - Chapter 03.md",
+      "extension": ".md",
+      "bytes": 396,
+      "sha256": "10ff1e5bd03198611f8400b165c8c09e336503b4d5b47bd5dfb99ffc0aa2fa19",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 03",
+        "book": "Paradox",
+        "part": "Part 1",
+        "order": 3
+      },
+      "firstHeading": "Book 5 - Paradox",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 5 - Paradox/Part 1/04 - Interlude.md",
+      "extension": ".md",
+      "bytes": 482,
+      "sha256": "71e6f61d35c4b7e2725bb860904332080a28c344c0260b7f4ef026fc04ce2845",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "interlude",
+        "title": "Interlude",
+        "book": "Paradox",
+        "part": "Part 1",
+        "order": 4
+      },
+      "firstHeading": "Book 5 - Paradox",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 1/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 1/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 1/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Assets/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Assets/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 5 - Paradox/Part 1/README.md",
+      "extension": ".md",
+      "bytes": 645,
+      "sha256": "e7982a17024f4b654e92969d5450d3ce126e933355f3a0375b19d2c493f220fd",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "part",
+        "title": "Paradox - Part 1",
+        "book": "Paradox",
+        "part": "Part 1",
+        "order": 0
+      },
+      "firstHeading": "Book 5 - Paradox",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 1/01 - Chapter 01",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 1/01 - Chapter 01.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 1/02 - Chapter 02",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 1/02 - Chapter 02.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 1/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 1/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 1/04 - Interlude",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 1/04 - Interlude.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 5 - Paradox/Part 2/01 - Chapter 01.md",
+      "extension": ".md",
+      "bytes": 396,
+      "sha256": "80f3c5cba02b31a8b52b87714ef77febcc7378996b7f96b03c545d2591f15851",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 01",
+        "book": "Paradox",
+        "part": "Part 2",
+        "order": 1
+      },
+      "firstHeading": "Book 5 - Paradox",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 5 - Paradox/Part 2/02 - Chapter 02.md",
+      "extension": ".md",
+      "bytes": 396,
+      "sha256": "1e133212dc2d2e7f5291ec46484eceb36fa39c4c35916f88c083a99eba16179e",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 02",
+        "book": "Paradox",
+        "part": "Part 2",
+        "order": 2
+      },
+      "firstHeading": "Book 5 - Paradox",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 5 - Paradox/Part 2/03 - Chapter 03.md",
+      "extension": ".md",
+      "bytes": 396,
+      "sha256": "bdde26abe28880946ceeb6e4b3aecd8ed01a36e7db58baf2cbae10d4fa25f174",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 03",
+        "book": "Paradox",
+        "part": "Part 2",
+        "order": 3
+      },
+      "firstHeading": "Book 5 - Paradox",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 5 - Paradox/Part 2/04 - Interlude.md",
+      "extension": ".md",
+      "bytes": 482,
+      "sha256": "32400659e2a0ed096688b3baa3b5e49f38d2ef425dee2f7e0d4bfcb01e5082a0",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "interlude",
+        "title": "Interlude",
+        "book": "Paradox",
+        "part": "Part 2",
+        "order": 4
+      },
+      "firstHeading": "Book 5 - Paradox",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 2/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 2/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 2/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Assets/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Assets/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 5 - Paradox/Part 2/README.md",
+      "extension": ".md",
+      "bytes": 645,
+      "sha256": "972061a9556a5da1b42db142fbd046d7d31d1385fec413b184e6f1accebb1e42",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "part",
+        "title": "Paradox - Part 2",
+        "book": "Paradox",
+        "part": "Part 2",
+        "order": 0
+      },
+      "firstHeading": "Book 5 - Paradox",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 2/01 - Chapter 01",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 2/01 - Chapter 01.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 2/02 - Chapter 02",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 2/02 - Chapter 02.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 2/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 2/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 2/04 - Interlude",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 2/04 - Interlude.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 5 - Paradox/README.md",
+      "extension": ".md",
+      "bytes": 465,
+      "sha256": "0fa7fd255db2973266ab1241d1bae01757b89ee582887651bf91cfbd91e469cc",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "book",
+        "title": "Paradox",
+        "book": "Paradox",
+        "order": 0
+      },
+      "firstHeading": "Book 5 - Paradox",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 1/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 6 - Shaman/Part 1/01 - Chapter 01.md",
+      "extension": ".md",
+      "bytes": 369,
+      "sha256": "7687af1aa7b421e0929640506a83e849de55d83d07f4ae199c2f825d3f6989b5",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 01",
+        "book": "Shaman",
+        "part": "Part 1",
+        "order": 1
+      },
+      "firstHeading": "Book 6 - Shaman",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 6 - Shaman/Part 1/02 - Chapter 02.md",
+      "extension": ".md",
+      "bytes": 31244,
+      "sha256": "558b396853ba374fa8ce65bd222bc3c8c96b0a854669749e73a927697b2c3d7d",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 02",
+        "book": "Shaman",
+        "part": "Part 1",
+        "order": 2
+      },
+      "firstHeading": "Book 6 - Shaman",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 6 - Shaman/Part 1/03 - Chapter 03.md",
+      "extension": ".md",
+      "bytes": 393,
+      "sha256": "eb611cd4fd73ae5ed54f74536728d3ba53367b910ff723732e8766e15edeba6f",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 03",
+        "book": "Shaman",
+        "part": "Part 1",
+        "order": 3
+      },
+      "firstHeading": "Book 6 - Shaman",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 1/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 6 - Shaman/Part 1/04 - Interlude.md",
+      "extension": ".md",
+      "bytes": 478,
+      "sha256": "50d6f09262aa441b31c0f336d7b4a8d0858906130bdf68e60cf7768e098c74e8",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "interlude",
+        "title": "Interlude",
+        "book": "Shaman",
+        "part": "Part 1",
+        "order": 4
+      },
+      "firstHeading": "Book 6 - Shaman",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 1/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 1/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 1/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Assets/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Assets/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 6 - Shaman/Part 1/README.md",
+      "extension": ".md",
+      "bytes": 637,
+      "sha256": "c5dcc2993d6ab70e6665cbdfbf9b02123e8b4587e3dd2c5d5e811f70e815898b",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "part",
+        "title": "Shaman - Part 1",
+        "book": "Shaman",
+        "part": "Part 1",
+        "order": 0
+      },
+      "firstHeading": "Book 6 - Shaman",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 1/01 - Chapter 01",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 1/01 - Chapter 01.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 1/02 - Chapter 02",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 1/02 - Chapter 02.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 1/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 1/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 1/04 - Interlude",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 1/04 - Interlude.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 6 - Shaman/Part 2/01 - Chapter 01.md",
+      "extension": ".md",
+      "bytes": 393,
+      "sha256": "0d76750cf1fa38138c491cb870c5cfdb15c3b226179b380e3d2ea5f706609ed4",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 01",
+        "book": "Shaman",
+        "part": "Part 2",
+        "order": 1
+      },
+      "firstHeading": "Book 6 - Shaman",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 6 - Shaman/Part 2/02 - Chapter 02.md",
+      "extension": ".md",
+      "bytes": 393,
+      "sha256": "ee34faee941e1635cdd289ecb96327bb5c36f6b6bdfbfd5c9ecc8b87b513ed2a",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 02",
+        "book": "Shaman",
+        "part": "Part 2",
+        "order": 2
+      },
+      "firstHeading": "Book 6 - Shaman",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 6 - Shaman/Part 2/03 - Chapter 03.md",
+      "extension": ".md",
+      "bytes": 393,
+      "sha256": "2084e6f23047983ba1328383162c0a21fa9d4a69adf8996b9bb282b07d3ead03",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "title": "Chapter 03",
+        "book": "Shaman",
+        "part": "Part 2",
+        "order": 3
+      },
+      "firstHeading": "Book 6 - Shaman",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 6 - Shaman/Part 2/04 - Interlude.md",
+      "extension": ".md",
+      "bytes": 478,
+      "sha256": "ffcf98894727f8d58a583c79f41f92860213fae02ded63123300521915439261",
+      "sourceKind": "manuscript",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "interlude",
+        "title": "Interlude",
+        "book": "Shaman",
+        "part": "Part 2",
+        "order": 4
+      },
+      "firstHeading": "Book 6 - Shaman",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 2/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 2/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 2/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Assets/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Assets/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 6 - Shaman/Part 2/README.md",
+      "extension": ".md",
+      "bytes": 637,
+      "sha256": "ec5e1b09ba44c2868473cd81b88ab2ef118cd0d45ea4bce610b6a72b42678a9c",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "part",
+        "title": "Shaman - Part 2",
+        "book": "Shaman",
+        "part": "Part 2",
+        "order": 0
+      },
+      "firstHeading": "Book 6 - Shaman",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 2/01 - Chapter 01",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 2/01 - Chapter 01.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 2/02 - Chapter 02",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 2/02 - Chapter 02.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 2/03 - Chapter 03",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 2/03 - Chapter 03.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 2/04 - Interlude",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 2/04 - Interlude.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 6 - Shaman/README.md",
+      "extension": ".md",
+      "bytes": 460,
+      "sha256": "f6ad25f4d02b04a53ca269ae5b6f4b21b87143f07e0ecf7ac9b913c06ddd764a",
+      "sourceKind": "book-structure",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "book",
+        "title": "Shaman",
+        "book": "Shaman",
+        "order": 0
+      },
+      "firstHeading": "Book 6 - Shaman",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 1/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 1/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/Part 2/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/Part 2/README.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Book 6 - Shaman/Recovered Drafts/Recovered Draft - The Game and Pharaoh's Court.md",
+      "extension": ".md",
+      "bytes": 10862,
+      "sha256": "e13347928e5c7e110682aafc7f992d8dcc317a5a4a9d4fd81b0dca44fd891acf",
+      "sourceKind": "recovered-draft",
+      "frontMatter": {},
+      "firstHeading": "Shaman — Recovered Game and Pharaoh's Court Sequence",
+      "publication": {
+        "classification": "unclassified",
+        "publicEligible": false
+      },
+      "links": []
+    },
+    {
+      "path": "Series Introduction.md",
+      "extension": ".md",
+      "bytes": 10530,
+      "sha256": "24fb30587e1e05b7ac1e5835264e9e90f1dabfdbe1d6657f6abc65b29e5bae63",
+      "sourceKind": "series-metadata",
+      "frontMatter": {},
+      "firstHeading": "[[Books]]",
+      "publication": {
+        "classification": "unclassified",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Books",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "RSC/Back Matter/Bestiary",
+          "resolution": {
+            "status": "resolved",
+            "path": "Back Matter/Bestiary.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Series Overview.md",
+      "extension": ".md",
+      "bytes": 1106,
+      "sha256": "0612862194336f1469f7766ae075c5c3f59a3ded897dc0217e7ee764df672a73",
+      "sourceKind": "series-metadata",
+      "frontMatter": {
+        "publish": true,
+        "series": "The Rock Springs Chronicles",
+        "type": "series-overview",
+        "title": "The Rock Springs Chronicles - Series Overview"
+      },
+      "firstHeading": "The Rock Springs Chronicles",
+      "publication": {
+        "classification": "ambiguous-publish-flag",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "Rock Springs Chronicles/Book 1 - Jackie's Window/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 1 - Jackie's Window/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 2 - Hunter's Hunted/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 2 - Hunter's Hunted/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 3 - Three Little Witches/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 3 - Three Little Witches/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 4 - The Feud of the Vampires/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 4 - The Feud of the Vampires/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 5 - Paradox/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 5 - Paradox/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Book 6 - Shaman/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Book 6 - Shaman/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Hometown Nightmares/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Hometown Nightmares/README.md"
+          }
+        },
+        {
+          "target": "Rock Springs Chronicles/Anthologies/Anthology 2 - Title TBD/README",
+          "resolution": {
+            "status": "resolved",
+            "path": "Anthologies/Anthology 2 - Title TBD/README.md"
+          }
+        },
+        {
+          "target": "Author",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Back Matter/Author.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Templates/chapter.md",
+      "extension": ".md",
+      "bytes": 469,
+      "sha256": "36f2678a26a874188218c3ba6b1108eedfb7da17d7d6d524d64d747e38d616ae",
+      "sourceKind": "template",
+      "frontMatter": {
+        "status": "draft",
+        "series": "The Rock Springs Chronicles",
+        "type": "chapter",
+        "book": "Book 1 – Jackie’s Window",
+        "part": "Part 1",
+        "chapter": 1
+      },
+      "firstHeading": "CHAPTER 01",
+      "publication": {
+        "classification": "explicit-draft",
+        "publicEligible": false
+      },
+      "links": [
+        {
+          "target": "00 – Series Overview",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "02 – Chapter 02",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Book 1 – Jackie’s Window",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "The Rock Springs Chronicles",
+          "resolution": {
+            "status": "unresolved"
+          }
+        },
+        {
+          "target": "Author",
+          "resolution": {
+            "status": "resolved-by-unique-name",
+            "path": "Back Matter/Author.md"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Untitled.base",
+      "extension": ".base",
+      "bytes": 39,
+      "sha256": "07bb42152a9f7290a4aa0940c11fffb8618248c567adbde6b1647f84312361ff"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "title": "Rock Springs \u2014 Jackie's Window, Part 1, Chapters 1\u20138",
+  "source_repository": "elderMicheal/micheal-writes",
+  "source_branch": "primary",
+  "source_files": [
+    "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 01.md",
+    "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 02.md",
+    "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 03.md",
+    "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 04.md",
+    "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 05.md",
+    "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 06.md",
+    "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 07.md",
+    "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 08.md"
+  ],
+  "source_shas": {
+    "Chapter 01.md": "43915a02fcbddf61d2aa5eb508fafc61ed6bd33c",
+    "Chapter 02.md": "2fbf82a35413b513efd196221605ee8847e88528",
+    "Chapter 03.md": "67bc77a9ca02f8f450a63829e0a3905de3497a54",
+    "Chapter 04.md": "3a0cf4b4cc1cda38307d1fc641d773da3ca69075",
+    "Chapter 05.md": "05b41d4b255c4facb98d8a1eb58c2e9102db3e09",
+    "Chapter 06.md": "d0f9d59919361f47ae40c10a1f1a95d38a940dd8",
+    "Chapter 07.md": "0069f2cf4809ff673298ea09ef23b3be0e2b2565",
+    "Chapter 08.md": "1f7e91a9c1619cc580d0edb9a4e4f061500e95b1"
+  },
+  "canon_additions": [
+    "Partridge Street",
+    "Oak Street",
+    "eight houses on the maintained side of Partridge",
+    "four New Beginnings campus houses among those eight",
+    "old school and staging lot across Partridge",
+    "back alley behind the campus houses",
+    "Main Street one block from Partridge",
+    "Southern Illinois State University south down Main Street and across the river",
+    "buckled sidewalk/root ramp",
+    "sagging chain-link fence on the deteriorated school side",
+    "highway approach context from Chapter 6"
+  ],
+  "important_limits": [
+    "Chapter 7 currently contains no prose.",
+    "Exact coordinates, block lengths, lot dimensions, architecture, and campus orientation remain interpretive.",
+    "The highway sign distances establish regional approach context but not a surveyed road alignment.",
+    "PRESENTATION_ nodes are visual continuity, not canon."
+  ]
+}

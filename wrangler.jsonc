@@ -1,0 +1,26 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "rocksprings-michealburford-com",
+  "main": "./worker/index.ts",
+<<<<<<< HEAD
+  "compatibility_date": "2026-07-23",
+  "compatibility_flags": ["nodejs_compat"],
+=======
+  "compatibility_date": "2026-07-11",
+  "routes": [
+    {
+      "pattern": "rocksprings.michealburford.com",
+      "custom_domain": true
+    }
+  ],
+>>>>>>> 65770f3f2baf7aac60f1a3d01672b89c3141eb80
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}

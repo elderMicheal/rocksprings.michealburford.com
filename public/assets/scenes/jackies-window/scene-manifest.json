@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "id": "jackies-window-part-one-spatial-evidence-v5",
+  "title": "Rock Springs: Jackie's Window",
+  "model": {
+    "url": "/assets/scenes/jackies-window/rock-springs-jackies-window.glb",
+    "sha256": "3c259f5a98681c5bb32955999255ca36409f2bb01d0021230e473ba1dc5b66fa",
+    "bytes": 383632,
+    "format": "glTF 2.0 binary",
+    "stats": {
+      "nodes": 604,
+      "meshes": 35,
+      "primitives": 35,
+      "baseTriangles": 8694,
+      "materials": 30,
+      "cameras": 10
+    },
+    "extensions": [
+      "EXT_mesh_gpu_instancing",
+      "KHR_lights_punctual",
+      "KHR_materials_emissive_strength"
+    ]
+  },
+  "fallback": {
+    "kind": "neutral",
+    "alt": "Neutral background behind the interpretive scene"
+  },
+  "provenance": {
+    "classification": "generated-presentation-media",
+    "sourceReferences": [
+      "Jackie's Window, Part 1, Chapters 1–8"
+    ],
+    "auditedAgainstRevision": "00350c94f1152116e1d27250dfb0674c5ccfea37",
+    "spatialPlan": "scene-data/jackies-window-spatial-plan.json",
+    "evidenceDocument": "docs/phase-2/JACKIES_WINDOW_SPATIAL_EVIDENCE.md",
+    "generator": "scripts/generate-town-scene.mjs"
+  },
+  "canon": {
+    "geometry": "interpretive",
+    "distances": "source-stated distances are scaled; otherwise approximate",
+    "architecture": "interpretive",
+    "publicLandmarks": false,
+    "nodeNaming": "CANON_* identifies source-established locations or relationships; INFERRED_* identifies reasoned placement; PRESENTATION_* identifies connective geometry.",
+    "notice": "The scene is an interpretive visualization. Unspecified distances, coordinates, bearings, and architecture are not asserted as canon."
+  },
+  "requiredLandmarkNodes": [
+    "CANON_Jackies_Window",
+    "CANON_New_Beginnings",
+    "CANON_Jackies_House",
+    "CANON_St_Thomas_Cathedral",
+    "CANON_Abbys_Apartment",
+    "CANON_Bakery_Storefront",
+    "CANON_Old_Elementary_School",
+    "CANON_Old_School_Asphalt_Staging_Lot",
+    "CANON_Police_Station",
+    "CANON_Sheriffs_Sons_House",
+    "INFERRED_Detective_Position",
+    "CANON_Chalmers_Property",
+    "CANON_City_Park",
+    "CANON_Old_Ruins",
+    "CANON_Main_Street",
+    "CANON_River"
+  ],
+  "authoredViews": [
+    {
+      "cameraNode": "Camera_Town_Overview",
+      "label": "Town overview",
+      "sourceReferences": ["Chapter 1:15-17", "Chapter 3:33", "Chapter 4:15-17"]
+    },
+    {
+      "cameraNode": "Camera_Abby_POV",
+      "label": "Abby's viewpoint",
+      "sourceReferences": ["Chapter 3:33-47", "Chapter 3:81-83"]
+    },
+    {
+      "cameraNode": "Camera_Jackie_Window",
+      "label": "Jackie's window",
+      "sourceReferences": ["Chapter 8:18-20", "Chapter 8:48-50"]
+    },
+    {
+      "cameraNode": "Camera_Downtown",
+      "label": "Downtown",
+      "sourceReferences": ["Chapter 1:15", "Chapter 3:33"]
+    },
+    {
+      "cameraNode": "Camera_New_Beginnings",
+      "label": "New Beginnings",
+      "sourceReferences": ["Chapter 1:17", "Chapter 3:81-83"]
+    },
+    {
+      "cameraNode": "Camera_Parade_Staging",
+      "label": "Staging area",
+      "sourceReferences": ["Chapter 3:69-73", "Chapter 8:18-20"]
+    },
+    {
+      "cameraNode": "Camera_Chalmers_Route",
+      "label": "Bicycle route",
+      "sourceReferences": ["Chapter 4:15-17", "Chapter 4:43-63"]
+    },
+    {
+      "cameraNode": "Camera_Ruins",
+      "label": "Old ruins",
+      "sourceReferences": ["Chapter 3:33-35"]
+    }
+  ],
+  "descent": {
+    "startCameraNode": "Camera_Descent_Start",
+    "endCameraNode": "Camera_Descent_End"
+  },
+  "authoredRoutes": [
+    "PATH_Abby_Sightline",
+    "PATH_Jackie_Downtown_View",
+    "PATH_Jackie_Staging_Sightline",
+    "PATH_Detective_Surveillance",
+    "PATH_Boys_Bicycle_Route",
+    "PATH_Parade_Route",
+    "PATH_Downtown_New_Beginnings"
+  ],
+  "anchors": []
+}
