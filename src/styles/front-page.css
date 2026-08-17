@@ -1,0 +1,543 @@
+.rsc-front-page {
+  --news-paper: #ded1b3;
+  --news-paper-light: #e8dec4;
+  --news-paper-dark: #c6b892;
+  --news-ink: #2b261b;
+  --news-ink-soft: #5a503d;
+  --news-rule: #4b4231;
+  --news-red: #7a302c;
+  --news-blue: #4e6267;
+  min-height: 100vh;
+  padding: clamp(0.5rem, 1.5vw, 1.25rem);
+  color: var(--news-ink);
+  background:
+    radial-gradient(circle at 20% 10%, rgb(255 255 255 / 0.025), transparent 20rem),
+    #211d16;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.front-page-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.front-page-outer-frame {
+  box-sizing: border-box;
+  width: min(100%, 88rem);
+  min-width: 44rem;
+  margin-inline: auto;
+  padding: clamp(0.55rem, 1vw, 0.85rem);
+  border: 1px solid #72654d;
+  background:
+    radial-gradient(circle at 16% 22%, rgb(73 59 37 / 0.045) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 73% 64%, rgb(73 59 37 / 0.035) 0 1px, transparent 1.3px),
+    linear-gradient(rgb(82 67 42 / 0.025) 1px, transparent 1px),
+    var(--news-paper);
+  background-size: 23px 19px, 31px 29px, 100% 7px, auto;
+  box-shadow: 0 1.4rem 4rem rgb(0 0 0 / 0.5);
+}
+
+.front-page-inner-frame {
+  padding: clamp(0.8rem, 1.5vw, 1.35rem);
+  border: 2px solid var(--news-rule);
+  box-shadow: inset 0 0 0 7px rgb(222 209 179 / 0.7), inset 0 0 0 8px rgb(75 66 49 / 0.55);
+}
+
+.front-page-grid {
+  display: grid;
+  min-height: 0;
+  aspect-ratio: 596 / 674;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows:
+    minmax(0, 64fr)
+    minmax(0, 148fr)
+    minmax(0, 64fr)
+    minmax(0, 147fr)
+    minmax(0, 170fr);
+  gap: clamp(0.7rem, 1.35vw, 1.25rem);
+}
+
+.front-page-box {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--news-rule);
+  background: rgb(232 222 196 / 0.16);
+}
+
+.front-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  padding: 0.4rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(0.5rem, 0.75vw, 0.72rem);
+  letter-spacing: 0.05em;
+  line-height: 1.15;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.front-meta strong {
+  font-size: 1.08em;
+}
+
+.front-meta-1 { grid-column: 1 / 2; grid-row: 1; }
+.front-meta-2 { grid-column: 2 / 3; grid-row: 1; }
+.front-meta-3 { grid-column: 11 / 12; grid-row: 1; }
+.front-meta-4 { grid-column: 12 / 13; grid-row: 1; }
+
+.front-masthead {
+  grid-column: 3 / 11;
+  grid-row: 1;
+  display: grid;
+  place-content: center;
+  padding: 0.3rem 0.8rem 0.45rem;
+  border-top-width: 4px;
+  text-align: center;
+}
+
+.front-masthead-kicker,
+.front-masthead-rule {
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(0.52rem, 0.7vw, 0.7rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.front-masthead-kicker {
+  margin-bottom: -0.2rem;
+  font-weight: 700;
+}
+
+.front-masthead h1 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.6rem, 4.65vw, 4.85rem);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 0.87;
+  text-transform: uppercase;
+}
+
+.front-masthead-rule {
+  margin-top: 0.4rem;
+  letter-spacing: 0.1em;
+}
+
+.front-top-story {
+  grid-column: 1 / 7;
+  grid-row: 2;
+}
+
+.front-map-exhibit {
+  grid-column: 7 / 13;
+  grid-row: 2 / 4;
+}
+
+.front-ad-banner {
+  grid-column: 1 / 7;
+  grid-row: 3;
+  display: grid;
+  place-content: center;
+  gap: 0.15rem;
+  padding: 0.55rem 0.8rem;
+  color: var(--news-paper-light);
+  background:
+    linear-gradient(rgb(255 255 255 / 0.018) 1px, transparent 1px),
+    #2c271c;
+  background-size: 100% 4px, auto;
+  font-family: "Courier New", Courier, monospace;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.front-ad-banner > span {
+  font-size: clamp(0.52rem, 0.75vw, 0.72rem);
+  letter-spacing: 0.08em;
+}
+
+.front-ad-banner strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1rem, 2.05vw, 2rem);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+
+.front-ad-banner:hover,
+.front-ad-banner:focus-visible {
+  color: #f4ead1;
+}
+
+.front-introduction {
+  grid-column: 1 / 7;
+  grid-row: 4 / 6;
+  padding: clamp(0.8rem, 1.5vw, 1.35rem);
+}
+
+.front-archive {
+  grid-column: 7 / 10;
+  grid-row: 4 / 6;
+  padding: clamp(0.8rem, 1.5vw, 1.35rem);
+}
+
+.front-books {
+  grid-column: 10 / 13;
+  grid-row: 4;
+  padding: clamp(0.65rem, 1.1vw, 1rem);
+}
+
+.front-anthologies {
+  grid-column: 10 / 13;
+  grid-row: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12rem;
+  padding: 0.65rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(0.8rem, 1.65vw, 1.45rem);
+  letter-spacing: 0.04em;
+  line-height: 1.12;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.front-anthologies span:nth-child(2) {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.15em;
+  font-style: italic;
+}
+
+.front-section-label {
+  margin: 0 0 0.6rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--news-rule);
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(0.58rem, 0.72vw, 0.72rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.front-introduction h2 {
+  margin: 0 0 0.85rem;
+  font-size: clamp(1.45rem, 3.2vw, 3.35rem);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 0.96;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.front-introduction-copy {
+  columns: 2 13rem;
+  column-gap: 1.15rem;
+  column-rule: 1px solid rgb(75 66 49 / 0.35);
+  font-size: clamp(0.78rem, 1vw, 0.98rem);
+  line-height: 1.42;
+  text-align: justify;
+}
+
+.front-introduction-copy p {
+  margin: 0 0 0.85rem;
+}
+
+.front-source-note {
+  margin: 0.9rem 0 0;
+  padding-top: 0.45rem;
+  border-top: 1px solid rgb(75 66 49 / 0.55);
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(0.52rem, 0.65vw, 0.66rem);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.front-archive-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.front-archive-list span {
+  padding: clamp(0.45rem, 0.9vw, 0.75rem) 0;
+  border-bottom: 1px solid rgb(75 66 49 / 0.38);
+  font-size: clamp(0.95rem, 1.8vw, 1.65rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.front-book-list {
+  display: grid;
+  gap: 0;
+}
+
+.front-book-list > a,
+.front-book-list > span {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: clamp(0.24rem, 0.45vw, 0.4rem) 0;
+  border-bottom: 1px solid rgb(75 66 49 / 0.38);
+  color: var(--news-ink);
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(0.68rem, 1vw, 0.95rem);
+  line-height: 1.05;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.front-book-list strong {
+  font-size: 1.12em;
+}
+
+.front-book-list > a:hover,
+.front-book-list > a:focus-visible {
+  color: var(--news-red);
+}
+
+.front-book-unavailable {
+  opacity: 0.62;
+}
+
+/* Existing lead-story data fitted into the locked Top Story box. */
+.front-top-story .lead-story {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  flex-direction: column;
+  border: 0;
+  color: var(--news-ink);
+  background: transparent;
+  box-shadow: none;
+}
+
+.front-top-story .lead-intro {
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+  padding: clamp(0.7rem, 1.2vw, 1.15rem);
+}
+
+.front-top-story .lead-summary {
+  display: none;
+}
+
+.front-top-story .section-label {
+  margin: 0 0 0.4rem;
+  color: var(--news-ink-soft);
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(0.54rem, 0.7vw, 0.68rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.front-top-story .lead-intro h2 {
+  margin: 0;
+  color: var(--news-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.45rem, 3.15vw, 3.15rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 0.94;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.front-top-story .lead-dek {
+  display: -webkit-box;
+  margin: 0.65rem 0;
+  overflow: hidden;
+  color: #403726;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.72rem, 0.95vw, 0.94rem);
+  font-style: italic;
+  line-height: 1.35;
+  text-align: center;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+.front-top-story .story-meta {
+  margin: 0.45rem 0 0;
+  color: var(--news-ink-soft);
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(0.5rem, 0.62vw, 0.63rem);
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.front-top-story .module-link {
+  display: inline-flex;
+  min-height: 0;
+  margin-top: 0.45rem;
+  color: var(--news-red);
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(0.5rem, 0.63vw, 0.64rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Existing source-traced map fitted into the locked Map Exhibit box. */
+.front-map-exhibit .map-panel {
+  display: grid;
+  height: 100%;
+  min-height: 0;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  border: 0;
+  color: var(--news-ink);
+  background: transparent;
+  box-shadow: none;
+}
+
+.front-map-exhibit .module-heading {
+  min-height: 0;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--news-rule);
+}
+
+.front-map-exhibit .module-heading h2 {
+  margin: 0;
+  color: var(--news-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.82rem, 1.3vw, 1.25rem);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.front-map-exhibit .module-heading .eyebrow,
+.front-map-exhibit .module-heading a,
+.front-map-exhibit .map-note,
+.front-map-exhibit .map-legend {
+  color: var(--news-ink-soft);
+  font-family: "Courier New", Courier, monospace;
+}
+
+.front-map-exhibit .module-heading .eyebrow {
+  margin: 0 0 0.1rem;
+  font-size: clamp(0.48rem, 0.62vw, 0.62rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.front-map-exhibit .module-heading a {
+  font-size: clamp(0.48rem, 0.6vw, 0.6rem);
+  text-transform: uppercase;
+}
+
+.front-map-exhibit .map-note {
+  margin: 0;
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid rgb(75 66 49 / 0.4);
+  background: rgb(75 66 49 / 0.025);
+  font-size: clamp(0.48rem, 0.62vw, 0.62rem);
+  line-height: 1.3;
+}
+
+.front-map-exhibit .town-map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  align-self: stretch;
+  aspect-ratio: auto;
+  background: #d5c7a5;
+}
+
+.front-map-exhibit .map-ground {
+  fill: #d5c7a5;
+}
+
+.front-map-exhibit .map-grid-line {
+  stroke: rgb(43 38 27 / 0.13);
+}
+
+.front-map-exhibit .map-river {
+  stroke: rgb(78 98 103 / 0.55);
+}
+
+.front-map-exhibit .map-road {
+  stroke: rgb(61 53 39 / 0.62);
+}
+
+.front-map-exhibit .map-road-main-street {
+  stroke: rgb(43 38 27 / 0.88);
+}
+
+.front-map-exhibit .map-route,
+.front-map-exhibit .map-route-detective_surveillance,
+.front-map-exhibit .map-route-boys_bicycle_route {
+  stroke: var(--news-red);
+}
+
+.front-map-exhibit .map-marker circle {
+  fill: var(--news-red);
+  stroke: var(--news-paper-light);
+}
+
+.front-map-exhibit .map-marker-inferred circle {
+  fill: var(--news-blue);
+}
+
+.front-map-exhibit .map-marker .map-marker-core {
+  fill: var(--news-paper-light);
+}
+
+.front-map-exhibit .map-marker text,
+.front-map-exhibit .map-water-label,
+.front-map-exhibit .map-north text {
+  fill: var(--news-ink);
+  paint-order: stroke;
+  stroke: #d5c7a5;
+  stroke-width: 5px;
+}
+
+.front-map-exhibit .map-north path {
+  stroke: var(--news-ink);
+}
+
+.front-map-exhibit .map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.7rem;
+  margin: 0;
+  padding: 0.45rem 0.75rem;
+  border-top: 1px solid rgb(75 66 49 / 0.4);
+  font-size: clamp(0.46rem, 0.56vw, 0.58rem);
+  line-height: 1.2;
+}
+
+.front-map-exhibit .legend-relative,
+.front-map-exhibit .legend-inferred,
+.front-map-exhibit .legend-route {
+  box-shadow: none;
+}
+
+.front-map-exhibit .legend-relative {
+  background: var(--news-red);
+}
+
+.front-map-exhibit .legend-inferred {
+  background: var(--news-blue);
+}
+
+.front-map-exhibit .legend-route {
+  background: var(--news-red);
+}
+
+@media (max-width: 48rem) {
+  .rsc-front-page {
+    padding: 0.4rem;
+  }
+
+  .front-page-outer-frame {
+    min-width: 42rem;
+  }
+}
