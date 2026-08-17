@@ -1,0 +1,4 @@
+Rock Springs production deployment trigger.
+
+Cloudflare Workers Builds should watch only this file for production builds.
+Updating this file deploys the current main branch.
