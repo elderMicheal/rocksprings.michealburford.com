@@ -1,0 +1,520 @@
+.newsletter-page {
+  min-height: 100vh;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+  color: #2a2418;
+  background:
+    radial-gradient(circle at 22% 12%, rgb(255 255 255 / 0.025), transparent 18rem),
+    #242016;
+}
+
+.newsletter-paper {
+  width: min(100%, 92rem);
+  margin-inline: auto;
+  padding: clamp(0.65rem, 1.3vw, 1rem);
+  border: 1px solid #6d6048;
+  background:
+    radial-gradient(circle at 18% 23%, rgb(92 74 44 / 0.04) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 73% 61%, rgb(92 74 44 / 0.035) 0 1px, transparent 1.4px),
+    linear-gradient(rgb(74 59 36 / 0.025) 1px, transparent 1px),
+    #ded1b3;
+  background-size: 23px 19px, 31px 29px, 100% 7px, auto;
+  box-shadow: 0 1.4rem 4rem rgb(0 0 0 / 0.52);
+}
+
+.newsletter-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto auto auto minmax(22rem, auto) auto;
+  gap: clamp(0.55rem, 1vw, 0.9rem);
+}
+
+.newsletter-box {
+  min-width: 0;
+  border: 1px solid #514632;
+  background: rgb(229 217 188 / 0.24);
+}
+
+.newsletter-tbd {
+  display: flex;
+  min-height: 6.2rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  padding: 0.6rem 0.35rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(0.54rem, 0.82vw, 0.72rem);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.newsletter-tbd strong {
+  font-size: 1.08em;
+}
+
+.newsletter-tbd-1 { grid-column: 1 / 2; grid-row: 1; }
+.newsletter-tbd-2 { grid-column: 2 / 3; grid-row: 1; }
+.newsletter-tbd-3 { grid-column: 11 / 12; grid-row: 1; }
+.newsletter-tbd-4 { grid-column: 12 / 13; grid-row: 1; }
+
+.newsletter-header-main {
+  grid-column: 3 / 11;
+  grid-row: 1;
+  display: grid;
+  min-height: 6.2rem;
+  place-content: center;
+  padding: 0.45rem 1rem 0.55rem;
+  text-align: center;
+  border-block-width: 5px 1px;
+}
+
+.newsletter-header-main p,
+.newsletter-header-main h1,
+.newsletter-header-main span {
+  margin: 0;
+}
+
+.newsletter-header-main p {
+  margin-bottom: -0.3rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.6rem, 0.9vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.newsletter-header-main h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 5.1vw, 5rem);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+
+.newsletter-header-main span {
+  margin-top: 0.4rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(0.58rem, 0.8vw, 0.74rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.newsletter-top-story {
+  grid-column: 1 / 7;
+  grid-row: 2;
+  align-self: stretch;
+}
+
+.newsletter-map-exhibit {
+  grid-column: 7 / 13;
+  grid-row: 2 / 4;
+  overflow: hidden;
+}
+
+.newsletter-ad-banner {
+  grid-column: 1 / 7;
+  grid-row: 3;
+  display: grid;
+  min-height: 7rem;
+  align-content: center;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+  color: #e4d7b9;
+  background: #30291c;
+  font-family: Georgia, "Times New Roman", serif;
+  text-align: center;
+  text-decoration: none;
+}
+
+.newsletter-ad-banner:hover {
+  color: #f0e4c8;
+}
+
+.newsletter-ad-banner strong {
+  font-size: clamp(1.15rem, 2.35vw, 2.15rem);
+  font-weight: 500;
+  letter-spacing: 0.015em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.newsletter-ad-kicker,
+.newsletter-ad-banner > span:last-child {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.newsletter-introduction {
+  grid-column: 1 / 7;
+  grid-row: 4 / 6;
+  padding: clamp(1rem, 1.7vw, 1.5rem);
+}
+
+.newsletter-archive-menu {
+  grid-column: 7 / 10;
+  grid-row: 4 / 6;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1rem, 1.7vw, 1.5rem);
+}
+
+.newsletter-books-sidebar {
+  grid-column: 10 / 13;
+  grid-row: 4;
+  padding: clamp(1rem, 1.7vw, 1.5rem);
+}
+
+.newsletter-anthologies {
+  grid-column: 10 / 13;
+  grid-row: 5;
+  display: flex;
+  min-height: 8rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ded1b3;
+  background: #30291c;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.15rem, 2vw, 1.8rem);
+  font-style: italic;
+  line-height: 1.05;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.newsletter-section-kicker {
+  margin: 0 0 0.65rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid #62553d;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.newsletter-introduction h2 {
+  margin: 0 0 0.9rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 3.4vw, 3.4rem);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 0.98;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.newsletter-intro-columns {
+  columns: 2 15rem;
+  column-gap: 1.25rem;
+  column-rule: 1px solid rgb(81 70 50 / 0.32);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.9rem, 1.25vw, 1rem);
+  line-height: 1.42;
+  text-align: justify;
+}
+
+.newsletter-intro-columns p {
+  margin: 0 0 0.9rem;
+}
+
+.newsletter-source-line {
+  margin: 1rem 0 0;
+  padding-top: 0.55rem;
+  border-top: 1px solid #62553d;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.67rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.newsletter-archive-menu a {
+  padding: 0.72rem 0;
+  border-bottom: 1px solid rgb(81 70 50 / 0.45);
+  color: #2a2418;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.15rem, 1.9vw, 1.65rem);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.newsletter-archive-menu a::after {
+  float: right;
+  content: "/";
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.8em;
+}
+
+.newsletter-archive-menu a:hover {
+  color: #6d2d25;
+}
+
+.newsletter-book-list {
+  display: grid;
+}
+
+.newsletter-book-list a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgb(81 70 50 / 0.45);
+  color: #2a2418;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.newsletter-book-list a strong {
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+
+.newsletter-book-list a.is-current {
+  font-weight: 700;
+}
+
+.newsletter-book-list a[aria-disabled="true"] {
+  cursor: default;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Existing lead-story content, restyled as the supplied top-story box. */
+.newsletter-top-story .lead-story {
+  display: block;
+  height: 100%;
+  border: 0;
+  color: #2a2418;
+  background: transparent;
+  box-shadow: none;
+}
+
+.newsletter-top-story .lead-intro,
+.newsletter-top-story .lead-summary {
+  padding: clamp(1rem, 1.5vw, 1.35rem);
+}
+
+.newsletter-top-story .section-label {
+  margin: 0 0 0.5rem;
+  color: #65583f;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.newsletter-top-story .lead-intro h2 {
+  margin: 0;
+  color: #2a2418;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.05rem, 4vw, 4.2rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 0.94;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.newsletter-top-story .lead-dek {
+  margin: 0.8rem 0;
+  color: #3d3424;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.92rem, 1.2vw, 1.05rem);
+  font-style: italic;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.newsletter-top-story .story-meta,
+.newsletter-top-story .module-link {
+  color: #62553d;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.newsletter-top-story .lead-summary {
+  margin: 0;
+  border-top: 1px solid #62553d;
+  color: #3b3324;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  text-align: justify;
+}
+
+/* Existing evidence map, recolored to printed ink on paper. */
+.newsletter-map-exhibit .map-panel {
+  display: grid;
+  height: 100%;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.newsletter-map-exhibit .module-heading {
+  min-height: 0;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #62553d;
+}
+
+.newsletter-map-exhibit .module-heading h2 {
+  color: #2a2418;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.1rem, 1.8vw, 1.55rem);
+  text-transform: uppercase;
+}
+
+.newsletter-map-exhibit .module-heading .eyebrow,
+.newsletter-map-exhibit .module-heading a,
+.newsletter-map-exhibit .map-note,
+.newsletter-map-exhibit .map-legend {
+  color: #5c513d;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.newsletter-map-exhibit .map-note {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid rgb(81 70 50 / 0.36);
+  background: rgb(92 74 44 / 0.035);
+}
+
+.newsletter-map-exhibit .town-map {
+  width: 100%;
+  height: 100%;
+  min-height: 24rem;
+  aspect-ratio: auto;
+  background: #d6c8a8;
+}
+
+.newsletter-map-exhibit .map-ground {
+  fill: #d6c8a8;
+}
+
+.newsletter-map-exhibit .map-grid-line {
+  stroke: rgb(67 56 37 / 0.12);
+}
+
+.newsletter-map-exhibit .map-river {
+  stroke: rgb(70 86 89 / 0.48);
+}
+
+.newsletter-map-exhibit .map-road {
+  stroke: rgb(45 38 25 / 0.52);
+}
+
+.newsletter-map-exhibit .map-road-main-street {
+  stroke: rgb(40 33 22 / 0.82);
+}
+
+.newsletter-map-exhibit .map-route,
+.newsletter-map-exhibit .map-route-detective_surveillance,
+.newsletter-map-exhibit .map-route-boys_bicycle_route {
+  stroke: #7d3229;
+}
+
+.newsletter-map-exhibit .map-marker circle,
+.newsletter-map-exhibit .legend-relative,
+.newsletter-map-exhibit .legend-inferred {
+  fill: #6d2d25;
+  background: #6d2d25;
+  stroke: #d6c8a8;
+}
+
+.newsletter-map-exhibit .map-marker-inferred circle {
+  fill: #4c5660;
+}
+
+.newsletter-map-exhibit .map-marker .map-marker-core {
+  fill: #eadfbe;
+}
+
+.newsletter-map-exhibit .map-marker text,
+.newsletter-map-exhibit .map-region text,
+.newsletter-map-exhibit .map-water-label,
+.newsletter-map-exhibit .map-north text,
+.newsletter-map-exhibit .map-scale text {
+  fill: #2a2418;
+  stroke: #d6c8a8;
+  stroke-width: 5px;
+}
+
+.newsletter-map-exhibit .map-north path,
+.newsletter-map-exhibit .map-scale line {
+  stroke: #2a2418;
+}
+
+.newsletter-map-exhibit .map-legend {
+  border-top: 1px solid #62553d;
+  background: rgb(92 74 44 / 0.035);
+}
+
+@media (max-width: 62rem) {
+  .newsletter-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: auto;
+  }
+
+  .newsletter-tbd-1 { grid-column: 1 / 2; grid-row: 1; }
+  .newsletter-tbd-2 { grid-column: 2 / 3; grid-row: 1; }
+  .newsletter-header-main { grid-column: 3 / 7; grid-row: 1; }
+  .newsletter-tbd-3,
+  .newsletter-tbd-4 { display: none; }
+  .newsletter-top-story { grid-column: 1 / 4; grid-row: 2; }
+  .newsletter-map-exhibit { grid-column: 4 / 7; grid-row: 2 / 4; }
+  .newsletter-ad-banner { grid-column: 1 / 4; grid-row: 3; }
+  .newsletter-introduction { grid-column: 1 / 4; grid-row: 4 / 6; }
+  .newsletter-archive-menu { grid-column: 4 / 6; grid-row: 4 / 6; }
+  .newsletter-books-sidebar { grid-column: 6 / 7; grid-row: 4; }
+  .newsletter-anthologies { grid-column: 6 / 7; grid-row: 5; font-size: 1rem; }
+}
+
+@media (max-width: 42rem) {
+  .newsletter-page {
+    padding: 0;
+  }
+
+  .newsletter-paper {
+    padding: 0.5rem;
+    border-inline: 0;
+  }
+
+  .newsletter-grid {
+    display: block;
+  }
+
+  .newsletter-box {
+    margin-bottom: 0.55rem;
+  }
+
+  .newsletter-tbd {
+    display: none;
+  }
+
+  .newsletter-header-main {
+    min-height: 7rem;
+  }
+
+  .newsletter-header-main h1 {
+    font-size: clamp(2.3rem, 13vw, 4rem);
+  }
+
+  .newsletter-map-exhibit .town-map {
+    min-height: 28rem;
+  }
+
+  .newsletter-intro-columns {
+    columns: 1;
+  }
+}
