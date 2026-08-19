@@ -14,7 +14,6 @@
   },
   "scripts": {
     "dev": "vite dev",
-    "prebuild": "node scripts/ensure-native-build-deps.mjs",
     "build": "vite build",
     "preview": "npm run build && vite preview",
     "deploy": "npm run build && wrangler deploy",
