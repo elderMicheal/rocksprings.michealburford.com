@@ -1,0 +1,6 @@
+Rock Springs production deployment trigger.
+
+Cloudflare Workers Builds should watch only this file for production builds.
+Updating this file deploys the current main branch.
+
+Last requested deployment: 2026-08-19T18:08:00-04:00

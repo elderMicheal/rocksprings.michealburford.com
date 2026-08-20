@@ -7,16 +7,10 @@
     "node": ">=22.12.0"
   },
   "packageManager": "npm@11.5.2",
-  "overrides": {
-    "miniflare": {
-      "sharp": "0.35.3"
-    }
-  },
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
     "preview": "npm run build && vite preview",
-    "deploy": "npm run build && wrangler deploy",
     "check": "tsc --noEmit",
     "typecheck": "npm run check",
     "test": "npm run test:unit && npm run test:e2e",
@@ -32,17 +26,14 @@
     "public:check": "node scripts/check-phase-2-integrity.mjs",
     "phase2:check": "npm run public:check",
     "scene:generate": "node scripts/generate-town-scene.mjs",
-    "scene:check": "node scripts/validate-scene.mjs",
-    "types": "wrangler types"
+    "scene:check": "node scripts/validate-scene.mjs"
   },
   "dependencies": {
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "three": "0.180.0"
+    "three": "0.185.1"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "1.46.0",
-    "@cloudflare/vitest-pool-workers": "0.18.7",
     "@playwright/test": "1.61.1",
     "@types/node": "22.20.1",
     "@types/react": "19.2.17",
@@ -51,7 +42,6 @@
     "@vitejs/plugin-react": "6.0.4",
     "typescript": "7.0.2",
     "vite": "8.1.5",
-    "vitest": "4.1.10",
-    "wrangler": "4.113.0"
+    "vitest": "4.1.10"
   }
 }
