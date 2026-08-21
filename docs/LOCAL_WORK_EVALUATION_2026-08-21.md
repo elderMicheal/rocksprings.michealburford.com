@@ -2,16 +2,10 @@
 
 ## Decision
 
-The pre-existing Jackie’s Window scene/content work is preserved but is not
-eligible for `main` or production in its current form.
-
-Preservation commit:
-
-`f6e2dfa551859566a1717c01e4be60810b1d03f4`
-
-Preservation branch:
-
-`agent/scene-content-recovery`
+The pre-existing Jackie’s Window scene/content work was not eligible for
+`main` or production. On 2026-08-21, the owner explicitly directed that the
+incompatible work be discarded. Its local and remote preservation branch was
+deleted and it must not be restored or merged.
 
 This decision follows the production mandate in the repository root. The work
 must not be deployed merely because it builds; it must remain compatible with
@@ -41,7 +35,7 @@ The original local state was internally inconsistent:
 - the scene manifest retained the prior artifact’s ID, byte count, digest, and
   statistics.
 
-The preservation commit repairs those internal scene defects by retaining the
+The evaluated candidate repaired those internal scene defects by retaining the
 evidence-backed additions while simplifying presentation-only terrain, road,
 and route geometry. The repaired artifact validates at:
 
@@ -73,9 +67,10 @@ approved redesign. Updating visual snapshots without product review would only
 hide that architectural conflict. Neither action is authorized by a content
 refresh or deployment request.
 
-## Conditions for future release
+## Conditions for any future replacement
 
-The preserved work can be reconsidered only through a deliberate change that:
+Any future scene or map work must start as a deliberate change against current
+`main` that:
 
 1. decides where the scene and map belong in the current redesigned
    application;
@@ -87,5 +82,5 @@ The preserved work can be reconsidered only through a deliberate change that:
 6. follows the production release procedure in `AGENTS.md`.
 
 Until those conditions are met, production remains the recovered application
-architecture plus the deployment mandate. The quarantined work must not be
-silently merged, discarded, or deployed.
+architecture plus the deployment mandate. The discarded work must not be
+silently restored or deployed.
