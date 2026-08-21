@@ -48,6 +48,10 @@ The initial API endpoints are:
 
 ## Checks and deployment
 
+All deployment and hosting changes are governed by the binding
+[Rock Springs Production Mandate](AGENTS.md). This application deploys to its
+Cloudflare Worker; GitHub Pages is not a deployment target.
+
 ```sh
 npm run check
 npm test
