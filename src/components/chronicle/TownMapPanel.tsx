@@ -112,7 +112,7 @@ export function TownMapPanel() {
           <p className="eyebrow">Manuscript evidence</p>
           <h2 id="map-title">{spatialPlan.map2d.title}</h2>
         </div>
-        <a href="/read/jackies-window/part-1">Read source →</a>
+        <a href="/map">Open 3D map →</a>
       </header>
       <p className="map-note">{spatialPlan.map2d.description}</p>
       <svg
@@ -124,8 +124,8 @@ export function TownMapPanel() {
         <title id="town-map-svg-title">{spatialPlan.map2d.title}</title>
         <desc id="town-map-svg-description">
           A topological evidence diagram generated from the same source-traced
-          plan as the three-dimensional scene. It distinguishes source-relative
-          relationships from inferred positions without asserting exact geography.
+          plan as the three-dimensional scene. Confirmed bearings are preserved;
+          inferred positions do not assert exact geography.
         </desc>
         <defs>
           <pattern

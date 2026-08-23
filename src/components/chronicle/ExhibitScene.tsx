@@ -22,9 +22,9 @@ export function ExhibitScene() {
       <RockSpringsScene />
       <div className="scene-shade" aria-hidden="true" />
       <div className="scene-copy">
-        <p className="eyebrow"><span aria-hidden="true">◇</span> Chapters 1–8 · Interpretive scene</p>
-        <h2 id="scene-title">Rock Springs in Part One</h2>
-        <p>View spatial relationships stated in Part One, then read the source chapters.</p>
+        <p className="eyebrow"><span aria-hidden="true">◇</span> Canonical evidence · Interpretive scene</p>
+        <h2 id="scene-title">Rock Springs</h2>
+        <p>Explore the source-derived city model, then read the published record.</p>
         <button
           className="exhibit-action"
           onClick={enterScene}

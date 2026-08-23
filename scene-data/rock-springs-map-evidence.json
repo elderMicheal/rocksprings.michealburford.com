@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "id": "rock-springs-map-evidence-2026-08-23",
+  "purpose": "Derived geographic and visual evidence for the public 2D and 3D maps",
+  "source": {
+    "repository": "elderMicheal/micheal-writes",
+    "branch": "primary",
+    "revision": "3fd095b8f3e36215deef39e7de899c278a147e94"
+  },
+  "publicationBoundary": {
+    "readerApprovalId": "jackies-window-part-one-chapters",
+    "rule": "Map evidence does not grant permission to publish manuscript prose.",
+    "publishedTextRemainsLimitedToReaderAllowlist": true
+  },
+  "sources": [
+    {
+      "id": "jw-01",
+      "path": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 01.md",
+      "gitBlob": "3d4266586bf1fb5a4dce9fbbc96bdc801df06fd9",
+      "publicationState": "published"
+    },
+    {
+      "id": "jw-02",
+      "path": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 02.md",
+      "gitBlob": "2fbf82a35413b513efd196221605ee8847e88528",
+      "publicationState": "published"
+    },
+    {
+      "id": "jw-03",
+      "path": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 03.md",
+      "gitBlob": "67bc77a9ca02f8f450a63829e0a3905de3497a54",
+      "publicationState": "published"
+    },
+    {
+      "id": "jw-04",
+      "path": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 04.md",
+      "gitBlob": "3a0cf4b4cc1cda38307d1fc641d773da3ca69075",
+      "publicationState": "published"
+    },
+    {
+      "id": "jw-05",
+      "path": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 05.md",
+      "gitBlob": "46b828c7efac56ce0fffd083f3c97c5a7d2c0a55",
+      "publicationState": "published"
+    },
+    {
+      "id": "jw-06",
+      "path": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 06.md",
+      "gitBlob": "42e3a47a7cbe3b9979d914a4d473be0f056317ae",
+      "publicationState": "published"
+    },
+    {
+      "id": "jw-07",
+      "path": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 07.md",
+      "gitBlob": "466805a35e57872f63df15bf4f7ba0d17563c549",
+      "publicationState": "published"
+    },
+    {
+      "id": "jw-08",
+      "path": "Rock Springs Chronicles/Book 1 - Jackie's Window/Part 1/Chapter 08.md",
+      "gitBlob": "464c5edc2a95587f25d391bc4a487ef83d749073",
+      "publicationState": "published"
+    },
+    {
+      "id": "hn-crosses",
+      "path": "Rock Springs Chronicles/Anthologies/Hometown Nightmares/1 - Crosses on the Overpass.md",
+      "gitBlob": "5bb27a9b0b9eb925775b6e2cd6d11e28399078a8",
+      "publicationState": "unpublished",
+      "canonicalStatus": "canonical",
+      "usage": "Derived facts only; no prose may be copied into the public application."
+    }
+  ],
+  "facts": [
+    {
+      "id": "main-is-highway-13-north-south",
+      "sourceId": "hn-crosses",
+      "locator": "line 30",
+      "category": "confirmed-road-orientation",
+      "statement": "Main Street is Highway 13 through Rock Springs and runs north-south."
+    },
+    {
+      "id": "broad-intersects-main",
+      "sourceId": "hn-crosses",
+      "locator": "line 30",
+      "category": "confirmed-road-adjacency",
+      "statement": "Broad Street intersects Main Street."
+    },
+    {
+      "id": "railroad-trestle-metro-rural-boundary",
+      "sourceId": "hn-crosses",
+      "locator": "lines 22 and 34",
+      "category": "confirmed-urban-transition",
+      "statement": "A railroad trestle over Highway 13 marks the informal transition between metropolitan and rural Rock Springs."
+    },
+    {
+      "id": "rock-springs-city-scale",
+      "sourceId": "hn-crosses",
+      "locator": "line 24",
+      "category": "confirmed-city-character",
+      "statement": "Rock Springs reads as a medium-to-large town whose residents identify it as a city."
+    },
+    {
+      "id": "downtown-industrial-river-city",
+      "sourceId": "jw-01",
+      "locator": "lines 78-80",
+      "category": "confirmed-city-character",
+      "statement": "Downtown, riverfront structures, industrial stacks, factories, workshops, pollution, and shadowed residential districts define the city silhouette."
+    },
+    {
+      "id": "downtown-six-story-to-1950s-housing",
+      "sourceId": "jw-02",
+      "locator": "line 23",
+      "category": "confirmed-urban-transition",
+      "statement": "The downtown edge ends abruptly at buildings no taller than six stories and transitions to 1950s residential development."
+    },
+    {
+      "id": "eisenhower-commercial-edge",
+      "sourceId": "jw-02",
+      "locator": "line 67",
+      "category": "confirmed-architecture",
+      "statement": "The last downtown block contains maintained Eisenhower-era gray-brick local storefronts beside declining small-industry fabric."
+    },
+    {
+      "id": "crumbling-main-street",
+      "sourceId": "jw-03",
+      "locator": "lines 15-17",
+      "category": "confirmed-district-character",
+      "statement": "Main Street has deteriorating storefronts, cracked concrete, sparse greenery, and invasive weeds."
+    },
+    {
+      "id": "new-beginnings-turn-of-century-houses",
+      "sourceId": "jw-03",
+      "locator": "lines 81-83",
+      "category": "confirmed-architecture",
+      "statement": "New Beginnings occupies four renovated turn-of-the-century houses beyond the old school and empty lots."
+    },
+    {
+      "id": "partridge-neighborhood-contrast",
+      "sourceId": "jw-06",
+      "locator": "lines 23-39",
+      "category": "confirmed-district-character",
+      "statement": "Partridge Street separates a maintained homeowner side from a deteriorated rental and school side; Oak intersects Partridge."
+    },
+    {
+      "id": "trainyard-industrial-edge",
+      "sourceId": "jw-06",
+      "locator": "line 57",
+      "category": "confirmed-industrial-character",
+      "statement": "A sound barrier separates the neighborhood from a nearby trainyard of tracks, warehouses, rolling stock, diesel haze, and rust-colored industry."
+    },
+    {
+      "id": "southside-mills-and-docks",
+      "sourceId": "jw-07",
+      "locator": "south-side travel sequence",
+      "category": "confirmed-industrial-character",
+      "statement": "The south side contains mills, docks, smokestacks, and industrial pollution."
+    },
+    {
+      "id": "diner-strip-mall",
+      "sourceId": "jw-07",
+      "locator": "diner arrival sequence",
+      "category": "confirmed-commercial-character",
+      "statement": "A diner occupies an asphalt lot enclosed by an L-shaped strip mall with trees screening nearby residences."
+    },
+    {
+      "id": "stanford-towers-straddle-river",
+      "sourceId": "jw-07",
+      "locator": "skyline description",
+      "category": "confirmed-skyline",
+      "statement": "Two twenty-story post-modern brutalist Stanford towers dominate the skyline, one on each side of the river, above a normal six-story cap."
+    }
+  ]
+}

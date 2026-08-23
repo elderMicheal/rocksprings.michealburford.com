@@ -1,0 +1,100 @@
+.town-scene-page {
+  min-height: 100vh;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 78% 12%, rgb(79 153 145 / 0.1), transparent 28rem),
+    var(--paper-dark);
+}
+
+.town-scene-main {
+  width: min(100% - 1rem, 88rem);
+  margin-inline: auto;
+  padding: clamp(0.75rem, 2vw, 1.5rem) 0 clamp(1.5rem, 4vw, 3rem);
+}
+
+.town-scene-header {
+  display: grid;
+  gap: var(--space-2);
+  padding: clamp(1.25rem, 4vw, 3rem);
+  border: 1px solid var(--rule);
+  background: rgb(13 20 22 / 0.92);
+}
+
+.town-scene-header h1 {
+  margin: 0;
+  color: #e4d5bc;
+  font-family: var(--font-masthead);
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-weight: 500;
+  line-height: 0.92;
+}
+
+.town-scene-header > p:not(.reader-kicker) {
+  max-width: 58rem;
+  margin: 0;
+  color: #c9bfaf;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.6;
+}
+
+.town-scene-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.town-scene-main > .exhibit-scene {
+  height: clamp(30rem, 68vh, 54rem);
+  max-height: none;
+  min-height: 30rem;
+  margin-top: var(--space-3);
+  border: 1px solid var(--rule);
+}
+
+.town-scene-evidence-note {
+  margin: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--rule);
+  border-top: 0;
+  color: var(--ink-soft);
+  background: rgb(13 20 22 / 0.92);
+  font-family: var(--font-label);
+  font-size: var(--text-meta);
+  line-height: 1.55;
+  text-transform: uppercase;
+}
+
+@media (max-width: 40rem) {
+  .town-scene-main > .exhibit-scene {
+    height: 44rem;
+    min-height: 44rem;
+  }
+
+  .town-scene-header nav {
+    display: grid;
+  }
+
+  .town-scene-main .scene-copy {
+    max-width: 100%;
+    padding-bottom: var(--space-4);
+  }
+
+  .town-scene-main .scene-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .town-scene-main .scene-view-control {
+    grid-column: 1 / -1;
+    display: grid;
+    min-width: 0;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .town-scene-main .scene-controls button,
+  .town-scene-main .scene-view-control select {
+    width: 100%;
+    min-width: 0;
+  }
+}

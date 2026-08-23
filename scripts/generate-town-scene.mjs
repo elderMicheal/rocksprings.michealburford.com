@@ -27,10 +27,15 @@ import { GLTFExporter } from "three/addons/exporters/GLTFExporter.js";
 const planPath = resolve(
   process.argv[2] ?? "scene-data/jackies-window-spatial-plan.json",
 );
-const outputPath = resolve(
-  process.argv[3] ??
-    "public/assets/scenes/jackies-window/rock-springs-jackies-window.glb",
+const defaultOutputPath = resolve(
+  "public/assets/scenes/jackies-window/rock-springs-jackies-window.glb",
 );
+const outputPath = resolve(process.argv[3] ?? defaultOutputPath);
+const manifestPath = process.argv[4]
+  ? resolve(process.argv[4])
+  : outputPath === defaultOutputPath
+    ? resolve("public/assets/scenes/jackies-window/scene-manifest.json")
+    : null;
 const sourcePlan = JSON.parse(readFileSync(planPath, "utf8"));
 const horizontalScale = sourcePlan.coordinates.horizontalMetersPerUnit ?? 1;
 
@@ -90,7 +95,7 @@ const scene = new Scene();
 scene.name = "Rock_Springs_Architectural_Blockout";
 scene.userData = {
   modelId: plan.id,
-  source: `${plan.source.work}, Chapters ${plan.source.chapters[0]}–${plan.source.chapters.at(-1)}`,
+  source: plan.source.work,
   writingRevision: plan.source.writingRevision,
   coordinateConvention: {
     ...sourcePlan.coordinates,
@@ -684,7 +689,10 @@ function createStreetGrid() {
     );
     roadGroup.userData.source = road.source;
     if (road.landmarkId) {
-      roadGroup.userData.bearing = "inferred-east-west";
+      roadGroup.userData.bearing =
+        road.axis === "z" ? "confirmed-north-south" : "source-traced";
+    }
+    if (road.nodeName.startsWith("CANON_")) {
       for (const child of roadGroup.children) {
         child.name = child.name.replace(
           new RegExp(`^${road.nodeName}`),
@@ -1171,7 +1179,8 @@ function createNewBeginnings() {
   const houses = [
     {
       name: "CANON_New_Beginnings_House_01",
-      x: -18 * horizontalScale,
+      x: 0,
+      z: -36 * horizontalScale,
       width: 6,
       depth: 7.6,
       bodyMaterial: palette.tanSiding,
@@ -1180,7 +1189,8 @@ function createNewBeginnings() {
     },
     {
       name: "CANON_New_Beginnings_House_02",
-      x: -6 * horizontalScale,
+      x: 0,
+      z: -24 * horizontalScale,
       width: 5.6,
       depth: 8,
       bodyMaterial: palette.greenSiding,
@@ -1188,8 +1198,19 @@ function createNewBeginnings() {
       porchWidth: 5,
     },
     {
+      name: "CANON_New_Beginnings_House_03",
+      x: 0,
+      z: -12 * horizontalScale,
+      width: 6.2,
+      depth: 7.5,
+      bodyMaterial: palette.whiteSiding,
+      roofMaterial: palette.roofRust,
+      porchWidth: 5.7,
+    },
+    {
       name: "CANON_Jackies_House",
       x: jackiesHouseLandmark.position[0] - landmark.position[0],
+      z: jackiesHouseLandmark.position[2] - landmark.position[2],
       width: 6,
       depth: 7.8,
       bodyMaterial: palette.redSiding,
@@ -1200,20 +1221,11 @@ function createNewBeginnings() {
       source: jackiesHouseLandmark.source,
       classification: jackiesHouseLandmark.classification,
     },
-    {
-      name: "CANON_New_Beginnings_House_04",
-      x: 18 * horizontalScale,
-      width: 6.2,
-      depth: 7.5,
-      bodyMaterial: palette.whiteSiding,
-      roofMaterial: palette.roofRust,
-      porchWidth: 5.7,
-    },
   ];
 
   for (const house of houses) {
     const worldX = landmark.position[0] + house.x;
-    const worldZ = landmark.position[2];
+    const worldZ = landmark.position[2] + house.z;
     if (
       doesFootprintIntersectRoad(
         worldX,
@@ -1227,7 +1239,7 @@ function createNewBeginnings() {
     const result = createNamedHouse({
       parent: newBeginnings,
       name: house.name,
-      position: [house.x, 0, 0],
+      position: [house.x, 0, house.z],
       width: house.width,
       depth: house.depth,
       floors: 2,
@@ -1235,6 +1247,7 @@ function createNewBeginnings() {
       roofMaterial: house.roofMaterial,
       porchWidth: house.porchWidth,
       porchMaterial: house.porchMaterial,
+      rotationY: Math.PI / 2,
       glowWindow: house.glowWindow,
       classification:
         house.classification ?? "canon-location-presentation-architecture",
@@ -1836,6 +1849,127 @@ function createRuins() {
   });
 }
 
+function createCanonicalUrbanExtensions() {
+  const intersectionLandmark = landmarkById.get("broad-main-intersection");
+  const intersection = new Object3D();
+  intersection.name = intersectionLandmark.nodeName;
+  intersection.position.set(...intersectionLandmark.position);
+  classify(intersection, intersectionLandmark.classification, intersectionLandmark.source);
+  groups.Transport_Infrastructure.add(intersection);
+
+  const trestleLandmark = landmarkById.get("railroad-trestle");
+  const trestle = new Group();
+  trestle.name = trestleLandmark.nodeName;
+  trestle.position.set(...trestleLandmark.position);
+  classify(trestle, trestleLandmark.classification, trestleLandmark.source);
+  groups.Transport_Infrastructure.add(trestle);
+  addBox(trestle, "PRESENTATION_Trestle_Deck", [44, 1.4, 7], [0, 8.4, 0], palette.metal);
+  addBox(trestle, "PRESENTATION_Trestle_Railbed", [44, 0.8, 5.6], [0, 9.3, 0], palette.wood);
+  for (const x of [-16, -8, 8, 16]) {
+    addBox(
+      trestle,
+      `PRESENTATION_Trestle_Support_${String(x).replace("-", "N")}`,
+      [1.2, 8.4, 1.2],
+      [x, 4.2, 0],
+      palette.metal,
+    );
+  }
+  for (const z of [-1.25, 1.25]) {
+    addBox(trestle, `PRESENTATION_Trestle_Rail_${z < 0 ? "South" : "North"}`, [44, 0.2, 0.18], [0, 9.8, z], palette.metal);
+  }
+
+  const trainyardLandmark = landmarkById.get("trainyard");
+  const trainyard = new Group();
+  trainyard.name = trainyardLandmark.nodeName;
+  trainyard.position.set(...trainyardLandmark.position);
+  classify(trainyard, trainyardLandmark.classification, trainyardLandmark.source);
+  groups.Transport_Infrastructure.add(trainyard);
+  addBox(trainyard, "PRESENTATION_Trainyard_Gravel", [95, 0.22, 50], [0, 0, 0], palette.field);
+  for (let index = 0; index < 6; index += 1) {
+    const z = -19 + index * 7.5;
+    addBox(trainyard, `PRESENTATION_Trainyard_Rail_${index + 1}_A`, [88, 0.16, 0.16], [0, 0.32, z - 0.75], palette.metal);
+    addBox(trainyard, `PRESENTATION_Trainyard_Rail_${index + 1}_B`, [88, 0.16, 0.16], [0, 0.32, z + 0.75], palette.metal);
+  }
+  addBox(trainyard, "PRESENTATION_Trainyard_Warehouse", [31, 8, 13], [-24, 4, 15], palette.industrial);
+  for (let index = 0; index < 5; index += 1) {
+    addBox(
+      trainyard,
+      `PRESENTATION_Train_Car_${index + 1}`,
+      [11, 3.2, 3.1],
+      [-20 + index * 13, 1.9, -10],
+      index % 2 ? palette.roofRust : palette.industrial,
+    );
+  }
+
+  const ledfordLandmark = landmarkById.get("ledford-home");
+  createNamedHouse({
+    parent: groups.Southside_Industrial,
+    name: ledfordLandmark.nodeName,
+    position: ledfordLandmark.position,
+    width: 6,
+    depth: 7,
+    floors: 2,
+    bodyMaterial: palette.tanSiding,
+    classification: ledfordLandmark.classification,
+    source: ledfordLandmark.source,
+  });
+
+  const industryLandmark = landmarkById.get("southside-industry");
+  const industry = new Group();
+  industry.name = industryLandmark.nodeName;
+  industry.position.set(...industryLandmark.position);
+  classify(industry, industryLandmark.classification, industryLandmark.source);
+  groups.Southside_Industrial.add(industry);
+  addBox(industry, "PRESENTATION_Southside_Mill", [44, 12, 22], [-18, 6, 0], palette.industrial);
+  addBox(industry, "PRESENTATION_Southside_Warehouse", [30, 8, 18], [23, 4, 8], palette.roofRust);
+  addBox(industry, "PRESENTATION_Southside_Dock", [70, 1, 8], [0, 0.5, 28], palette.wood);
+  for (const x of [-29, -18, 18]) {
+    const stack = new Mesh(
+      geometry("urban-extension-stack", () => new CylinderGeometry(0.65, 0.9, 1, 10)),
+      palette.brick,
+    );
+    stack.name = `PRESENTATION_Southside_Stack_${String(x).replace("-", "N")}`;
+    stack.position.set(x, 17, x > 0 ? 7 : -4);
+    stack.scale.set(1, 28, 1);
+    classify(stack, "canon-district-presentation-architecture", industryLandmark.source);
+    industry.add(stack);
+  }
+
+  const dinerLandmark = landmarkById.get("diner-strip-mall");
+  const diner = new Group();
+  diner.name = dinerLandmark.nodeName;
+  diner.position.set(...dinerLandmark.position);
+  classify(diner, dinerLandmark.classification, dinerLandmark.source);
+  groups.Eastside_Commercial.add(diner);
+  addBox(diner, "PRESENTATION_Diner_Asphalt_Lot", [65, 0.18, 46], [0, 0, 0], palette.asphalt);
+  addBox(diner, "PRESENTATION_Diner_Building", [16, 5.5, 11], [-13, 2.75, 2], palette.grayBrick);
+  addWindow(diner, "PRESENTATION_Diner_Windows", [-13, 2.4, -3.56], [12, 2.4, 0.12], palette.warmWindow);
+  addBox(diner, "PRESENTATION_Strip_Mall_Long_Wing", [42, 6, 10], [8, 3, 17], palette.grayBrick);
+  addBox(diner, "PRESENTATION_Strip_Mall_Short_Wing", [10, 6, 28], [27, 3, 3], palette.grayBrick);
+
+  for (const [id, label] of [
+    ["stanford-north-tower", "North"],
+    ["stanford-south-tower", "South"],
+  ]) {
+    const landmark = landmarkById.get(id);
+    const tower = new Group();
+    tower.name = landmark.nodeName;
+    tower.position.set(...landmark.position);
+    classify(tower, landmark.classification, landmark.source);
+    groups.Downtown.add(tower);
+    addBox(tower, `PRESENTATION_Stanford_${label}_Tower`, [14, 62, 14], [0, 31, 0], palette.concrete);
+    for (let floor = 2; floor < 20; floor += 3) {
+      addWindow(
+        tower,
+        `PRESENTATION_Stanford_${label}_Windows_${floor}`,
+        [0, floor * 3, -7.06],
+        [10, 1.2, 0.12],
+        palette.darkWindow,
+      );
+    }
+  }
+}
+
 function createLightingProxies() {
   const jackiesWindowPosition = landmarkById.get("jackies-window").position;
   const bakeryPosition = landmarkById.get("bakery-storefront").position;
@@ -1931,6 +2065,7 @@ createPoliceDistrict();
 createCityPark();
 createChalmersAndWoods();
 createRuins();
+createCanonicalUrbanExtensions();
 createLightingProxies();
 createAuthoredCameras();
 createAuthoredPaths();
@@ -1950,6 +2085,57 @@ mkdirSync(dirname(outputPath), { recursive: true });
 writeFileSync(outputPath, model);
 
 const hash = createHash("sha256").update(model).digest("hex");
+const jsonChunkLength = model.readUInt32LE(12);
+const gltf = JSON.parse(
+  model
+    .subarray(20, 20 + jsonChunkLength)
+    .toString("utf8")
+    .replace(/\0+$/g, "")
+    .trim(),
+);
+let primitives = 0;
+let baseTriangles = 0;
+for (const mesh of gltf.meshes ?? []) {
+  for (const primitive of mesh.primitives ?? []) {
+    primitives += 1;
+    if (primitive.indices !== undefined) {
+      baseTriangles += Math.floor(gltf.accessors[primitive.indices].count / 3);
+    }
+  }
+}
+
+if (manifestPath) {
+  const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+  manifest.id = plan.id;
+  manifest.title = "Rock Springs";
+  manifest.model.sha256 = hash;
+  manifest.model.bytes = model.length;
+  manifest.model.stats = {
+    nodes: gltf.nodes?.length ?? 0,
+    meshes: gltf.meshes?.length ?? 0,
+    primitives,
+    baseTriangles,
+    materials: gltf.materials?.length ?? 0,
+    cameras: gltf.cameras?.length ?? 0,
+  };
+  manifest.model.extensions = gltf.extensionsUsed ?? [];
+  manifest.provenance.sourceReferences = [
+    "Jackie's Window, Part 1, Chapters 1–8",
+    "Canonical unpublished-derived map evidence (no manuscript prose)",
+  ];
+  manifest.provenance.auditedAgainstRevision = sourcePlan.source.writingRevision;
+  manifest.provenance.spatialPlan = "scene-data/jackies-window-spatial-plan.json";
+  manifest.requiredLandmarkNodes = sourcePlan.landmarks.map((landmark) => landmark.nodeName);
+  manifest.authoredViews = sourcePlan.cameras
+    .filter((camera) => !camera.name.startsWith("Camera_Descent_"))
+    .map((camera) => ({
+      cameraNode: camera.name,
+      label: camera.label,
+      sourceReferences: camera.source,
+    }));
+  manifest.authoredRoutes = sourcePlan.routes.map((route) => route.name);
+  writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+}
 console.log(
   [
     `Generated ${plan.id}.`,

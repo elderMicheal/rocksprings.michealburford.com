@@ -10,6 +10,8 @@ const spatialPlanPath = resolve(
   manifest.provenance.spatialPlan.replace(/^\/+/, ""),
 );
 const spatialPlan = JSON.parse(readFileSync(spatialPlanPath, "utf8"));
+const evidenceCatalogPath = resolve(spatialPlan.source.mapEvidence);
+const evidenceCatalog = JSON.parse(readFileSync(evidenceCatalogPath, "utf8"));
 const modelPath = resolve("public", manifest.model.url.replace(/^\/+/, ""));
 const model = readFileSync(modelPath);
 
@@ -22,14 +24,41 @@ function assertPartOneSourceReferences(sourceReferences, subject) {
     fail(`${subject} lacks source evidence`);
   }
   for (const sourceReference of sourceReferences) {
-    const match = /^Chapter ([1-8]):\d+(?:-\d+)?$/.exec(sourceReference);
-    if (!match) {
-      fail(`${subject} has an invalid Part One source reference: ${sourceReference}`);
+    if (/^Chapter [1-8]:\d+(?:-\d+)?$/.test(sourceReference)) continue;
+    const evidenceMatch = /^Evidence:([a-z0-9-]+)$/.exec(sourceReference);
+    if (!evidenceMatch || !evidenceFactIds.has(evidenceMatch[1])) {
+      fail(`${subject} has an invalid source reference: ${sourceReference}`);
     }
   }
 }
 
 if (spatialPlan.schemaVersion !== 2) fail("unsupported spatial-plan schema");
+if (evidenceCatalog.schemaVersion !== 1) fail("unsupported map-evidence schema");
+if (evidenceCatalog.source.revision !== spatialPlan.source.writingRevision) {
+  fail("map evidence and spatial plan writing revisions differ");
+}
+const evidenceSourceIds = new Set(evidenceCatalog.sources.map((source) => source.id));
+const evidenceFactIds = new Set();
+for (const fact of evidenceCatalog.facts) {
+  if (!fact.id || evidenceFactIds.has(fact.id)) {
+    fail(`missing or duplicated map-evidence fact id: ${fact.id ?? "(missing)"}`);
+  }
+  if (!evidenceSourceIds.has(fact.sourceId)) {
+    fail(`map-evidence fact references an unknown source: ${fact.id}`);
+  }
+  evidenceFactIds.add(fact.id);
+}
+for (const source of evidenceCatalog.sources) {
+  if (!/^[0-9a-f]{40}$/.test(source.gitBlob)) {
+    fail(`map-evidence source lacks an immutable Git blob: ${source.id}`);
+  }
+  if (
+    source.publicationState === "unpublished" &&
+    (source.canonicalStatus !== "canonical" || !source.usage?.includes("no prose"))
+  ) {
+    fail(`unpublished map evidence lacks the canonical/no-prose boundary: ${source.id}`);
+  }
+}
 if (
   manifest.fallback?.kind !== "neutral" ||
   "url" in (manifest.fallback ?? {})
@@ -180,7 +209,6 @@ const newBeginnings = planLandmarkById.get("new-beginnings");
 const oldSchool = planLandmarkById.get("old-school");
 const stagingLot = planLandmarkById.get("old-school-staging-lot");
 const river = planLandmarkById.get("river");
-const mainStreet = planLandmarkById.get("main-street");
 const jackiesHouse = planLandmarkById.get("jackies-house");
 if (!(river.position[2] < abby.position[2])) {
   fail("river must remain south of Abby's apartment");
@@ -198,13 +226,22 @@ for (const [name, landmark] of [
     fail(`${name} must remain between Abby and New Beginnings`);
   }
 }
+const mainRoad = planRoadById.get("main-street");
+const broadRoad = planRoadById.get("broad-street");
+if (mainRoad?.axis !== "z") {
+  fail("Main Street / Highway 13 must run north-south on the +Z axis");
+}
+if (broadRoad?.axis !== "x") {
+  fail("Broad Street must cross Main Street on the east-west axis");
+}
+const mainRoadPosition = planLandmarkById.get(mainRoad.landmarkId)?.position;
 if (
-  !(
-    mainStreet.position[2] < stagingLot.position[2] &&
-    stagingLot.position[2] < jackiesHouse.position[2]
-  )
+  !mainRoadPosition ||
+  mainRoadPosition[0] !== broadRoad.position[0] ||
+  Math.abs(broadRoad.position[2] - mainRoadPosition[2]) > mainRoad.length / 2 ||
+  Math.abs(mainRoadPosition[0] - broadRoad.position[0]) > broadRoad.length / 2
 ) {
-  fail("Main Street, staging lot, and Jackie's house have the wrong south-to-north order");
+  fail("Main Street and Broad Street do not share their modeled intersection");
 }
 
 if (manifest.schemaVersion !== 1) fail("unsupported manifest schema");
@@ -426,9 +463,7 @@ for (const relationship of spatialPlan.relationships ?? []) {
   if (!nodeNames.has(relationship.object)) {
     fail(`relationship object is missing: ${relationship.object}`);
   }
-  if (!Array.isArray(relationship.source) || relationship.source.length === 0) {
-    fail(`relationship lacks source evidence: ${relationship.id}`);
-  }
+  assertPartOneSourceReferences(relationship.source, `relationship ${relationship.id}`);
 }
 
 for (const extension of manifest.model.extensions) {

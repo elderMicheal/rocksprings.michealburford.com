@@ -378,6 +378,12 @@
   gap: var(--space-1);
 }
 
+.exhibit-scene:not(.scene-entered) .scene-controls {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+
 .scene-view-control {
   display: inline-flex;
   min-height: var(--touch-target);
