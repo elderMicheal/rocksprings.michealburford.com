@@ -38,7 +38,7 @@
   "dependencies": {
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "three": "0.180.0"
+    "three": "0.185.1"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.53.1",
@@ -55,9 +55,9 @@
     "wrangler": "4.125.0"
   },
   "optionalDependencies": {
-    "@esbuild/linux-x64": "0.28.1",
-    "@rolldown/binding-linux-x64-gnu": "1.1.5",
+    "@esbuild/linux-x64": "0.28.2",
+    "@rolldown/binding-linux-x64-gnu": "1.2.5",
     "@typescript/typescript-linux-x64": "7.0.2",
-    "lightningcss-linux-x64-gnu": "1.32.0"
+    "lightningcss-linux-x64-gnu": "1.33.0"
   }
 }
