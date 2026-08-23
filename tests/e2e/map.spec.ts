@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const canonicalRevision = "00350c94f1152116e1d27250dfb0674c5ccfea37";
+const canonicalRevision = "3fd095b8f3e36215deef39e7de899c278a147e94";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
@@ -10,12 +10,9 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
-test("renders the manuscript-evidence relationships from the shared plan", async ({
-  page,
-}) => {
+test("renders current manuscript-evidence relationships from the shared plan", async ({ page }) => {
   const map = page.locator(".town-map");
-  const marker = (label: string) =>
-    map.locator(".map-marker").filter({ hasText: label });
+  const marker = (label: string) => map.locator(".map-marker").filter({ hasText: label });
 
   const abby = await marker("Abby's").boundingBox();
   const newBeginnings = await marker("New Beginnings").boundingBox();
@@ -33,9 +30,15 @@ test("renders the manuscript-evidence relationships from the shared plan", async
   expect(staging.y).toBeGreaterThan(newBeginnings.y);
   expect(staging.y).toBeLessThan(abby.y);
   expect(river.y).toBeGreaterThan(abby.y);
+
+  await expect(map.locator(".map-road-partridge-street")).toHaveCount(1);
+  await expect(map.locator(".map-road-oak-street")).toHaveCount(1);
+  await expect(map.locator(".map-road-amity-street")).toHaveCount(1);
+  await expect(map.locator(".map-route-monte_perimeter")).toHaveCount(1);
+  await expect(page.getByRole("link", { name: "Open 3D map" })).toHaveAttribute("href", "/map");
 });
 
-test("keeps every evidence marker inside the map", async ({ page }, testInfo) => {
+test("keeps every reviewed evidence marker inside the local map", async ({ page }, testInfo) => {
   const map = page.locator(".town-map");
   const mapBox = await map.boundingBox();
   expect(mapBox).not.toBeNull();
@@ -54,9 +57,6 @@ test("keeps every evidence marker inside the map", async ({ page }, testInfo) =>
   }
 
   if (process.env.RSC_CAPTURE_MAP === "1") {
-    await map.screenshot({
-      animations: "disabled",
-      path: testInfo.outputPath("canonical-town-map.png"),
-    });
+    await map.screenshot({ animations: "disabled", path: testInfo.outputPath("canonical-town-map.png") });
   }
 });
