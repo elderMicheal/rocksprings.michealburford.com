@@ -3,13 +3,8 @@ import spatialPlanJson from "../../../scene-data/jackies-window-spatial-plan.jso
 type Point3 = [number, number, number];
 
 interface SpatialPlan {
-  source: {
-    writingRevision: string;
-  };
-  landmarks: Array<{
-    id: string;
-    position: Point3;
-  }>;
+  source: { writingRevision: string };
+  landmarks: Array<{ id: string; position: Point3 }>;
   roads: Array<{
     id: string;
     landmarkId?: string;
@@ -18,19 +13,11 @@ interface SpatialPlan {
     length: number;
     width: number;
   }>;
-  routes: Array<{
-    name: string;
-    points: Point3[];
-  }>;
+  routes: Array<{ name: string; points: Point3[] }>;
   map2d: {
     title: string;
     description: string;
-    extent: {
-      minX: number;
-      maxX: number;
-      minZ: number;
-      maxZ: number;
-    };
+    extent: { minX: number; maxX: number; minZ: number; maxZ: number };
     roads: string[];
     routes: string[];
     regions: Array<{
@@ -112,7 +99,7 @@ export function TownMapPanel() {
           <p className="eyebrow">Manuscript evidence</p>
           <h2 id="map-title">{spatialPlan.map2d.title}</h2>
         </div>
-        <a href="/read/jackies-window/part-1">Read source →</a>
+        <a href="/map">Open 3D map →</a>
       </header>
       <p className="map-note">{spatialPlan.map2d.description}</p>
       <svg
@@ -128,12 +115,7 @@ export function TownMapPanel() {
           relationships from inferred positions without asserting exact geography.
         </desc>
         <defs>
-          <pattern
-            id="map-grid"
-            width="28"
-            height="28"
-            patternUnits="userSpaceOnUse"
-          >
+          <pattern id="map-grid" width="28" height="28" patternUnits="userSpaceOnUse">
             <path d="M 28 0 L 0 0 0 28" className="map-grid-line" />
           </pattern>
           <filter id="map-glow" x="-100%" y="-100%" width="300%" height="300%">
@@ -219,9 +201,7 @@ export function TownMapPanel() {
 
         <g className="map-north" transform={`translate(${mapWidth - 56} 54)`}>
           <path d="M 0 20 L 0 -14 M -6 -3 L 0 -14 L 6 -3" />
-          <text x="0" y="37" textAnchor="middle">
-            N
-          </text>
+          <text x="0" y="37" textAnchor="middle">N</text>
         </g>
       </svg>
       <p className="map-legend">
