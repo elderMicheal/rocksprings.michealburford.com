@@ -7,6 +7,12 @@ const PartOneReader = lazy(() =>
   })),
 );
 
+const TownScenePage = lazy(() =>
+  import("./components/scene/TownScenePage").then((module) => ({
+    default: module.TownScenePage,
+  })),
+);
+
 const partOnePath = "/read/jackies-window/part-1";
 
 export function App() {
@@ -14,6 +20,20 @@ export function App() {
   const isPartOneIndex =
     pathname === partOnePath || pathname === "/stories" || pathname === "/latest";
   const isPartOneChapter = pathname.startsWith(`${partOnePath}/`);
+
+  if (pathname === "/map") {
+    return (
+      <Suspense
+        fallback={
+          <div className="reader-loading" role="status">
+            Opening the spatial record…
+          </div>
+        }
+      >
+        <TownScenePage />
+      </Suspense>
+    );
+  }
 
   if (isPartOneIndex || isPartOneChapter) {
     const chapterSlug = isPartOneChapter
