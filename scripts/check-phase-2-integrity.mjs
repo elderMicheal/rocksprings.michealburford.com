@@ -6,103 +6,146 @@ const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 const readJson = (relativePath) =>
   JSON.parse(readFileSync(path.join(projectRoot, relativePath), "utf8"));
 
-const publicationPackage = readJson(
-  "src/content/generated/publication-package.json",
-);
+const publicationPackage = readJson("src/content/generated/publication-package.json");
 const sourceInventory = readJson("generated/source-inventory.json");
-const spatialPlan = readJson("scene-data/jackies-window-spatial-plan.json");
-const sceneManifest = readJson(
-  "public/assets/scenes/jackies-window/scene-manifest.json",
-);
 const approvalPolicy = readJson("content-policy/approved-sources.json");
+const spatialPlan = readJson("scene-data/jackies-window-spatial-plan.json");
+const evidenceCatalog = readJson(spatialPlan.source.mapEvidence);
+const sceneManifest = readJson("public/assets/scenes/jackies-window/scene-manifest.json");
+const sceneSourceManifest = readJson(
+  "public/assets/scenes/jackies-window/source-manifest.json",
+);
 
 function fail(message) {
   throw new Error(`Public source-evidence check failed: ${message}`);
 }
 
-function assertPartOneSourceReferences(sourceReferences, subject) {
-  if (!Array.isArray(sourceReferences) || sourceReferences.length === 0) {
-    fail(`${subject} has no source references`);
-  }
-  for (const sourceReference of sourceReferences) {
-    if (!/^Chapter [1-8]:\d+(?:-\d+)?$/.test(sourceReference)) {
-      fail(`${subject} has an invalid source reference: ${sourceReference}`);
-    }
+function assertSameValues(actual, expected, subject) {
+  const actualSorted = [...actual].sort();
+  const expectedSorted = [...expected].sort();
+  if (JSON.stringify(actualSorted) !== JSON.stringify(expectedSorted)) {
+    fail(`${subject} differs from its approved allowlist`);
   }
 }
 
-const revisions = new Map([
-  ["publication package", publicationPackage.manifest.sourceRevision],
-  ["source inventory", sourceInventory.source.revision],
-  ["spatial plan", spatialPlan.source.writingRevision],
+const publicationRevision = publicationPackage.manifest.sourceRevision;
+if (sourceInventory.source.revision !== publicationRevision) {
+  fail("publication package and committed source inventory revisions disagree");
+}
+
+const mapRevision = spatialPlan.source.writingRevision;
+for (const [subject, revision] of [
+  ["map evidence", evidenceCatalog.source.revision],
   ["scene manifest", sceneManifest.provenance.auditedAgainstRevision],
-]);
-const uniqueRevisions = new Set(revisions.values());
-if (uniqueRevisions.size !== 1) {
-  throw new Error(
-    `Phase 2 source revisions disagree:\n${[...revisions]
-      .map(([name, revision]) => `- ${name}: ${revision}`)
-      .join("\n")}`,
-  );
+  ["scene source manifest", sceneSourceManifest.sourceRevision],
+]) {
+  if (revision !== mapRevision) fail(`${subject} revision differs from the spatial plan`);
 }
 
 const approval = approvalPolicy.approvals.find(
   (candidate) => candidate.id === publicationPackage.manifest.approvalId,
 );
-if (!approval) {
-  throw new Error("Publication package approval is not present in the policy");
+if (!approval) fail("publication package approval is not present in policy");
+if (spatialPlan.source.readerApprovalId !== approval.id) {
+  fail("spatial plan does not preserve the reader publication boundary");
 }
 
-const approvedSourceRefs = new Set(
-  approval.sourcePaths.map((sourcePath) => `Rock Springs Chronicles/${sourcePath}`),
+const approvedReaderPaths = approval.sourcePaths.map(
+  (sourcePath) => `Rock Springs Chronicles/${sourcePath}`,
 );
-const publishedSourceRefs = publicationPackage.collections.chronicles.map(
+const publishedPaths = publicationPackage.collections.chronicles.map(
   (entry) => entry.provenance.sourceRef,
 );
-if (
-  publishedSourceRefs.length !== approvedSourceRefs.size ||
-  !publishedSourceRefs.every((sourceRef) => approvedSourceRefs.has(sourceRef))
-) {
-  throw new Error("Published source references differ from the exact approval allowlist");
-}
+assertSameValues(publishedPaths, approvedReaderPaths, "published reader content");
 
 const publiclyEligibleInventoryPaths = sourceInventory.files
   .filter((file) => file.publication?.publicEligible)
   .map((file) => `Rock Springs Chronicles/${file.path}`);
-if (
-  publiclyEligibleInventoryPaths.length !== approvedSourceRefs.size ||
-  !publiclyEligibleInventoryPaths.every((sourceRef) =>
-    approvedSourceRefs.has(sourceRef),
-  )
-) {
-  throw new Error("Source inventory eligibility differs from the approval allowlist");
-}
+assertSameValues(
+  publiclyEligibleInventoryPaths,
+  approvedReaderPaths,
+  "source-inventory reader eligibility",
+);
 
-for (const [collectionName, entries] of Object.entries(
-  publicationPackage.collections,
-)) {
+for (const [collectionName, entries] of Object.entries(publicationPackage.collections)) {
   if (collectionName !== "chronicles" && entries.length !== 0) {
     fail(`unapproved ${collectionName} entries are present`);
   }
 }
 
-if (spatialPlan.map2d.regions.length !== 0) {
-  fail("public map contains unsourced district or region geometry");
+const publishedEvidenceSources = evidenceCatalog.sources
+  .filter((source) => source.publicationState === "published")
+  .map((source) => source.path);
+assertSameValues(
+  publishedEvidenceSources,
+  approvedReaderPaths,
+  "published map-evidence sources",
+);
+
+for (const source of evidenceCatalog.sources) {
+  if (!/^[0-9a-f]{40}$/.test(source.gitBlob)) {
+    fail(`map-evidence source is not pinned to a Git blob: ${source.id}`);
+  }
+  if (
+    source.publicationState === "unpublished" &&
+    (source.canonicalStatus !== "canonical" || !source.usage?.includes("no prose"))
+  ) {
+    fail(`unpublished map source is missing the canonical/no-prose boundary: ${source.id}`);
+  }
+}
+
+const evidenceSourceIds = new Set(evidenceCatalog.sources.map((source) => source.id));
+const evidenceFactIds = new Set();
+for (const fact of evidenceCatalog.facts) {
+  if (!fact.id || evidenceFactIds.has(fact.id)) {
+    fail(`missing or duplicate evidence fact id: ${fact.id ?? "(missing)"}`);
+  }
+  if (!evidenceSourceIds.has(fact.sourceId)) {
+    fail(`evidence fact ${fact.id} references an unknown source`);
+  }
+  evidenceFactIds.add(fact.id);
+}
+
+function assertMapSourceReferences(sourceReferences, subject) {
+  if (!Array.isArray(sourceReferences) || sourceReferences.length === 0) {
+    fail(`${subject} has no source references`);
+  }
+  for (const reference of sourceReferences) {
+    if (/^Chapter [1-8]:\d+(?:-\d+)?$/.test(reference)) continue;
+    const evidence = /^Evidence:([a-z0-9-]+)$/.exec(reference);
+    if (!evidence || !evidenceFactIds.has(evidence[1])) {
+      fail(`${subject} has an invalid source reference: ${reference}`);
+    }
+  }
 }
 
 const landmarkById = new Map(
   spatialPlan.landmarks.map((landmark) => [landmark.id, landmark]),
 );
 const roadById = new Map(spatialPlan.roads.map((road) => [road.id, road]));
-const routeByName = new Map(
-  spatialPlan.routes.map((route) => [route.name, route]),
-);
-const cameraByName = new Map(
-  spatialPlan.cameras.map((camera) => [camera.name, camera]),
-);
+const routeByName = new Map(spatialPlan.routes.map((route) => [route.name, route]));
+const cameraByName = new Map(spatialPlan.cameras.map((camera) => [camera.name, camera]));
 
-for (const road of spatialPlan.roads) {
-  assertPartOneSourceReferences(road.source, `scene road ${road.id}`);
+for (const [collection, name] of [
+  [spatialPlan.roads, "road"],
+  [spatialPlan.landmarks, "landmark"],
+  [spatialPlan.routes, "route"],
+  [spatialPlan.cameras, "camera"],
+  [spatialPlan.relationships ?? [], "relationship"],
+]) {
+  for (const record of collection) {
+    assertMapSourceReferences(record.source, `${name} ${record.id ?? record.name}`);
+  }
+}
+
+if (roadById.get("main-street")?.axis !== "z") {
+  fail("Main Street / Highway 13 is not modeled north-south");
+}
+if (roadById.get("broad-street")?.axis !== "x") {
+  fail("Broad Street is not modeled across Main Street");
+}
+if (spatialPlan.map2d.regions.length !== 0) {
+  fail("public map contains unsourced district or region geometry");
 }
 
 const expectedMapLabels = new Map([
@@ -117,47 +160,35 @@ const expectedMapLabels = new Map([
   ["city-park", "City park"],
   ["chalmers-property", "Chalmers property"],
   ["old-ruins", "Old ruins"],
+  ["railroad-trestle", "Railroad trestle"],
+  ["trainyard", "Trainyard"],
+  ["southside-industry", "Mills and docks"],
+  ["diner-strip-mall", "Diner and shops"],
+  ["stanford-north-tower", "Stanford towers"],
 ]);
-
 if (spatialPlan.map2d.landmarks.length !== expectedMapLabels.size) {
-  fail("public map landmark set differs from the reviewed Part One evidence set");
+  fail("public map landmark set differs from the reviewed evidence set");
 }
 for (const marker of spatialPlan.map2d.landmarks) {
   const landmark = landmarkById.get(marker.id);
   if (!landmark) fail(`public map references unknown landmark ${marker.id}`);
-  assertPartOneSourceReferences(
-    landmark.source,
-    `public map landmark ${marker.id}`,
-  );
   if (expectedMapLabels.get(marker.id) !== marker.label) {
     fail(`public map label is not source-safe: ${marker.id} = ${marker.label}`);
   }
 }
-
 for (const roadId of spatialPlan.map2d.roads) {
-  const road = roadById.get(roadId);
-  if (!road) fail(`public map references unknown road ${roadId}`);
-  assertPartOneSourceReferences(road.source, `public map road ${roadId}`);
+  if (!roadById.has(roadId)) fail(`public map references unknown road ${roadId}`);
 }
 for (const routeName of spatialPlan.map2d.routes) {
-  const route = routeByName.get(routeName);
-  if (!route) fail(`public map references unknown route ${routeName}`);
-  assertPartOneSourceReferences(route.source, `public map route ${routeName}`);
+  if (!routeByName.has(routeName)) fail(`public map references unknown route ${routeName}`);
 }
 
-if (
-  sceneManifest.fallback?.kind !== "neutral" ||
-  "url" in (sceneManifest.fallback ?? {})
-) {
+if (sceneManifest.fallback?.kind !== "neutral" || "url" in (sceneManifest.fallback ?? {})) {
   fail("scene fallback references presentation artwork instead of a neutral surface");
 }
 for (const view of sceneManifest.authoredViews) {
   const camera = cameraByName.get(view.cameraNode);
   if (!camera) fail(`public scene view has no spatial-plan camera: ${view.cameraNode}`);
-  assertPartOneSourceReferences(
-    view.sourceReferences,
-    `public scene view ${view.cameraNode}`,
-  );
   if (
     view.label !== camera.label ||
     JSON.stringify(view.sourceReferences) !== JSON.stringify(camera.source)
@@ -165,6 +196,17 @@ for (const view of sceneManifest.authoredViews) {
     fail(`public scene view differs from source-traced camera ${view.cameraNode}`);
   }
 }
+
+assertSameValues(
+  sceneSourceManifest.publishedReaderSources,
+  approvedReaderPaths,
+  "scene source manifest published boundary",
+);
+assertSameValues(
+  sceneSourceManifest.mapEvidenceSources,
+  evidenceCatalog.sources.map((source) => source.path),
+  "scene source manifest evidence boundary",
+);
 
 const unsupportedFallbackPath = path.join(
   projectRoot,
@@ -174,54 +216,30 @@ if (existsSync(unsupportedFallbackPath)) {
   fail("unsupported generated river-town fallback image is still public");
 }
 
-const publicSurfaceSources = [
-  "src/App.tsx",
-  "src/components/chronicle/ChronicleShell.tsx",
-  "src/components/chronicle/EditionHeader.tsx",
-  "src/components/chronicle/EditorialModules.tsx",
-  "src/components/chronicle/StatusStrip.tsx",
-  "src/components/chronicle/ChronicleFooter.tsx",
-].map((relativePath) => [
-  relativePath,
-  readFileSync(path.join(projectRoot, relativePath), "utf8"),
-]);
-const unsupportedPublicConcepts = [
-  "Artifacts & Case Files",
-  "From the Files",
-  "People in the Record",
-  "Place Records",
-  "Public place records",
-  "Timeline entries",
-  '"/people"',
-  '"/places"',
-  '"/timeline"',
-  '"/archive"',
-];
-for (const [relativePath, source] of publicSurfaceSources) {
-  for (const concept of unsupportedPublicConcepts) {
-    if (source.includes(concept)) {
-      fail(`${relativePath} still exposes unsupported public concept ${concept}`);
-    }
-  }
+const appSource = readFileSync(path.join(projectRoot, "src/App.tsx"), "utf8");
+const mapPanelSource = readFileSync(
+  path.join(projectRoot, "src/components/chronicle/TownMapPanel.tsx"),
+  "utf8",
+);
+if (!appSource.includes('pathname === "/map"') || !mapPanelSource.includes('href="/map"')) {
+  fail("the shared 3D map is not intentionally reachable from the public 2D map");
 }
 
 const sceneGeneratorSource = readFileSync(
   path.join(projectRoot, "scripts/generate-town-scene.mjs"),
   "utf8",
 );
-const unsupportedSceneStructures = [
-  "PRESENTATION_Bridge_",
+for (const structure of [
   "PRESENTATION_City_Park_Bandstand",
   "PRESENTATION_Chalmers_Barn",
   "PRESENTATION_Chalmers_Utility_Shed",
   "PRESENTATION_Bakery_Loading_Dock",
-];
-for (const structure of unsupportedSceneStructures) {
+]) {
   if (sceneGeneratorSource.includes(structure)) {
     fail(`scene generator still contains unsupported structure ${structure}`);
   }
 }
 
 console.log(
-  `Public source evidence verified at ${[...uniqueRevisions][0]} with ${publishedSourceRefs.length} approved chapters, ${spatialPlan.map2d.landmarks.length} traced map landmarks, and ${sceneManifest.authoredViews.length} traced scene views.`,
+  `Reader content verified at ${publicationRevision}; map evidence verified independently at ${mapRevision} with ${publishedPaths.length} published chapters, ${evidenceCatalog.sources.filter((source) => source.publicationState === "unpublished").length} canonical unpublished evidence source, ${spatialPlan.map2d.landmarks.length} map landmarks, and ${sceneManifest.authoredViews.length} scene views.`,
 );

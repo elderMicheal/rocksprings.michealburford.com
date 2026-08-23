@@ -2,20 +2,20 @@ import { expect, test } from "@playwright/test";
 
 test.describe("interactive presentation scene", () => {
   test("loads the validated model and enables controls", async ({ page }, testInfo) => {
-    await page.goto("/");
+    await page.goto("/map");
 
     const runtime = page.locator("[data-scene-phase]");
     await expect(runtime).toHaveAttribute("data-scene-phase", "ready", { timeout: 20_000 });
     await expect(page.locator(".scene-canvas")).toBeVisible();
+    await page.getByRole("button", { name: "Enter the view" }).click();
+    await expect(page.locator(".exhibit-scene")).toHaveClass(/scene-entered/);
+    await expect(page.locator(".scene-copy")).toBeHidden();
     await expect(page.getByRole("button", { name: "Reset view" })).toBeEnabled();
     await expect(page.getByRole("button", { name: "Replay descent" })).toBeEnabled();
     const viewpoint = page.getByRole("combobox", { name: "Town viewpoint" });
     await expect(viewpoint).toBeEnabled();
-    await expect(viewpoint.locator("option")).toHaveCount(8);
+    await expect(viewpoint.locator("option")).toHaveCount(10);
     await expect(page.locator(".scene-label")).toHaveCount(0);
-    await page.getByRole("button", { name: "Enter the view" }).click();
-    await expect(page.locator(".exhibit-scene")).toHaveClass(/scene-entered/);
-    await expect(page.locator(".scene-copy")).toBeHidden();
 
     if (process.env.RSC_CAPTURE_SCENE === "1") {
       await viewpoint.selectOption("Camera_Town_Overview");
@@ -79,10 +79,18 @@ test.describe("interactive presentation scene", () => {
     }
 
     await page.getByRole("button", { name: "Reset view" }).click();
+
+    const horizontalLayout = await page.evaluate(() => ({
+      overflow:
+        document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      scrollX: window.scrollX,
+    }));
+    expect(horizontalLayout.overflow).toBeLessThanOrEqual(1);
+    expect(horizontalLayout.scrollX).toBe(0);
   });
 
   test("enters an unobstructed view and supports full screen", async ({ page }, testInfo) => {
-    await page.goto("/");
+    await page.goto("/map");
 
     const runtime = page.locator("[data-scene-phase]");
     await expect(runtime).toHaveAttribute("data-scene-phase", "ready", { timeout: 20_000 });
@@ -108,7 +116,7 @@ test.describe("interactive presentation scene", () => {
 
   test("skips automatic descent when reduced motion is requested", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto("/");
+    await page.goto("/map");
 
     const runtime = page.locator("[data-scene-phase]");
     await expect(runtime).toHaveAttribute("data-scene-phase", "ready", { timeout: 20_000 });
@@ -117,11 +125,12 @@ test.describe("interactive presentation scene", () => {
 
   test("keeps a neutral fallback when the model cannot load", async ({ page }) => {
     await page.route("**/rock-springs-jackies-window.glb", (route) => route.abort());
-    await page.goto("/");
+    await page.goto("/map");
 
     const runtime = page.locator("[data-scene-phase]");
     await expect(runtime).toHaveAttribute("data-scene-phase", "error", { timeout: 20_000 });
     await expect(page.locator(".scene-fallback")).toBeVisible();
+    await page.getByRole("button", { name: "Enter the view" }).click();
     await expect(page.getByRole("button", { name: "Reset view" })).toBeDisabled();
     await expect(page.getByRole("button", { name: "Replay descent" })).toBeDisabled();
     await expect(page.getByRole("combobox", { name: "Town viewpoint" })).toBeDisabled();

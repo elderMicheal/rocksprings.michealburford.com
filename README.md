@@ -46,6 +46,24 @@ The initial API endpoints are:
 - `GET /api/manifest`
 - `GET /api/content/:slug` (not configured in V1)
 
+### Updating the shared map
+
+The front-page 2D map and the interactive 3D map at `/map` use the same spatial
+plan. Reader publication approval and map evidence are separate: canonical
+unpublished writing may contribute paraphrased geographic facts, but it never
+becomes reader content and its prose must not be copied here.
+
+```sh
+npm run scene:generate
+npm run scene:check
+npm run public:check
+```
+
+`scene:generate` regenerates the GLB and synchronizes its manifest hash, size,
+statistics, views, routes, and landmark contract in one operation. The evidence
+catalog and policy are documented in
+`docs/phase-2/JACKIES_WINDOW_SPATIAL_EVIDENCE.md`.
+
 ## Checks and deployment
 
 All deployment and hosting changes are governed by the binding

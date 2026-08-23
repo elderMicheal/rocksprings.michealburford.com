@@ -37,3 +37,18 @@ The app deploys and serves:
 
 The current delivery strategy is a build-time approved export. Runtime access
 to the Writing repository is prohibited.
+
+## Map architecture
+
+The 2D front-page map and the interactive 3D scene at `/map` are two views of
+`scene-data/jackies-window-spatial-plan.json`. A second coordinate model is not
+permitted.
+
+Map evidence has a narrower permission than reader publication. The map may use
+paraphrased geographic and visual facts from canonical unpublished writing when
+the source is pinned in `scene-data/rock-springs-map-evidence.json`. That does
+not add the source to the public reader, copy its prose, or change
+`content-policy/approved-sources.json`.
+
+The deterministic scene generator owns both the GLB and its computed manifest
+metadata so those artifacts cannot be regenerated independently and drift.

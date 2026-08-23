@@ -4,6 +4,7 @@ import "./styles/tokens.css";
 import "./styles/global.css";
 import "./styles/app.css";
 import "./styles/front-page.css";
+import "./styles/town-scene-page.css";
 import { App } from "./App";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

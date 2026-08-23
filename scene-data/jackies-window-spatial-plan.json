@@ -1,11 +1,13 @@
 {
   "schemaVersion": 2,
-  "id": "jackies-window-part-one-spatial-evidence-v5",
+  "id": "rock-springs-shared-spatial-evidence-v7",
   "source": {
-    "work": "Jackie's Window",
+    "work": "Rock Springs canonical writing",
     "part": 1,
     "chapters": [1, 2, 3, 4, 5, 6, 7, 8],
-    "writingRevision": "00350c94f1152116e1d27250dfb0674c5ccfea37"
+    "writingRevision": "3fd095b8f3e36215deef39e7de899c278a147e94",
+    "readerApprovalId": "jackies-window-part-one-chapters",
+    "mapEvidence": "scene-data/rock-springs-map-evidence.json"
   },
   "coordinates": {
     "handedness": "right",
@@ -21,15 +23,16 @@
   "bounds": {
     "minX": -180,
     "maxX": 200,
-    "minZ": -130,
+    "minZ": -220,
     "maxZ": 260
   },
   "policy": {
-    "architecture": "interpretive",
+    "architecture": "source-derived categories with interpretive dimensions",
     "absoluteCoordinates": "presentation-only",
     "distances": "source-stated distances are preserved at the declared coordinate scale",
     "localArchitectureScale": "consistent with the inter-district coordinate scale",
-    "publicLandmarkInteraction": false
+    "publicLandmarkInteraction": false,
+    "unpublishedEvidence": "derived geographic and visual facts only; manuscript prose is never copied"
   },
   "requiredGroups": [
     "Town_Ground",
@@ -43,6 +46,9 @@
     "Chalmers_Farm",
     "Woods",
     "Ruins",
+    "Transport_Infrastructure",
+    "Southside_Industrial",
+    "Eastside_Commercial",
     "Landmarks",
     "Lighting_Proxies",
     "Authored_Cameras",
@@ -53,21 +59,51 @@
       "id": "main-street",
       "nodeName": "CANON_Main_Street",
       "landmarkId": "main-street",
-      "axis": "x",
-      "length": 230,
+      "axis": "z",
+      "length": 340,
       "width": 6.6,
-      "classification": "canon-feature-inferred-bearing",
-      "source": ["Chapter 3:15", "Chapter 3:69-73", "Chapter 8:52"]
+      "classification": "canon-feature-confirmed-bearing",
+      "source": ["Chapter 3:15", "Chapter 3:69-73", "Chapter 8:52", "Evidence:main-is-highway-13-north-south"]
     },
     {
-      "id": "school-street",
-      "nodeName": "PRESENTATION_School_Street",
-      "position": [55, 3.2, 108.5],
+      "id": "broad-street",
+      "nodeName": "CANON_Broad_Street",
+      "position": [95, 2.4, 0],
       "axis": "x",
-      "length": 90,
+      "length": 210,
+      "width": 5.4,
+      "classification": "canon-feature-confirmed-intersection-inferred-extent",
+      "source": ["Evidence:broad-intersects-main"]
+    },
+    {
+      "id": "partridge-street",
+      "nodeName": "CANON_Partridge_Street",
+      "position": [68, 3.2, 111],
+      "axis": "z",
+      "length": 82,
       "width": 4.2,
-      "classification": "presentation-infrastructure",
-      "source": ["Chapter 8:18-20"]
+      "classification": "canon-street-relative-placement",
+      "source": ["Chapter 6:23-39", "Evidence:partridge-neighborhood-contrast"]
+    },
+    {
+      "id": "oak-street",
+      "nodeName": "CANON_Oak_Street",
+      "position": [40, 3.2, 152],
+      "axis": "x",
+      "length": 56,
+      "width": 4.2,
+      "classification": "canon-street-relative-placement",
+      "source": ["Chapter 6:39-57", "Evidence:partridge-neighborhood-contrast"]
+    },
+    {
+      "id": "amity-street",
+      "nodeName": "CANON_Amity_Street",
+      "position": [19, 3.2, 111],
+      "axis": "z",
+      "length": 82,
+      "width": 4.2,
+      "classification": "canon-name-inferred-placement",
+      "source": ["Chapter 6:59"]
     },
     {
       "id": "bakery-street",
@@ -104,8 +140,8 @@
       "nodeName": "CANON_New_Beginnings",
       "classification": "canon-location-relative-placement",
       "position": [55, 3.5, 113],
-      "footprint": [116, 11],
-      "source": ["Chapter 1:17", "Chapter 3:81-83", "Chapter 8:18-20"]
+      "footprint": [11, 116],
+      "source": ["Chapter 1:17", "Chapter 3:81-83", "Chapter 6:23-39"]
     },
     {
       "id": "jackies-house",
@@ -142,7 +178,7 @@
       "id": "old-school",
       "nodeName": "CANON_Old_Elementary_School",
       "classification": "canon-location-relative-placement",
-      "position": [67, 3, 104],
+      "position": [75, 3, 110],
       "footprint": [20.6, 9],
       "source": ["Chapter 3:69-71", "Chapter 3:81-83", "Chapter 8:84"]
     },
@@ -150,7 +186,7 @@
       "id": "old-school-staging-lot",
       "nodeName": "CANON_Old_School_Asphalt_Staging_Lot",
       "classification": "canon-feature-relative-placement",
-      "position": [59, 2.95, 104],
+      "position": [75, 2.95, 110],
       "footprint": [31, 7.5],
       "source": ["Chapter 3:69-71", "Chapter 8:18-20", "Chapter 8:52", "Chapter 8:84-88"]
     },
@@ -206,8 +242,8 @@
       "id": "main-street",
       "nodeName": "CANON_Main_Street",
       "classification": "canon-feature-inferred-bearing",
-      "position": [65, 2.2, 88],
-      "source": ["Chapter 3:15", "Chapter 3:69-73", "Chapter 8:52"]
+      "position": [95, 2.2, 35],
+      "source": ["Chapter 3:15", "Chapter 3:69-73", "Chapter 8:52", "Evidence:main-is-highway-13-north-south"]
     },
     {
       "id": "river",
@@ -215,18 +251,81 @@
       "classification": "canon-feature-interpretive-course",
       "position": [60, -3.2, -100],
       "source": ["Chapter 1:15", "Chapter 3:33"]
+    },
+    {
+      "id": "broad-main-intersection",
+      "nodeName": "CANON_Broad_Main_Intersection",
+      "classification": "canon-road-intersection-presentation-position",
+      "position": [95, 2.4, 0],
+      "source": ["Evidence:broad-intersects-main"]
+    },
+    {
+      "id": "railroad-trestle",
+      "nodeName": "CANON_Highway13_Railroad_Trestle",
+      "classification": "canon-feature-inferred-side-of-city",
+      "position": [95, 2.4, 200],
+      "footprint": [44, 12],
+      "source": ["Evidence:railroad-trestle-metro-rural-boundary"]
+    },
+    {
+      "id": "trainyard",
+      "nodeName": "CANON_Trainyard",
+      "classification": "canon-location-relative-placement",
+      "position": [5, 2.2, 185],
+      "footprint": [95, 50],
+      "source": ["Evidence:trainyard-industrial-edge"]
+    },
+    {
+      "id": "ledford-home",
+      "nodeName": "CANON_Ledford_Home",
+      "classification": "canon-location-inferred-placement",
+      "position": [132, 2.4, -175],
+      "footprint": [10, 12],
+      "source": ["Evidence:southside-mills-and-docks"]
+    },
+    {
+      "id": "southside-industry",
+      "nodeName": "CANON_Southside_Mills_Docks",
+      "classification": "canon-district-inferred-placement",
+      "position": [90, 1.5, -170],
+      "footprint": [95, 45],
+      "source": ["Evidence:southside-mills-and-docks"]
+    },
+    {
+      "id": "diner-strip-mall",
+      "nodeName": "CANON_Diner_Strip_Mall",
+      "classification": "canon-location-inferred-placement",
+      "position": [175, 2.2, -25],
+      "footprint": [65, 46],
+      "source": ["Evidence:diner-strip-mall"]
+    },
+    {
+      "id": "stanford-north-tower",
+      "nodeName": "CANON_Stanford_North_Tower",
+      "classification": "canon-location-inferred-placement",
+      "position": [118, 2.2, -62],
+      "footprint": [15, 15],
+      "source": ["Evidence:stanford-towers-straddle-river"]
+    },
+    {
+      "id": "stanford-south-tower",
+      "nodeName": "CANON_Stanford_South_Tower",
+      "classification": "canon-location-inferred-placement",
+      "position": [118, 2.2, -138],
+      "footprint": [15, 15],
+      "source": ["Evidence:stanford-towers-straddle-river"]
     }
   ],
   "map2d": {
-    "title": "Part One spatial relationships",
-    "description": "Topological evidence diagram from Chapters 1–8. Positions show only stated direction, adjacency, sightline, or approximate distance; line courses and shapes are not geographic data.",
+    "title": "Rock Springs spatial relationships",
+    "description": "One shared evidence model derived from published chapters and canonical map-only evidence. Confirmed bearings and relationships are preserved; unstated coordinates remain interpretive.",
     "extent": {
       "minX": -155,
       "maxX": 185,
-      "minZ": -120,
+      "minZ": -210,
       "maxZ": 240
     },
-    "roads": ["main-street"],
+    "roads": ["main-street", "broad-street", "partridge-street", "oak-street", "amity-street", "franklin-street"],
     "routes": ["PATH_Abby_Sightline", "PATH_Detective_Surveillance", "PATH_Boys_Bicycle_Route"],
     "regions": [],
     "landmarks": [
@@ -240,7 +339,12 @@
       { "id": "detective-position", "label": "Detective position", "confidence": "inferred", "labelOffset": [-16, 30] },
       { "id": "city-park", "label": "City park", "confidence": "inferred", "labelOffset": [-16, -16] },
       { "id": "chalmers-property", "label": "Chalmers property", "confidence": "inferred", "labelOffset": [16, 30] },
-      { "id": "old-ruins", "label": "Old ruins", "confidence": "inferred", "labelOffset": [16, -16] }
+      { "id": "old-ruins", "label": "Old ruins", "confidence": "inferred", "labelOffset": [16, -16] },
+      { "id": "railroad-trestle", "label": "Railroad trestle", "confidence": "inferred", "labelOffset": [16, 30] },
+      { "id": "trainyard", "label": "Trainyard", "confidence": "relative", "labelOffset": [-16, 30] },
+      { "id": "southside-industry", "label": "Mills and docks", "confidence": "inferred", "labelOffset": [-16, 30] },
+      { "id": "diner-strip-mall", "label": "Diner and shops", "confidence": "relative", "labelOffset": [-16, -16] },
+      { "id": "stanford-north-tower", "label": "Stanford towers", "confidence": "inferred", "labelOffset": [16, -16] }
     ]
   },
   "cameras": [
@@ -262,7 +366,7 @@
       "name": "Camera_Jackie_Window",
       "label": "Jackie's window",
       "position": [61, 9, 111.6],
-      "target": [59, 3.5, 104],
+      "target": [75, 3.5, 110],
       "source": ["Chapter 8:18-20", "Chapter 8:48-50"]
     },
     {
@@ -283,7 +387,7 @@
       "name": "Camera_Parade_Staging",
       "label": "Staging area",
       "position": [90, 48, 133],
-      "target": [61, 3.5, 108],
+      "target": [75, 3.5, 110],
       "source": ["Chapter 3:69-73", "Chapter 8:18-20"]
     },
     {
@@ -299,6 +403,20 @@
       "position": [-90, 45, 245],
       "target": [-125, 0, 220],
       "source": ["Chapter 3:33-35"]
+    },
+    {
+      "name": "Camera_City_Spine",
+      "label": "Main and Broad",
+      "position": [185, 125, 135],
+      "target": [95, 3, 25],
+      "source": ["Evidence:main-is-highway-13-north-south", "Evidence:broad-intersects-main"]
+    },
+    {
+      "name": "Camera_Southside_Industrial",
+      "label": "Southside industry",
+      "position": [185, 100, -210],
+      "target": [105, 8, -120],
+      "source": ["Evidence:southside-mills-and-docks", "Evidence:stanford-towers-straddle-river"]
     },
     {
       "name": "Camera_Descent_Start",
@@ -320,7 +438,7 @@
       "name": "PATH_Abby_Sightline",
       "classification": "canon-relationship-approximate-distance",
       "source": ["Chapter 3:33", "Chapter 3:69-83"],
-      "points": [[158, 15, -35], [126, 12, 18], [96, 10, 72], [67, 9, 104], [61, 8.85, 111.72]]
+      "points": [[158, 15, -35], [126, 12, 18], [96, 10, 72], [75, 9, 110], [61, 8.85, 111.72]]
     },
     {
       "name": "PATH_Jackie_Downtown_View",
@@ -332,7 +450,7 @@
       "name": "PATH_Jackie_Staging_Sightline",
       "classification": "canon-view-presentation-geometry",
       "source": ["Chapter 8:18-20", "Chapter 8:30", "Chapter 8:92-94"],
-      "points": [[61, 8.85, 111.72], [60, 6, 108.5], [59, 3.4, 104]]
+      "points": [[61, 8.85, 111.72], [68, 6, 110], [75, 3.4, 110]]
     },
     {
       "name": "PATH_Detective_Surveillance",
@@ -350,13 +468,19 @@
       "name": "PATH_Parade_Route",
       "classification": "canon-event-inferred-route",
       "source": ["Chapter 3:65-73", "Chapter 8:52"],
-      "points": [[172, 2.8, 88], [125, 2.8, 88], [65, 2.8, 88], [5, 2.8, 88]]
+      "points": [[95, 2.8, -20], [95, 2.8, 35], [95, 2.8, 88], [95, 2.8, 150]]
     },
     {
       "name": "PATH_Downtown_New_Beginnings",
       "classification": "inferred-connector",
       "source": ["Chapter 1:17", "Chapter 3:81-83"],
-      "points": [[82, 3, 66], [72, 3.5, 88], [62, 4, 100], [55, 4, 113]]
+      "points": [[82, 3, 66], [78, 3.5, 88], [68, 4, 100], [55, 4, 113]]
+    },
+    {
+      "name": "PATH_Ledford_Southside_To_Diner",
+      "classification": "canon-sequence-inferred-route",
+      "source": ["Evidence:southside-mills-and-docks", "Evidence:diner-strip-mall"],
+      "points": [[132, 3, -175], [105, 3, -150], [95, 3, -100], [120, 3, -60], [175, 3, -25]]
     }
   ],
   "relationships": [
@@ -414,6 +538,30 @@
       "object": "CANON_City_Park",
       "classification": "inferred-event-placement",
       "source": ["Chapter 3:65", "Chapter 8:56"]
+    },
+    {
+      "id": "main-street-confirmed-north-south",
+      "subject": "CANON_Main_Street",
+      "relation": "runs-north-south-as-highway-13",
+      "object": "CANON_Broad_Main_Intersection",
+      "classification": "canon-road-orientation",
+      "source": ["Evidence:main-is-highway-13-north-south", "Evidence:broad-intersects-main"]
+    },
+    {
+      "id": "trestle-marks-metro-rural-transition",
+      "subject": "CANON_Highway13_Railroad_Trestle",
+      "relation": "marks-informal-metro-rural-transition-on",
+      "object": "CANON_Main_Street",
+      "classification": "canon-urban-transition-inferred-side",
+      "source": ["Evidence:railroad-trestle-metro-rural-boundary"]
+    },
+    {
+      "id": "stanford-towers-straddle-river",
+      "subject": "CANON_Stanford_North_Tower",
+      "relation": "opposite-side-of-river-from",
+      "object": "CANON_Stanford_South_Tower",
+      "classification": "canon-relative-layout",
+      "source": ["Evidence:stanford-towers-straddle-river"]
     }
   ]
 }

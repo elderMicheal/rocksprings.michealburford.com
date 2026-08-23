@@ -52,10 +52,11 @@ validation, unit tests, and a production build on its original base.
 
 ## Why it is quarantined
 
-Recovered `main` contains the approved front-page redesign. That redesign does
-not mount or route to `ExhibitScene`, `RockSpringsScene`, or `TownMapPanel`.
-Applying the local bundle to recovered `main` therefore leaves the scene and map
-UI unreachable.
+Recovered `main` contains the approved front-page redesign. That redesign
+mounts `TownMapPanel` as its 2D map exhibit, but it does not mount or route to
+`ExhibitScene` or `RockSpringsScene`. Applying the local bundle to recovered
+`main` therefore left the 3D scene unreachable and its former front-page tests
+incompatible with the approved layout.
 
 The combined browser suite completed with 9 passing and 33 failing tests across
 mobile, tablet, and desktop. Failures included missing map/scene surfaces,
@@ -84,3 +85,11 @@ Any future scene or map work must start as a deliberate change against current
 Until those conditions are met, production remains the recovered application
 architecture plus the deployment mandate. The discarded work must not be
 silently restored or deployed.
+
+## Owner-approved replacement
+
+On 2026-08-23, the owner approved a clean replacement from current `main` with
+three explicit decisions: expose the 3D map at `/map` from the existing 2D map,
+allow canonical unpublished writing to contribute derived map evidence without
+publishing prose, and replace rather than extend draft PR #8. That replacement
+must be independently implemented and must not restore the discarded bundle.
