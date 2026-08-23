@@ -1,26 +1,19 @@
-# Jackie's Window GLB — Chapters 1–8 Update
+# Jackie’s Window scene refresh — Writing revision 3fd095b8
 
-This revision updates the uploaded GLB from the current `primary` branch of `elderMicheal/micheal-writes`.
+This scene refresh is a deliberate replacement against current `main`; it does
+not restore the discarded pre-2026-08-21 scene branch.
 
-## Map corrections from the latest writing
+Changes are limited to the approved Part One spatial evidence:
 
-- Names the New Beginnings street as **Partridge Street**.
-- Adds **Oak Street** at the corner where Monte turns right.
-- Represents **eight houses** on the maintained side of Partridge, with four forming the New Beginnings campus.
-- Places the deteriorated old school/staging side across Partridge.
-- Adds the **back alley** behind the campus houses.
-- Moves the primary Main Street representation one block west of the campus instead of allowing it to cut through the campus block.
-- Adds **Southern Illinois State University** south down Main Street, across the river.
-- Adds the buckled sidewalk/root ramp and the sagging chain-link boundary described in Chapter 5.
-- Adds a non-surveyed highway-approach context marker from Chapter 6.
-- Retains the Chapter 8 parade staging relationship: Jackie is less than 100 feet from the school parking lot.
-
-## Canon boundary
-
-Nodes prefixed `CANON_` represent a location, name, or relationship stated directly in the prose.
-
-Nodes prefixed `PRESENTATION_` are interpretive geometry used to make the scene readable.
-
-Nodes prefixed `MARKER_` are navigation anchors for Three.js.
-
-Chapter 7 currently contains no prose, so it contributes no new map information.
+- refreshed scene provenance from Writing revision `00350c94…` to
+  `3fd095b8f3e36215deef39e7de899c278a147e94`;
+- added Chapter 6 Partridge/Oak/Amity, the eight-house New Beginnings block,
+  trainyard/sound barrier, and founder-statue intersection evidence;
+- added Chapter 7 south-side industrial, bridge, diner/strip mall, Stanford
+  towers and Ledford route evidence;
+- retained Chapter 8 highway distances as regional-only context;
+- kept Chapter 9–10 out of the public source boundary;
+- retained the compact eleven-label 2D map while making the expanded 3D scene
+  reachable at `/map`;
+- replaced the oversized procedural scene generator with a deterministic,
+  plan-driven blockout under the existing validation budgets.
