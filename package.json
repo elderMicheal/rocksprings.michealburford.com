@@ -55,6 +55,9 @@
     "wrangler": "4.125.0"
   },
   "optionalDependencies": {
-    "@typescript/typescript-linux-x64": "7.0.2"
+    "@esbuild/linux-x64": "0.28.1",
+    "@rolldown/binding-linux-x64-gnu": "1.1.5",
+    "@typescript/typescript-linux-x64": "7.0.2",
+    "lightningcss-linux-x64-gnu": "1.32.0"
   }
 }
