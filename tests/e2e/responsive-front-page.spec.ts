@@ -1,141 +1,94 @@
 import { expect, test } from "@playwright/test";
 
 const keyRegions = [
-  ".chronicle-frame",
-  ".edition-header",
-  ".masthead",
-  ".masthead h1",
-  ".primary-navigation",
-  ".front-page-primary",
-  ".exhibit-scene",
-  ".scene-controls",
-  ".lead-story",
-  ".lead-intro",
-  ".lead-intro h2",
+  ".rsc-front-page",
+  ".front-page-scroll",
+  ".front-page-outer-frame",
+  ".front-page-inner-frame",
+  ".front-page-grid",
+  ".front-masthead",
+  ".front-top-story",
+  ".front-map-exhibit",
+  ".map-panel",
+  ".front-introduction",
 ];
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("h1")).toHaveText("The Rock Springs Chronicles");
-  await expect(
-    page.getByText(
-      "View spatial relationships stated in Part One, then read the source chapters.",
-    ),
-  ).toBeVisible();
+  await expect(page.locator(".front-masthead h1")).toHaveText("The Rock Springs Chronicles");
+  await expect(page.locator(".front-map-exhibit .map-panel")).toBeVisible();
 });
 
-test("keeps the full front page inside the viewport", async ({ page }) => {
-  const overflow = await page.evaluate((selectors) => {
+test("keeps the locked newspaper composition contained by its scroll surface", async ({ page }, testInfo) => {
+  const layout = await page.evaluate((selectors) => {
     const viewportWidth = document.documentElement.clientWidth;
     const documentOverflow = document.documentElement.scrollWidth - viewportWidth;
+    const scroll = document.querySelector<HTMLElement>(".front-page-scroll")!;
+    const frame = document.querySelector<HTMLElement>(".front-page-outer-frame")!;
     const regions = selectors.map((selector) => {
-      const element = document.querySelector(selector);
+      const element = document.querySelector<HTMLElement>(selector);
       if (!element) return { selector, missing: true };
-
       const box = element.getBoundingClientRect();
-      return {
-        selector,
-        left: Math.round(box.left),
-        right: Math.round(box.right),
-        width: Math.round(box.width),
-      };
+      return { selector, width: Math.round(box.width), height: Math.round(box.height) };
     });
 
-    return { viewportWidth, documentOverflow, regions };
+    return {
+      viewportWidth,
+      documentOverflow,
+      scrollClientWidth: scroll.clientWidth,
+      scrollWidth: scroll.scrollWidth,
+      frameWidth: frame.getBoundingClientRect().width,
+      regions,
+    };
   }, keyRegions);
 
-  expect(overflow.documentOverflow, JSON.stringify(overflow, null, 2)).toBeLessThanOrEqual(1);
-
-  for (const region of overflow.regions) {
+  expect(layout.documentOverflow, JSON.stringify(layout, null, 2)).toBeLessThanOrEqual(1);
+  for (const region of layout.regions) {
     expect("missing" in region, JSON.stringify(region)).toBe(false);
-    if ("left" in region) {
-      expect(region.left, `${region.selector} crosses the left viewport edge`).toBeGreaterThanOrEqual(0);
-      expect(region.right, `${region.selector} crosses the right viewport edge`).toBeLessThanOrEqual(
-        overflow.viewportWidth + 1,
-      );
+    if ("width" in region) {
+      expect(region.width, `${region.selector} has no width`).toBeGreaterThan(0);
+      expect(region.height, `${region.selector} has no height`).toBeGreaterThan(0);
     }
   }
-});
-
-test("uses readable controls and responsive layout modes", async ({ page }, testInfo) => {
-  const navLinks = page.locator(".nav-links a");
-  const linkCount = await navLinks.count();
-
-  for (let index = 0; index < linkCount; index += 1) {
-    const box = await navLinks.nth(index).boundingBox();
-    expect(box?.height ?? 0, `Navigation item ${index + 1} is too short`).toBeGreaterThanOrEqual(44);
-  }
-
-  await expect(page.locator("[data-scene-phase]")).toHaveAttribute(
-    "data-scene-phase",
-    "ready",
-    { timeout: 20_000 },
-  );
-  const sceneControls = page.locator(".scene-controls button, .scene-controls select");
-  const sceneControlCount = await sceneControls.count();
-  for (let index = 0; index < sceneControlCount; index += 1) {
-    const box = await sceneControls.nth(index).boundingBox();
-    expect(box?.height ?? 0, `Scene control ${index + 1} is too short`).toBeGreaterThanOrEqual(44);
-  }
-
-  const layout = await page.evaluate(() => ({
-    primaryColumns: getComputedStyle(document.querySelector(".front-page-primary")!).gridTemplateColumns,
-    leadColumns: getComputedStyle(document.querySelector(".lead-story")!).gridTemplateColumns,
-    sceneHeight: document.querySelector(".exhibit-scene")!.getBoundingClientRect().height,
-    sceneControls: document.querySelector(".scene-controls")!.getBoundingClientRect().toJSON(),
-    sceneRect: document.querySelector(".exhibit-scene")!.getBoundingClientRect().toJSON(),
-    viewportHeight: window.innerHeight,
-    mastheadHeight: document.querySelector(".masthead h1")!.getBoundingClientRect().height,
-    mastheadSize: Number.parseFloat(
-      getComputedStyle(document.querySelector(".masthead h1")!).fontSize,
-    ),
-    headlineSize: Number.parseFloat(
-      getComputedStyle(document.querySelector(".lead-intro h2")!).fontSize,
-    ),
-  }));
-
-  expect(layout.sceneHeight).toBeLessThanOrEqual(layout.viewportHeight * 0.5 + 1);
-  expect(layout.sceneControls.top).toBeGreaterThanOrEqual(layout.sceneRect.top - 1);
-  expect(layout.sceneControls.bottom).toBeLessThanOrEqual(layout.sceneRect.bottom + 1);
 
   if (testInfo.project.name === "mobile") {
-    expect(layout.primaryColumns.trim().split(/\s+/)).toHaveLength(1);
-    expect(layout.leadColumns.trim().split(/\s+/)).toHaveLength(1);
-    expect(layout.mastheadSize).toBeLessThanOrEqual(52);
-    expect(layout.mastheadHeight).toBeLessThanOrEqual(layout.mastheadSize * 2.2);
-    expect(layout.headlineSize).toBeLessThanOrEqual(56);
-  } else if (testInfo.project.name === "tablet") {
-    expect(layout.primaryColumns.trim().split(/\s+/)).toHaveLength(2);
-    expect(layout.leadColumns.trim().split(/\s+/)).toHaveLength(1);
-    expect(layout.mastheadSize).toBeLessThanOrEqual(64);
-    expect(layout.mastheadHeight).toBeLessThanOrEqual(layout.mastheadSize * 2.2);
-    expect(layout.headlineSize).toBeLessThanOrEqual(56);
+    expect(layout.frameWidth).toBeGreaterThan(layout.viewportWidth);
+    expect(layout.scrollWidth).toBeGreaterThan(layout.scrollClientWidth);
   } else {
-    expect(layout.primaryColumns.trim().split(/\s+/)).toHaveLength(3);
-    expect(layout.leadColumns.trim().split(/\s+/)).toHaveLength(1);
-    expect(layout.mastheadSize).toBeLessThanOrEqual(96);
-    expect(layout.mastheadHeight).toBeLessThanOrEqual(layout.mastheadSize * 1.2);
-    expect(layout.headlineSize).toBeLessThanOrEqual(64);
+    expect(layout.frameWidth).toBeLessThanOrEqual(layout.viewportWidth + 1);
   }
 });
 
-test("matches the responsive exhibit baseline", async ({ page }, testInfo) => {
-  await page.addStyleTag({
-    content: `
-      .town-scene-runtime .scene-canvas { opacity: 0 !important; }
-      .town-scene-runtime .scene-fallback { opacity: 1 !important; }
-      .scene-controls, .scene-load-status { visibility: hidden !important; }
-    `,
+test("keeps current front-page map controls and source actions usable", async ({ page }) => {
+  const mapLink = page.getByRole("link", { name: "Open 3D map" });
+  await expect(mapLink).toBeVisible();
+  await expect(mapLink).toHaveAttribute("href", "/map");
+  await expect(page.getByRole("link", { name: /Read Book 1, Part 1/i })).toHaveAttribute("href", "/read/jackies-window/part-1");
+  await expect(page.locator(".town-map")).toBeVisible();
+  await expect(page.locator(".map-marker")).toHaveCount(11);
+  await expect(page.locator(".exhibit-scene")).toHaveCount(0);
+});
+
+test("maintains the reviewed front-page grid proportions", async ({ page }) => {
+  const layout = await page.evaluate(() => {
+    const grid = document.querySelector<HTMLElement>(".front-page-grid")!;
+    const masthead = document.querySelector<HTMLElement>(".front-masthead")!;
+    const map = document.querySelector<HTMLElement>(".front-map-exhibit")!;
+    const story = document.querySelector<HTMLElement>(".front-top-story")!;
+    const gridStyle = getComputedStyle(grid);
+    return {
+      columns: gridStyle.gridTemplateColumns.trim().split(/\s+/).length,
+      rows: gridStyle.gridTemplateRows.trim().split(/\s+/).length,
+      aspectRatio: grid.getBoundingClientRect().width / grid.getBoundingClientRect().height,
+      mastheadHeight: masthead.getBoundingClientRect().height,
+      mapHeight: map.getBoundingClientRect().height,
+      storyHeight: story.getBoundingClientRect().height,
+    };
   });
-  if (process.env.RSC_CAPTURE_FALLBACK === "1") {
-    await page.screenshot({
-      animations: "disabled",
-      fullPage: true,
-      path: testInfo.outputPath("current-fallback.png"),
-    });
-  }
-  await expect(page).toHaveScreenshot("chronicle-front-page.png", {
-    fullPage: true,
-    timeout: 15_000,
-  });
+
+  expect(layout.columns).toBe(12);
+  expect(layout.rows).toBe(5);
+  expect(layout.aspectRatio).toBeCloseTo(596 / 674, 1);
+  expect(layout.mastheadHeight).toBeGreaterThan(0);
+  expect(layout.mapHeight).toBeGreaterThan(layout.storyHeight);
 });
