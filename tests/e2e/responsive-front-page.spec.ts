@@ -48,6 +48,7 @@ test("keeps the source-derived map legible at each viewport", async ({ page }) =
 });
 
 test("matches the approved responsive front-page baseline", async ({ page }) => {
+  test.skip(process.platform !== "win32", "Reviewed screenshot baselines are Windows-specific.");
   await expect(page).toHaveScreenshot("chronicle-front-page.png", {
     fullPage: true,
     timeout: 15_000,

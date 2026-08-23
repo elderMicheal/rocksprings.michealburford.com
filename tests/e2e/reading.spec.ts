@@ -100,6 +100,7 @@ test("provides visible keyboard focus without unsupported collection navigation"
 });
 
 test("matches the reviewed Part 1 responsive baseline", async ({ page }) => {
+  test.skip(process.platform !== "win32", "Reviewed screenshot baselines are Windows-specific.");
   await page.goto(partOnePath);
   await expect(page.locator(".chapter-card")).toHaveCount(8);
   await expect(page).toHaveScreenshot("part-one-reader.png", {
