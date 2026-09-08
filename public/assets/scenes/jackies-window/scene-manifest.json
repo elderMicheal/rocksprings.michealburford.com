@@ -4,18 +4,20 @@
   "title": "Rock Springs",
   "model": {
     "url": "/assets/scenes/jackies-window/rock-springs-jackies-window.glb",
-    "sha256": "daef60c7f68a6b91e8c9d101f69fe4ca3326dcd419a7b2c117eecc973ef90cf9",
-    "bytes": 272160,
+    "sha256": "975cf6bd2b631b4767940a675def1b6ca579d01af7f7a27f1b57df5b9e0674d5",
+    "bytes": 61440,
     "format": "glTF 2.0 binary",
     "stats": {
-      "nodes": 738,
-      "meshes": 62,
-      "primitives": 62,
-      "baseTriangles": 5032,
-      "materials": 27,
+      "nodes": 129,
+      "meshes": 24,
+      "primitives": 24,
+      "baseTriangles": 948,
+      "materials": 17,
       "cameras": 5
     },
-    "extensions": []
+    "extensions": [
+      "EXT_mesh_gpu_instancing"
+    ]
   },
   "fallback": {
     "kind": "neutral",
