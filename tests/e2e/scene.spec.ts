@@ -14,7 +14,7 @@ test.describe("interactive presentation scene", () => {
     await expect(page.getByRole("button", { name: "Replay descent" })).toBeEnabled();
     const viewpoint = page.getByRole("combobox", { name: "Town viewpoint" });
     await expect(viewpoint).toBeEnabled();
-    await expect(viewpoint.locator("option")).toHaveCount(10);
+    await expect(viewpoint.locator("option")).toHaveCount(5);
     await expect(page.locator(".scene-label")).toHaveCount(0);
 
     if (process.env.RSC_CAPTURE_SCENE === "1") {
@@ -35,18 +35,14 @@ test.describe("interactive presentation scene", () => {
         animations: "disabled",
         path: testInfo.outputPath("authored-abby-view.png"),
       });
-      await viewpoint.selectOption("Camera_Chalmers_Route");
+      await viewpoint.selectOption("Camera_New_Beginnings");
       await page.waitForTimeout(1_000);
       await page.locator(".exhibit-scene").screenshot({
         animations: "disabled",
-        path: testInfo.outputPath("authored-chalmers-view.png"),
+        path: testInfo.outputPath("authored-new-beginnings-view.png"),
       });
-      await viewpoint.selectOption("Camera_Parade_Staging");
+      await viewpoint.selectOption("Camera_Downtown");
       await page.waitForTimeout(1_000);
-      await page.locator(".exhibit-scene").screenshot({
-        animations: "disabled",
-        path: testInfo.outputPath("authored-parade-staging-view.png"),
-      });
       const diagnosticStyle = await page.addStyleTag({
         content: `
           .scene-shade,
@@ -58,7 +54,7 @@ test.describe("interactive presentation scene", () => {
       });
       await page.locator(".scene-canvas").screenshot({
         animations: "disabled",
-        path: testInfo.outputPath("authored-parade-staging-canvas.png"),
+        path: testInfo.outputPath("authored-downtown-canvas.png"),
       });
       await diagnosticStyle.evaluate((style) => {
         style.parentNode?.removeChild(style);
