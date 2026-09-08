@@ -1,25 +1,21 @@
 {
   "schemaVersion": 1,
-  "id": "rock-springs-shared-spatial-evidence-v7",
+  "id": "rock-springs-shared-spatial-evidence-v8",
   "title": "Rock Springs",
   "model": {
     "url": "/assets/scenes/jackies-window/rock-springs-jackies-window.glb",
-    "sha256": "ed34f71b12b4f3871413627c8f588259e2d475920c2031a3d598485a325cf95e",
-    "bytes": 408916,
+    "sha256": "daef60c7f68a6b91e8c9d101f69fe4ca3326dcd419a7b2c117eecc973ef90cf9",
+    "bytes": 272160,
     "format": "glTF 2.0 binary",
     "stats": {
-      "nodes": 713,
-      "meshes": 37,
-      "primitives": 37,
-      "baseTriangles": 8746,
-      "materials": 30,
-      "cameras": 12
+      "nodes": 738,
+      "meshes": 62,
+      "primitives": 62,
+      "baseTriangles": 5032,
+      "materials": 27,
+      "cameras": 5
     },
-    "extensions": [
-      "EXT_mesh_gpu_instancing",
-      "KHR_materials_emissive_strength",
-      "KHR_lights_punctual"
-    ]
+    "extensions": []
   },
   "fallback": {
     "kind": "neutral",
@@ -39,7 +35,7 @@
   "canon": {
     "geometry": "interpretive",
     "distances": "source-stated distances are scaled; otherwise approximate",
-    "architecture": "interpretive",
+    "architecture": "source-derived categories; dimensions and filler structures are interpretive",
     "publicLandmarks": false,
     "nodeNaming": "CANON_* identifies source-established locations or relationships; INFERRED_* identifies reasoned placement; PRESENTATION_* identifies connective geometry.",
     "notice": "The scene is an interpretive visualization. Unspecified distances, coordinates, bearings, and architecture are not asserted as canon."
@@ -75,9 +71,18 @@
       "cameraNode": "Camera_Town_Overview",
       "label": "Town overview",
       "sourceReferences": [
-        "Chapter 1:15-17",
+        "Chapter 1:97-105",
         "Chapter 3:33",
-        "Chapter 4:15-17"
+        "Evidence:downtown-industrial-river-city"
+      ]
+    },
+    {
+      "cameraNode": "Camera_Downtown",
+      "label": "Downtown / Main Street",
+      "sourceReferences": [
+        "Chapter 2:67",
+        "Chapter 3:15",
+        "Evidence:crumbling-main-street"
       ]
     },
     {
@@ -89,81 +94,33 @@
       ]
     },
     {
-      "cameraNode": "Camera_Jackie_Window",
-      "label": "Jackie's window",
-      "sourceReferences": [
-        "Chapter 8:18-20",
-        "Chapter 8:48-50"
-      ]
-    },
-    {
-      "cameraNode": "Camera_Downtown",
-      "label": "Downtown",
-      "sourceReferences": [
-        "Chapter 1:15",
-        "Chapter 3:33"
-      ]
-    },
-    {
       "cameraNode": "Camera_New_Beginnings",
-      "label": "New Beginnings",
+      "label": "New Beginnings / Jackie",
       "sourceReferences": [
-        "Chapter 1:17",
-        "Chapter 3:81-83"
-      ]
-    },
-    {
-      "cameraNode": "Camera_Parade_Staging",
-      "label": "Staging area",
-      "sourceReferences": [
-        "Chapter 3:69-73",
-        "Chapter 8:18-20"
-      ]
-    },
-    {
-      "cameraNode": "Camera_Chalmers_Route",
-      "label": "Bicycle route",
-      "sourceReferences": [
-        "Chapter 4:15-17",
-        "Chapter 4:43-63"
-      ]
-    },
-    {
-      "cameraNode": "Camera_Ruins",
-      "label": "Old ruins",
-      "sourceReferences": [
-        "Chapter 3:33-35"
-      ]
-    },
-    {
-      "cameraNode": "Camera_City_Spine",
-      "label": "Main and Broad",
-      "sourceReferences": [
-        "Evidence:main-is-highway-13-north-south",
-        "Evidence:broad-intersects-main"
+        "Chapter 1:103-105",
+        "Chapter 6:23-39",
+        "Evidence:new-beginnings-turn-of-century-houses"
       ]
     },
     {
       "cameraNode": "Camera_Southside_Industrial",
       "label": "Southside industry",
       "sourceReferences": [
-        "Evidence:southside-mills-and-docks",
-        "Evidence:stanford-towers-straddle-river"
+        "Chapter 7:29",
+        "Chapter 7:43",
+        "Evidence:southside-mills-and-docks"
       ]
     }
   ],
   "descent": {
-    "startCameraNode": "Camera_Descent_Start",
-    "endCameraNode": "Camera_Descent_End"
+    "startCameraNode": "Camera_Town_Overview",
+    "endCameraNode": "Camera_Downtown"
   },
   "authoredRoutes": [
     "PATH_Abby_Sightline",
     "PATH_Jackie_Downtown_View",
-    "PATH_Jackie_Staging_Sightline",
     "PATH_Detective_Surveillance",
     "PATH_Boys_Bicycle_Route",
-    "PATH_Parade_Route",
-    "PATH_Downtown_New_Beginnings",
     "PATH_Ledford_Southside_To_Diner"
   ],
   "anchors": []
