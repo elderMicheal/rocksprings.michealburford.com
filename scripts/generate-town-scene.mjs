@@ -1,2146 +1,328 @@
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import {
-  BoxGeometry,
-  BufferGeometry,
-  ConeGeometry,
-  CylinderGeometry,
-  DoubleSide,
-  Float32BufferAttribute,
-  Group,
-  InstancedMesh,
-  Matrix4,
-  Mesh,
-  MeshStandardMaterial,
-  Object3D,
-  PerspectiveCamera,
-  PlaneGeometry,
-  PointLight,
-  Quaternion,
-  Scene,
-  SphereGeometry,
-  Vector3,
-} from "three";
-import { GLTFExporter } from "three/addons/exporters/GLTFExporter.js";
 
-const planPath = resolve(
-  process.argv[2] ?? "scene-data/jackies-window-spatial-plan.json",
-);
-const defaultOutputPath = resolve(
-  "public/assets/scenes/jackies-window/rock-springs-jackies-window.glb",
-);
+const planPath = resolve(process.argv[2] ?? "scene-data/jackies-window-spatial-plan.json");
+const defaultOutputPath = resolve("public/assets/scenes/jackies-window/rock-springs-jackies-window.glb");
 const outputPath = resolve(process.argv[3] ?? defaultOutputPath);
 const manifestPath = process.argv[4]
   ? resolve(process.argv[4])
   : outputPath === defaultOutputPath
     ? resolve("public/assets/scenes/jackies-window/scene-manifest.json")
     : null;
-const sourcePlan = JSON.parse(readFileSync(planPath, "utf8"));
-const horizontalScale = sourcePlan.coordinates.horizontalMetersPerUnit ?? 1;
+const plan = JSON.parse(readFileSync(planPath, "utf8"));
+const S = plan.coordinates.horizontalMetersPerUnit ?? 3.048;
 
-function toWorldPosition([x, y, z]) {
-  return [x * horizontalScale, y, z * horizontalScale];
+const buffers = [];
+let byteLength = 0;
+const bufferViews = [];
+const accessors = [];
+const meshes = [];
+const materials = [];
+const materialByName = new Map();
+const geometryByName = new Map();
+const meshByKey = new Map();
+const nodes = [];
+const sceneNodes = [];
+const groupByName = new Map();
+const landmarkById = new Map(plan.landmarks.map((item) => [item.id, item]));
+const landmarkNodeById = new Map();
+
+function align4(value) { return (value + 3) & ~3; }
+function pushBuffer(buffer, target) {
+  const aligned = align4(byteLength);
+  if (aligned > byteLength) buffers.push(Buffer.alloc(aligned - byteLength));
+  byteLength = aligned;
+  const view = { buffer: 0, byteOffset: byteLength, byteLength: buffer.length };
+  if (target) view.target = target;
+  const index = bufferViews.length;
+  bufferViews.push(view);
+  buffers.push(buffer);
+  byteLength += buffer.length;
+  return index;
 }
-
-const plan = structuredClone(sourcePlan);
-plan.bounds = {
-  minX: sourcePlan.bounds.minX * horizontalScale,
-  maxX: sourcePlan.bounds.maxX * horizontalScale,
-  minZ: sourcePlan.bounds.minZ * horizontalScale,
-  maxZ: sourcePlan.bounds.maxZ * horizontalScale,
-};
-plan.landmarks = sourcePlan.landmarks.map((landmark) => ({
-  ...landmark,
-  position: toWorldPosition(landmark.position),
-}));
-plan.roads = sourcePlan.roads.map((road) => ({
-  ...road,
-  position: road.position ? toWorldPosition(road.position) : undefined,
-  length: road.length * horizontalScale,
-}));
-plan.cameras = sourcePlan.cameras.map((camera) => ({
-  ...camera,
-  position: toWorldPosition(camera.position),
-  target: toWorldPosition(camera.target),
-}));
-plan.routes = sourcePlan.routes.map((route) => ({
-  ...route,
-  points: route.points.map(toWorldPosition),
-}));
-const landmarkById = new Map(plan.landmarks.map((landmark) => [landmark.id, landmark]));
-
-class NodeFileReader {
-  result = null;
-  onloadend = null;
-
-  readAsArrayBuffer(blob) {
-    blob.arrayBuffer().then((result) => {
-      this.result = result;
-      this.onloadend?.({ target: this });
-    });
+function addAccessor(array, type, componentType, target, min, max) {
+  const typed = Buffer.from(array.buffer, array.byteOffset, array.byteLength);
+  const view = pushBuffer(typed, target);
+  const count = array.length / ({ SCALAR:1, VEC2:2, VEC3:3, VEC4:4 }[type]);
+  const accessor = { bufferView: view, componentType, count, type };
+  if (min) accessor.min = min;
+  if (max) accessor.max = max;
+  const index = accessors.length;
+  accessors.push(accessor);
+  return index;
+}
+function bounds3(values) {
+  const min=[Infinity,Infinity,Infinity], max=[-Infinity,-Infinity,-Infinity];
+  for (let i=0;i<values.length;i+=3) for(let j=0;j<3;j++){ min[j]=Math.min(min[j],values[i+j]); max[j]=Math.max(max[j],values[i+j]); }
+  return {min,max};
+}
+function defineGeometry(name, positions, normals, indices) {
+  const p = new Float32Array(positions), n = new Float32Array(normals), idx = new Uint16Array(indices);
+  const b = bounds3(positions);
+  const geom = {
+    position: addAccessor(p,"VEC3",5126,34962,b.min,b.max),
+    normal: addAccessor(n,"VEC3",5126,34962),
+    indices: addAccessor(idx,"SCALAR",5123,34963),
+    triangles: Math.floor(indices.length/3),
+  };
+  geometryByName.set(name, geom);
+  return geom;
+}
+function addMaterial(name, color, roughness=0.88, metallic=0.02, emissive=null) {
+  const hex = color.replace("#","");
+  const rgb=[parseInt(hex.slice(0,2),16)/255,parseInt(hex.slice(2,4),16)/255,parseInt(hex.slice(4,6),16)/255,1];
+  const m={ name, pbrMetallicRoughness:{ baseColorFactor:rgb, metallicFactor:metallic, roughnessFactor:roughness } };
+  if (emissive) {
+    const e=emissive.replace("#","");
+    m.emissiveFactor=[parseInt(e.slice(0,2),16)/255,parseInt(e.slice(2,4),16)/255,parseInt(e.slice(4,6),16)/255];
   }
-
-  readAsDataURL(blob) {
-    blob.arrayBuffer().then((result) => {
-      this.result = `data:${blob.type};base64,${Buffer.from(result).toString("base64")}`;
-      this.onloadend?.({ target: this });
-    });
-  }
+  const i=materials.length; materials.push(m); materialByName.set(name,i); return i;
 }
-
-globalThis.FileReader ??= NodeFileReader;
-
-const scene = new Scene();
-scene.name = "Rock_Springs_Architectural_Blockout";
-scene.userData = {
-  modelId: plan.id,
-  source: plan.source.work,
-  writingRevision: plan.source.writingRevision,
-  coordinateConvention: {
-    ...sourcePlan.coordinates,
-    glbMetersPerUnit: 1,
-    note: "Horizontal plan coordinates are converted to meters in the GLB.",
-  },
-  canonNotice:
-    "Named locations and stated relationships are source-derived. Coordinates, architecture, and filler geometry remain interpretive.",
-};
-
-const groups = Object.fromEntries(
-  plan.requiredGroups.map((name) => {
-    const group = new Group();
-    group.name = name;
-    group.userData = {
-      classification:
-        name === "Authored_Cameras" || name === "Authored_Paths"
-          ? "presentation-metadata"
-          : "scene-hierarchy",
-    };
-    scene.add(group);
-    return [name, group];
-  }),
-);
-
-const geometryCache = new Map();
-const materials = {};
-
-function geometry(key, factory) {
-  if (!geometryCache.has(key)) geometryCache.set(key, factory());
-  return geometryCache.get(key);
-}
-
-function material(name, options) {
-  const value = new MeshStandardMaterial({
-    roughness: 0.84,
-    metalness: 0.03,
-    ...options,
-  });
-  value.name = name;
-  materials[name] = value;
-  return value;
-}
-
-const palette = {
-  ground: material("MAT_Glacial_Earth", { color: 0x313831, roughness: 1 }),
-  grass: material("MAT_Unkempt_Grass", { color: 0x364431, roughness: 1 }),
-  field: material("MAT_Fallow_Field", { color: 0x635c3d, roughness: 1 }),
-  asphalt: material("MAT_Cracked_Asphalt", { color: 0x292b2a, roughness: 0.97 }),
-  concrete: material("MAT_Aged_Concrete", { color: 0x74746c, roughness: 0.94 }),
-  brick: material("MAT_Dark_Brick", { color: 0x4d3028, roughness: 0.92 }),
-  redBrick: material("MAT_School_Brick", { color: 0x633328, roughness: 0.95 }),
-  grayBrick: material("MAT_Eisenhower_Gray_Brick", { color: 0x68675f, roughness: 0.92 }),
-  industrial: material("MAT_Industrial_Soot", { color: 0x343633, roughness: 0.9 }),
-  whiteSiding: material("MAT_Aged_White_Siding", { color: 0xb8b5a5, roughness: 0.9 }),
-  redSiding: material("MAT_Oxide_Red_Siding", { color: 0x6f2b26, roughness: 0.91 }),
-  blueSiding: material("MAT_Faded_Blue_Siding", { color: 0x4d6670, roughness: 0.9 }),
-  greenSiding: material("MAT_Faded_Green_Siding", { color: 0x596955, roughness: 0.91 }),
-  tanSiding: material("MAT_Faded_Tan_Siding", { color: 0x8b7c61, roughness: 0.92 }),
-  roof: material("MAT_Aged_Roofing", { color: 0x252525, roughness: 0.95 }),
-  blackPaint: material("MAT_Chipped_Black_Paint", { color: 0x171615, roughness: 0.98 }),
-  exposedWood: material("MAT_Exposed_Porch_Wood", { color: 0x82634a, roughness: 1 }),
-  pothole: material("MAT_Pothole_Depression", { color: 0x111313, roughness: 1 }),
-  tentCanvas: material("MAT_Aged_Circus_Canvas", { color: 0xb8aa8a, roughness: 0.95 }),
-  roofRust: material("MAT_Rusted_Metal_Roof", {
-    color: 0x54352b,
-    roughness: 0.88,
-    metalness: 0.28,
-  }),
-  wood: material("MAT_Weathered_Wood", { color: 0x554638, roughness: 1 }),
-  metal: material("MAT_Dull_Metal", {
-    color: 0x4f5654,
-    roughness: 0.72,
-    metalness: 0.62,
-  }),
-  water: material("MAT_Rock_River", {
-    color: 0x17343d,
-    roughness: 0.24,
-    metalness: 0.12,
-    transparent: true,
-    opacity: 0.9,
-  }),
-  treeTrunk: material("MAT_Tree_Trunk", { color: 0x332c24, roughness: 1 }),
-  townLeaves: material("MAT_Town_Foliage", { color: 0x344538, roughness: 1 }),
-  woodsLeaves: material("MAT_Woods_Foliage", { color: 0x172b25, roughness: 1 }),
-  warmWindow: material("MAT_Warm_Window", {
-    color: 0x8e6841,
-    emissive: 0xd98e45,
-    emissiveIntensity: 3.2,
-    roughness: 0.35,
-  }),
-  cathedralGlass: material("MAT_Stained_Glass", {
-    color: 0x513b55,
-    emissive: 0x6d486c,
-    emissiveIntensity: 2.1,
-    roughness: 0.42,
-  }),
-  darkWindow: material("MAT_Dark_Window", {
-    color: 0x10191b,
-    metalness: 0.3,
-    roughness: 0.35,
-  }),
+const MAT={
+  ground:addMaterial("MAT_Glacial_Earth","#343933",1), grass:addMaterial("MAT_Unkempt_Grass","#42503b",1),
+  asphalt:addMaterial("MAT_Cracked_Asphalt","#242827",0.98), concrete:addMaterial("MAT_Aged_Concrete","#858279",0.95),
+  brick:addMaterial("MAT_Dark_Brick","#55352d",0.94), redBrick:addMaterial("MAT_School_Brick","#6f3d32",0.95),
+  grayBrick:addMaterial("MAT_Eisenhower_Gray_Brick","#74736b",0.93), soot:addMaterial("MAT_Industrial_Soot","#353936",0.92),
+  siding:addMaterial("MAT_Aged_Siding","#aaa697",0.93), redSiding:addMaterial("MAT_Oxide_Red_Siding","#792f2b",0.93),
+  blueSiding:addMaterial("MAT_Faded_Blue_Siding","#526d79",0.92), greenSiding:addMaterial("MAT_Faded_Green_Siding","#5f725a",0.93),
+  roof:addMaterial("MAT_Aged_Roofing","#242526",0.97), rust:addMaterial("MAT_Rust","#654034",0.88,0.28),
+  wood:addMaterial("MAT_Weathered_Wood","#67513e",1), metal:addMaterial("MAT_Dull_Metal","#5d6260",0.74,0.58),
+  water:addMaterial("MAT_Rock_River","#1f6571",0.22,0.08), bank:addMaterial("MAT_River_Bank","#5d5944",1),
+  darkWindow:addMaterial("MAT_Dark_Window","#10191b",0.3,0.18), warmWindow:addMaterial("MAT_Warm_Window","#8e6841",0.4,0,"#d98e45"),
+  yellow:addMaterial("MAT_Road_Yellow","#c7a84d",0.9), white:addMaterial("MAT_Road_White","#d0d0c8",0.9),
+  treeTrunk:addMaterial("MAT_Tree_Trunk","#3c3025",1), leaves:addMaterial("MAT_Town_Foliage","#314a37",1),
+  woods:addMaterial("MAT_Woods_Foliage","#1b3327",1), field:addMaterial("MAT_Fallow_Field","#6b6341",1),
+  tower:addMaterial("MAT_Stanford_Concrete","#666d70",0.85,0.08)
 };
 
-const houseBodyMaterials = [
-  palette.tanSiding,
-  palette.blueSiding,
-  palette.greenSiding,
-  palette.whiteSiding,
-  palette.redSiding,
-  palette.grayBrick,
-  palette.brick,
-  palette.tanSiding,
-];
-
-function seededRandom(seed = 0x1879) {
-  let value = seed >>> 0;
-  return () => {
-    value += 0x6d2b79f5;
-    let result = value;
-    result = Math.imul(result ^ (result >>> 15), result | 1);
-    result ^= result + Math.imul(result ^ (result >>> 7), result | 61);
-    return ((result ^ (result >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-const random = seededRandom();
-const yAxis = new Vector3(0, 1, 0);
-
-function glacialBase(x, z) {
-  return (
-    1.4 +
-    Math.sin((x + 55) * 0.0105) * 0.7 +
-    Math.cos((z - 36) * 0.0135) * 0.55 +
-    Math.sin((x + z) * 0.006) * 0.45
-  );
-}
-
-function riverCenterZ(x) {
-  const river = landmarkById.get("river");
-  return (
-    river.position[2] +
-    Math.sin((x + 67) * 0.009) * 4.4 +
-    Math.sin(x * 0.023) * 1.4
-  );
-}
-
-function terrainHeight(x, z) {
-  let height = glacialBase(x, z);
-  const riverDistance = Math.abs(z - riverCenterZ(x));
-  height -= Math.exp(-(riverDistance * riverDistance) / 90) * 5.3;
-
-  const farm = landmarkById.get("chalmers-property");
-  const ruins = landmarkById.get("old-ruins");
-  if (z > farm.position[2] - 70 && x < farm.position[0] + 110) {
-    height += Math.min((z - (farm.position[2] - 70)) * 0.025, 3.1);
-  }
-  if (z > ruins.position[2] - 95 && x < farm.position[0] - 20) {
-    height -= Math.min((z - (ruins.position[2] - 95)) * 0.075, 10.5);
-  }
-
-  const downtownCenter = toWorldPosition([77, 0, 35]);
-  if (
-    x > downtownCenter[0] - 175 &&
-    x < downtownCenter[0] + 175 &&
-    z > downtownCenter[2] - 160 &&
-    z < downtownCenter[2] + 160
-  ) {
-    height += 0.8;
-  }
-
-  return height;
-}
-
-const roads = plan.roads.map((road) => {
-  const position = road.landmarkId
-    ? landmarkById.get(road.landmarkId)?.position
-    : road.position;
-  if (!position) throw new Error(`Road ${road.id} has no position`);
-  return { ...road, position };
-});
-
-function isWithinRoadCorridor(x, z, clearance = 0) {
-  for (const road of roads) {
-    const [centerX, , centerZ] = road.position;
-    const { axis, length, width } = road;
-    const sidewalkExtent = width / 2 + 2.1;
-    const along = axis === "x" ? Math.abs(x - centerX) : Math.abs(z - centerZ);
-    const across = axis === "x" ? Math.abs(z - centerZ) : Math.abs(x - centerX);
-    if (along <= length / 2 + clearance && across <= sidewalkExtent + clearance) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function doesFootprintIntersectRoad(x, z, halfWidth, halfDepth) {
-  for (const road of roads) {
-    const [centerX, , centerZ] = road.position;
-    const { axis, length, width } = road;
-    const sidewalkExtent = width / 2 + 2.1;
-    const along =
-      axis === "x"
-        ? Math.abs(x - centerX) <= length / 2 + halfWidth
-        : Math.abs(z - centerZ) <= length / 2 + halfDepth;
-    const across =
-      axis === "x"
-        ? Math.abs(z - centerZ) <= sidewalkExtent + halfDepth
-        : Math.abs(x - centerX) <= sidewalkExtent + halfWidth;
-    if (along && across) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function reservationFor(id, halfWidth, halfDepth) {
-  const landmark = landmarkById.get(id);
-  return {
-    x: landmark.position[0],
-    z: landmark.position[2],
-    halfWidth,
-    halfDepth,
-  };
-}
-
-function reservationFromFootprint(id, paddingX = 0, paddingZ = paddingX) {
-  const landmark = landmarkById.get(id);
-  if (!landmark.footprint) {
-    throw new Error(`Reservation landmark ${id} has no footprint`);
-  }
-  return reservationFor(
-    id,
-    landmark.footprint[0] / 2 + paddingX,
-    landmark.footprint[1] / 2 + paddingZ,
-  );
-}
-
-const townReservations = [
-  reservationFromFootprint("new-beginnings", 8, 12),
-  reservationFromFootprint("old-school-staging-lot", 12, 14),
-  reservationFromFootprint("old-school", 8, 12),
-  reservationFromFootprint("abbys-apartment", 18, 14),
-  reservationFromFootprint("police-station", 16, 17),
-  reservationFromFootprint("st-thomas", 11, 13),
-  reservationFromFootprint("sheriffs-sons-house", 23, 18),
-  reservationFromFootprint("detective-position", 17, 16),
-  reservationFromFootprint("city-park", 6, 6),
-  {
-    x: toWorldPosition([77, 0, 35])[0],
-    z: toWorldPosition([77, 0, 35])[2],
-    halfWidth: 175,
-    halfDepth: 160,
-  },
-  reservationFromFootprint("chalmers-property", 76, 57),
-];
-
-const residentialLotCenters = [
-  [-25, 78],
-  [-12, 78],
-  [2, 78],
-  [-25, 96],
-  [-12, 96],
-  [2, 96],
-  [132, 100],
-  [146, 100],
-  [160, 100],
-  [132, 118],
-  [146, 118],
-  [160, 118],
-  [142, 18],
-  [158, 18],
-  [174, 18],
-  [142, 58],
-  [158, 58],
-  [174, 58],
-].map(([x, z]) => {
-  const [worldX, , worldZ] = toWorldPosition([x, 0, z]);
-  return [worldX, worldZ];
-});
-
-function isWithinReservedTownSite(x, z, clearance = 0) {
-  return townReservations.some(
-    (reservation) =>
-      Math.abs(x - reservation.x) <= reservation.halfWidth + clearance &&
-      Math.abs(z - reservation.z) <= reservation.halfDepth + clearance,
-  );
-}
-
-function assertNamedBuildingClearance() {
-  const structures = [
-    ["st-thomas", 7.4, 9.5],
-    ["abbys-apartment", 5.5, 4.5],
-    ["bakery-storefront", 3.5, 4.5],
-    ["old-school", 10.3, 4.5],
-    ["police-station", 5.5, 4.5],
-    ["sheriffs-sons-house", 3.9, 4.1],
+function boxGeometry() {
+  const p=[],n=[],i=[];
+  const faces=[
+    [[-0.5,-0.5,0.5],[0.5,-0.5,0.5],[0.5,0.5,0.5],[-0.5,0.5,0.5],[0,0,1]],
+    [[0.5,-0.5,-0.5],[-0.5,-0.5,-0.5],[-0.5,0.5,-0.5],[0.5,0.5,-0.5],[0,0,-1]],
+    [[0.5,-0.5,0.5],[0.5,-0.5,-0.5],[0.5,0.5,-0.5],[0.5,0.5,0.5],[1,0,0]],
+    [[-0.5,-0.5,-0.5],[-0.5,-0.5,0.5],[-0.5,0.5,0.5],[-0.5,0.5,-0.5],[-1,0,0]],
+    [[-0.5,0.5,0.5],[0.5,0.5,0.5],[0.5,0.5,-0.5],[-0.5,0.5,-0.5],[0,1,0]],
+    [[-0.5,-0.5,-0.5],[0.5,-0.5,-0.5],[0.5,-0.5,0.5],[-0.5,-0.5,0.5],[0,-1,0]],
   ];
-  for (const [id, halfWidth, halfDepth] of structures) {
-    const landmark = landmarkById.get(id);
-    if (
-      doesFootprintIntersectRoad(
-        landmark.position[0],
-        landmark.position[2],
-        halfWidth,
-        halfDepth,
-      )
-    ) {
-      throw new Error(`${landmark.nodeName} intersects a reserved road corridor`);
-    }
-  }
+  for(const [a,b,c,d,no] of faces){ const s=p.length/3; for(const v of [a,b,c,d]){p.push(...v); n.push(...no);} i.push(s,s+1,s+2,s,s+2,s+3); }
+  return defineGeometry("box",p,n,i);
+}
+function gableGeometry(){
+  const p=[-0.5,0,-0.5, 0.5,0,-0.5, 0,0.5,-0.5, -0.5,0,0.5, 0.5,0,0.5, 0,0.5,0.5];
+  const idx=[0,2,1,3,4,5,0,3,5,0,5,2,1,2,5,1,5,4,0,1,4,0,4,3];
+  const normals=new Array(p.length).fill(0); for(let k=1;k<normals.length;k+=3) normals[k]=1;
+  return defineGeometry("gable",p,normals,idx);
+}
+function cylinderGeometry(segments=12){
+  const p=[],n=[],idx=[];
+  for(let s=0;s<segments;s++){ const a=2*Math.PI*s/segments,b=2*Math.PI*(s+1)/segments; const x1=.5*Math.cos(a),z1=.5*Math.sin(a),x2=.5*Math.cos(b),z2=.5*Math.sin(b); const base=p.length/3; p.push(x1,-.5,z1,x2,-.5,z2,x2,.5,z2,x1,.5,z1); n.push(Math.cos(a),0,Math.sin(a),Math.cos(b),0,Math.sin(b),Math.cos(b),0,Math.sin(b),Math.cos(a),0,Math.sin(a)); idx.push(base,base+1,base+2,base,base+2,base+3); }
+  const top=p.length/3; p.push(0,.5,0); n.push(0,1,0); const bottom=p.length/3; p.push(0,-.5,0); n.push(0,-1,0);
+  for(let s=0;s<segments;s++){ const a=2*Math.PI*s/segments,b=2*Math.PI*(s+1)/segments; const t1=p.length/3; p.push(.5*Math.cos(a),.5,.5*Math.sin(a), .5*Math.cos(b),.5,.5*Math.sin(b)); n.push(0,1,0,0,1,0); idx.push(top,t1,t1+1); const b1=p.length/3; p.push(.5*Math.cos(a),-.5,.5*Math.sin(a), .5*Math.cos(b),-.5,.5*Math.sin(b)); n.push(0,-1,0,0,-1,0); idx.push(bottom,b1+1,b1); }
+  return defineGeometry("cylinder",p,n,idx);
+}
+boxGeometry(); gableGeometry(); cylinderGeometry();
+
+function meshFor(geomName, materialIndex, nameSuffix="") {
+  const key=`${geomName}:${materialIndex}:${nameSuffix}`;
+  if(meshByKey.has(key)) return meshByKey.get(key);
+  const g=geometryByName.get(geomName); const mesh={ name:key, primitives:[{attributes:{POSITION:g.position,NORMAL:g.normal},indices:g.indices,material:materialIndex}]};
+  const index=meshes.length; meshes.push(mesh); meshByKey.set(key,index); return index;
+}
+function customMesh(name, positions, normals, indices, materialIndex) {
+  const geom=defineGeometry(`custom:${name}`,positions,normals,indices);
+  const mesh={name,primitives:[{attributes:{POSITION:geom.position,NORMAL:geom.normal},indices:geom.indices,material:materialIndex}]};
+  const index=meshes.length; meshes.push(mesh); return index;
+}
+function addNode(node,parent=null){ const idx=nodes.length; nodes.push(node); if(parent===null) sceneNodes.push(idx); else {nodes[parent].children??=[]; nodes[parent].children.push(idx);} return idx; }
+function world([x,y,z]){ return [x*S,y,z*S]; }
+function classify(classification,source=[]){ return {classification,source}; }
+
+for(const groupName of plan.requiredGroups){ const idx=addNode({name:groupName,extras:{classification:"scene-hierarchy"}}); groupByName.set(groupName,idx); }
+
+function riverCenterZ(xPlan){ return -100 + 8*Math.sin((xPlan-30)/45) + 3*Math.sin(xPlan/18); }
+function terrainHeight(xPlan,zPlan){
+  let y=2.2 + .75*Math.sin((xPlan+30)*.025) + .55*Math.cos((zPlan-20)*.02) + .3*Math.sin((xPlan+zPlan)*.014);
+  if(zPlan>180) y += Math.min((zPlan-180)*.018,2.5);
+  if(xPlan<-90 && zPlan>150) y += 1.0;
+  const d=Math.abs(zPlan-riverCenterZ(xPlan)); y -= 4.8*Math.exp(-Math.pow(d/12,2));
+  return y;
+}
+function addPrimitive(parent,name,geom,mat,position=[0,0,0],scale=[1,1,1],extras={classification:"presentation-geometry"}){
+  return addNode({name,mesh:meshFor(geom,mat),translation:position,scale,extras},parent);
 }
 
-function classify(object, classification, source = []) {
-  object.userData = {
-    ...object.userData,
-    classification,
-    source,
-  };
-  return object;
+function createTerrain(){
+  const minX=plan.bounds.minX-55,maxX=plan.bounds.maxX+55,minZ=plan.bounds.minZ-55,maxZ=plan.bounds.maxZ+55;
+  const nx=36,nz=44,p=[],n=[],idx=[];
+  for(let iz=0;iz<=nz;iz++) for(let ix=0;ix<=nx;ix++){ const x=minX+(maxX-minX)*ix/nx, z=minZ+(maxZ-minZ)*iz/nz; p.push(x*S,terrainHeight(x,z),z*S); n.push(0,1,0); }
+  const row=nx+1; for(let iz=0;iz<nz;iz++) for(let ix=0;ix<nx;ix++){ const a=iz*row+ix,b=a+1,c=a+row,d=c+1; idx.push(a,c,b,b,c,d); }
+  const mesh=customMesh("Terrain",p,n,idx,MAT.ground); addNode({name:"PRESENTATION_Glacial_Terrain",mesh,extras:{classification:"presentation-terrain"}},groupByName.get("Town_Ground"));
+  const farm=landmarkById.get("chalmers-property"); addPrimitive(groupByName.get("Chalmers_Farm"),"PRESENTATION_Chalmers_Field","box",MAT.field,world([farm.position[0],terrainHeight(farm.position[0],farm.position[2])+.12,farm.position[2]]),[180,.2,125],{classification:"presentation-terrain"});
 }
-
-function addBox(
-  parent,
-  name,
-  size,
-  position,
-  boxMaterial,
-  {
-    rotationY = 0,
-    classification = "presentation-geometry",
-    source = [],
-  } = {},
-) {
-  const mesh = new Mesh(
-    geometry("unit-box", () => new BoxGeometry(1, 1, 1)),
-    boxMaterial,
-  );
-  mesh.name = name;
-  mesh.position.set(...position);
-  mesh.scale.set(...size);
-  mesh.rotation.y = rotationY;
-  classify(mesh, classification, source);
-  parent.add(mesh);
-  return mesh;
-}
-
-function createGableGeometry() {
-  const positions = [
-    -0.5, 0, -0.5,
-    0.5, 0, -0.5,
-    0, 0.5, -0.5,
-    -0.5, 0, 0.5,
-    0.5, 0, 0.5,
-    0, 0.5, 0.5,
-  ];
-  const indices = [
-    0, 2, 1,
-    3, 4, 5,
-    0, 3, 5,
-    0, 5, 2,
-    1, 2, 5,
-    1, 5, 4,
-    0, 1, 4,
-    0, 4, 3,
-  ];
-  const result = new BufferGeometry();
-  result.setAttribute("position", new Float32BufferAttribute(positions, 3));
-  result.setIndex(indices);
-  result.computeVertexNormals();
-  return result;
-}
-
-function addGableRoof(
-  parent,
-  name,
-  width,
-  depth,
-  height,
-  position,
-  roofMaterial = palette.roof,
-) {
-  const roof = new Mesh(
-    geometry("unit-gable", createGableGeometry),
-    roofMaterial,
-  );
-  roof.name = name;
-  roof.position.set(...position);
-  roof.scale.set(width, height * 2, depth);
-  classify(roof, "presentation-architecture");
-  parent.add(roof);
-  return roof;
-}
-
-function addWindow(
-  parent,
-  name,
-  position,
-  size,
-  windowMaterial = palette.darkWindow,
-) {
-  return addBox(parent, name, size, position, windowMaterial, {
-    classification: "presentation-lighting-detail",
-  });
-}
-
-function createTerrain() {
-  const width = plan.bounds.maxX - plan.bounds.minX;
-  const depth = plan.bounds.maxZ - plan.bounds.minZ;
-  const centerX = (plan.bounds.minX + plan.bounds.maxX) / 2;
-  const centerZ = (plan.bounds.minZ + plan.bounds.maxZ) / 2;
-  const geometryValue = new PlaneGeometry(width, depth, 60, 60);
-  geometryValue.rotateX(-Math.PI / 2);
-  const positions = geometryValue.getAttribute("position");
-
-  for (let index = 0; index < positions.count; index += 1) {
-    const x = positions.getX(index) + centerX;
-    const z = positions.getZ(index) + centerZ;
-    positions.setXYZ(index, x, terrainHeight(x, z), z);
+function stripGeometry(points,widthPlan,yOffset=0.18){
+  const p=[],n=[],idx=[]; const half=widthPlan*S/2;
+  for(let k=0;k<points.length;k++){
+    const [x,z]=points[k]; const prev=points[Math.max(0,k-1)], next=points[Math.min(points.length-1,k+1)];
+    let dx=(next[0]-prev[0])*S,dz=(next[1]-prev[1])*S; const len=Math.hypot(dx,dz)||1; dx/=len; dz/=len; const px=-dz, pz=dx;
+    const y=terrainHeight(x,z)+yOffset;
+    p.push(x*S+px*half,y,z*S+pz*half, x*S-px*half,y,z*S-pz*half); n.push(0,1,0,0,1,0);
+    if(k<points.length-1){ const a=k*2; idx.push(a,a+2,a+1,a+1,a+2,a+3); }
   }
-
-  positions.needsUpdate = true;
-  geometryValue.computeVertexNormals();
-
-  const terrain = new Mesh(geometryValue, palette.ground);
-  terrain.name = "PRESENTATION_Glacial_Terrain";
-  terrain.receiveShadow = true;
-  classify(terrain, "presentation-terrain");
-  groups.Town_Ground.add(terrain);
-
-  const fieldWidth = 210;
-  const fieldDepth = 145;
-  const fieldSegmentsX = 24;
-  const fieldSegmentsZ = 16;
-  const farmLandmark = landmarkById.get("chalmers-property");
-  const fieldCenterX = farmLandmark.position[0];
-  const fieldCenterZ = farmLandmark.position[2];
-  const fieldPositions = [];
-  const fieldIndices = [];
-
-  for (let zIndex = 0; zIndex <= fieldSegmentsZ; zIndex += 1) {
-    for (let xIndex = 0; xIndex <= fieldSegmentsX; xIndex += 1) {
-      const x = fieldCenterX - fieldWidth / 2 + (fieldWidth * xIndex) / fieldSegmentsX;
-      const z = fieldCenterZ - fieldDepth / 2 + (fieldDepth * zIndex) / fieldSegmentsZ;
-      fieldPositions.push(x, terrainHeight(x, z) + 0.08, z);
-    }
-  }
-  for (let zIndex = 0; zIndex < fieldSegmentsZ; zIndex += 1) {
-    for (let xIndex = 0; xIndex < fieldSegmentsX; xIndex += 1) {
-      const row = fieldSegmentsX + 1;
-      const offset = zIndex * row + xIndex;
-      fieldIndices.push(
-        offset,
-        offset + row,
-        offset + 1,
-        offset + 1,
-        offset + row,
-        offset + row + 1,
-      );
-    }
-  }
-
-  const fieldGeometry = new BufferGeometry();
-  fieldGeometry.setAttribute(
-    "position",
-    new Float32BufferAttribute(fieldPositions, 3),
-  );
-  fieldGeometry.setIndex(fieldIndices);
-  fieldGeometry.computeVertexNormals();
-  const farmland = new Mesh(fieldGeometry, palette.field);
-  farmland.name = "PRESENTATION_Chalmers_Field_Surface";
-  classify(farmland, "presentation-terrain");
-  groups.Town_Ground.add(farmland);
-  farmland.userData.note = "Interpretive farmland extent";
+  return {p,n,idx};
 }
-
-function createRiver() {
-  const landmark = landmarkById.get("river");
-  const group = new Group();
-  group.name = landmark.nodeName;
-  group.position.set(...landmark.position);
-  classify(group, landmark.classification, landmark.source);
-  groups.River.add(group);
-
-  const positions = [];
-  const indices = [];
-  const samples = 96;
-
-  for (let index = 0; index < samples; index += 1) {
-    const worldX =
-      plan.bounds.minX +
-      ((plan.bounds.maxX - plan.bounds.minX) * index) / (samples - 1);
-    const centerZ = riverCenterZ(worldX);
-    const width = 7.5 + Math.sin(index * 0.31) * 1.4;
-    const y = terrainHeight(worldX, centerZ) + 0.18;
-    positions.push(
-      worldX - landmark.position[0],
-      y - landmark.position[1],
-      centerZ - width - landmark.position[2],
-      worldX - landmark.position[0],
-      y - landmark.position[1],
-      centerZ + width - landmark.position[2],
-    );
-    if (index < samples - 1) {
-      const offset = index * 2;
-      indices.push(
-        offset,
-        offset + 2,
-        offset + 1,
-        offset + 1,
-        offset + 2,
-        offset + 3,
-      );
-    }
-  }
-
-  const riverGeometry = new BufferGeometry();
-  riverGeometry.setAttribute("position", new Float32BufferAttribute(positions, 3));
-  riverGeometry.setIndex(indices);
-  riverGeometry.computeVertexNormals();
-
-  const water = new Mesh(riverGeometry, palette.water);
-  water.name = "PRESENTATION_River_Surface";
-  classify(water, "canon-feature-interpretive-course", landmark.source);
-  group.add(water);
+function roadPoints(road,samples=20){
+  const center=road.position ?? landmarkById.get(road.landmarkId)?.position ?? [0,0,0]; const out=[];
+  for(let k=0;k<=samples;k++){ const t=k/samples-.5; out.push(road.axis==="x"?[center[0]+road.length*t,center[2]]:[center[0],center[2]+road.length*t]); }
+  return out;
 }
-
-function createRoad(
-  parent,
-  name,
-  center,
-  length,
-  width,
-  axis = "x",
-  classification = "presentation-infrastructure",
-) {
-  const group = new Group();
-  group.name = name;
-  group.position.set(...center);
-  classify(group, classification);
-  parent.add(group);
-
-  const roadSize = axis === "x" ? [length, 0.22, width] : [width, 0.22, length];
-  addBox(group, `${name}_Surface`, roadSize, [0, 0, 0], palette.asphalt, {
-    classification,
-  });
-
-  const sidewalkOffset = width / 2 + 1.25;
-  const sidewalkSize =
-    axis === "x" ? [length, 0.18, 1.55] : [1.55, 0.18, length];
-  const curbSize =
-    axis === "x" ? [length, 0.32, 0.22] : [0.22, 0.32, length];
-
-  for (const side of [-1, 1]) {
-    const sidewalkPosition =
-      axis === "x" ? [0, 0.12, side * sidewalkOffset] : [side * sidewalkOffset, 0.12, 0];
-    const curbPosition =
-      axis === "x" ? [0, 0.18, side * (width / 2 + 0.22)] : [side * (width / 2 + 0.22), 0.18, 0];
-    addBox(
-      group,
-      `${name}_Sidewalk_${side > 0 ? "NorthEast" : "SouthWest"}`,
-      sidewalkSize,
-      sidewalkPosition,
-      palette.concrete,
-    );
-    addBox(
-      group,
-      `${name}_Curb_${side > 0 ? "NorthEast" : "SouthWest"}`,
-      curbSize,
-      curbPosition,
-      palette.concrete,
-    );
-  }
-
-  return group;
-}
-
-function createStreetGrid() {
-  for (const road of roads) {
-    const parent = road.landmarkId ? groups.Downtown : groups.Town_Ground;
-    const roadGroup = createRoad(
-      parent,
-      road.nodeName,
-      road.position,
-      road.length,
-      road.width,
-      road.axis,
-      road.classification,
-    );
-    roadGroup.userData.source = road.source;
-    if (road.landmarkId) {
-      roadGroup.userData.bearing =
-        road.axis === "z" ? "confirmed-north-south" : "source-traced";
-    }
-    if (road.nodeName.startsWith("CANON_")) {
-      for (const child of roadGroup.children) {
-        child.name = child.name.replace(
-          new RegExp(`^${road.nodeName}`),
-          `PRESENTATION_${road.nodeName.replace(/^CANON_/, "")}`,
-        );
-        child.userData.classification = "presentation-infrastructure";
-      }
-    }
+function createRoadVisual(parent,name,points,width,classification,source){
+  const r=stripGeometry(points,width,.24); const roadMesh=customMesh(`${name}_surface`,r.p,r.n,r.idx,MAT.asphalt); addNode({name:`PRESENTATION_${name}_Surface`,mesh:roadMesh,extras:classify(classification,source)},parent);
+  for(const side of [-1,1]){
+    const shifted=[];
+    for(let k=0;k<points.length;k++){ const [x,z]=points[k]; const prev=points[Math.max(0,k-1)], next=points[Math.min(points.length-1,k+1)]; let dx=next[0]-prev[0],dz=next[1]-prev[1]; const len=Math.hypot(dx,dz)||1; dx/=len;dz/=len; const px=-dz,pz=dx; const off=side*(width/2+1.05); shifted.push([x+px*off,z+pz*off]); }
+    const s=stripGeometry(shifted,1.35,.34); const sm=customMesh(`${name}_sidewalk_${side}`,s.p,s.n,s.idx,MAT.concrete); addNode({name:`PRESENTATION_${name}_Sidewalk_${side<0?"A":"B"}`,mesh:sm,extras:{classification:"presentation-infrastructure"}},parent);
   }
 }
-
-function createNamedHouse({
-  parent,
-  name,
-  position,
-  width = 7,
-  depth = 8,
-  floors = 2,
-  bodyMaterial = palette.whiteSiding,
-  roofMaterial = palette.roof,
-  rotationY = 0,
-  classification = "presentation-architecture",
-  source = [],
-  porchWidth = width * 0.68,
-  porchMaterial = palette.wood,
-  glowWindow = false,
-}) {
-  const group = new Group();
-  group.name = name;
-  group.position.set(...position);
-  group.rotation.y = rotationY;
-  classify(group, classification, source);
-  parent.add(group);
-  const detailPrefix = `PRESENTATION_${name.replace(/^(CANON|INFERRED)_/, "")}`;
-
-  const floorHeight = 3.1;
-  const bodyHeight = floors * floorHeight;
-  addBox(
-    group,
-    `${detailPrefix}_Foundation`,
-    [width + 0.5, 0.65, depth + 0.5],
-    [0, 0.32, 0],
-    palette.concrete,
-  );
-  addBox(
-    group,
-    `${detailPrefix}_Body`,
-    [width, bodyHeight, depth],
-    [0, bodyHeight / 2 + 0.65, 0],
-    bodyMaterial,
-    { classification: "presentation-architecture" },
-  );
-  addGableRoof(
-    group,
-    `${detailPrefix}_Roof`,
-    width + 0.75,
-    depth + 0.8,
-    2.1,
-    [0, bodyHeight + 0.65, 0],
-    roofMaterial,
-  );
-  addBox(
-    group,
-    `${detailPrefix}_Porch`,
-    [porchWidth, 0.42, 2.25],
-    [0, 0.9, -depth / 2 - 0.9],
-    porchMaterial,
-  );
-  addBox(
-    group,
-    `${detailPrefix}_Porch_Roof`,
-    [porchWidth + 0.5, 0.25, 2.5],
-    [0, 3.05, -depth / 2 - 0.9],
-    roofMaterial,
-  );
-  for (const x of [-porchWidth / 2 + 0.35, porchWidth / 2 - 0.35]) {
-    addBox(
-      group,
-      `${detailPrefix}_Porch_Post_${x}`,
-      [0.2, 2.2, 0.2],
-      [x, 1.95, -depth / 2 - 1.15],
-      porchMaterial,
-    );
+function createRoads(){
+  for(const road of plan.roads){
+    if(!road.landmarkId) addNode({name:road.nodeName,translation:world(road.position),extras:classify(road.classification,road.source)},groupByName.get("Transport_Infrastructure"));
+    const pts=roadPoints(road).map(([x,z])=>[x,z]);
+    createRoadVisual(groupByName.get("Transport_Infrastructure"),road.id.replaceAll("-","_"),pts,road.width,road.classification,road.source);
   }
-  addBox(
-    group,
-    `${detailPrefix}_Chimney`,
-    [0.7, 3.1, 0.9],
-    [width * 0.27, bodyHeight + 1.15, 0.7],
-    palette.brick,
-  );
-
-  const windowMaterial = glowWindow ? palette.warmWindow : palette.darkWindow;
-  for (let floor = 0; floor < floors; floor += 1) {
-    const y = 2.25 + floor * floorHeight;
-    for (const x of [-width * 0.27, width * 0.27]) {
-      addWindow(
-        group,
-        `${detailPrefix}_Front_Window_${floor}_${x}`,
-        [x, y, -depth / 2 - 0.03],
-        [1.05, 1.35, 0.12],
-        floor === floors - 1 && glowWindow ? windowMaterial : palette.darkWindow,
-      );
-    }
-  }
-
-  return group;
+  for(const road of plan.presentationRoads??[]){ const parent=addNode({name:road.nodeName,extras:classify(road.classification,road.source)},groupByName.get("Transport_Infrastructure")); createRoadVisual(parent,road.id.replaceAll("-","_"),road.points.map(p=>[p[0],p[2]]),road.width,road.classification,road.source); }
+  // Strong but sparse lane markings on Main and Broad.
+  for(const z of [-110,-80,-50,-20,10,40,70,100,130,160,190]) addPrimitive(groupByName.get("Transport_Infrastructure"),`PRESENTATION_Main_Marking_${z}`,"box",MAT.yellow,world([95,terrainHeight(95,z)+.38,z]),[.22,.05,11],{classification:"presentation-road-marking"});
+  for(const x of [20,50,80,110,140,170]) addPrimitive(groupByName.get("Transport_Infrastructure"),`PRESENTATION_Broad_Marking_${x}`,"box",MAT.white,world([x,terrainHeight(x,0)+.38,0]),[11,.05,.18],{classification:"presentation-road-marking"});
 }
-
-function createResidentialInstances() {
-  const placements = [];
-
-  for (const [x, z] of residentialLotCenters) {
-    if (isWithinRoadCorridor(x, z, 4.2)) continue;
-    if (isWithinReservedTownSite(x, z, 1.5)) continue;
-    placements.push({
-      x,
-      z,
-      rotation: z < 0 ? Math.PI : 0,
-      scale: 0.74 + random() * 0.14,
-      variant: Math.floor(random() * 8),
-    });
-  }
-
-  for (const placement of placements) {
-    if (isWithinRoadCorridor(placement.x, placement.z, 4.2)) {
-      throw new Error(
-        `Residential placement intersects a reserved road corridor at ${placement.x}, ${placement.z}`,
-      );
-    }
-  }
-
-  const unitBox = geometry("unit-box", () => new BoxGeometry(1, 1, 1));
-  const unitGable = geometry("unit-gable", createGableGeometry);
-  const matrix = new Matrix4();
-  const quaternion = new Quaternion();
-  const position = new Vector3();
-  const scale = new Vector3();
-
-  for (let variant = 0; variant < 8; variant += 1) {
-    const instances = placements.filter((placement) => placement.variant === variant);
-    if (instances.length === 0) continue;
-    const older = variant >= 5;
-    const width = older ? 6.6 + (variant % 2) * 1.1 : 7.2 + (variant % 3) * 0.8;
-    const depth = older ? 8.6 : 7.1 + (variant % 2) * 1.2;
-    const height = older ? 6.6 : 3.5 + (variant % 3 === 0 ? 2.8 : 0);
-
-    const body = new InstancedMesh(unitBox, houseBodyMaterials[variant], instances.length);
-    const roof = new InstancedMesh(unitGable, variant % 3 === 0 ? palette.roofRust : palette.roof, instances.length);
-    const porch = new InstancedMesh(unitBox, palette.wood, instances.length);
-    body.name = `PRESENTATION_House_Variant_${variant + 1}_Bodies`;
-    roof.name = `PRESENTATION_House_Variant_${variant + 1}_Roofs`;
-    porch.name = `PRESENTATION_House_Variant_${variant + 1}_Porches`;
-    classify(body, "presentation-instanced-residential");
-    classify(roof, "presentation-instanced-residential");
-    classify(porch, "presentation-instanced-residential");
-
-    instances.forEach((placement, index) => {
-      const baseY = terrainHeight(placement.x, placement.z);
-      quaternion.setFromAxisAngle(yAxis, placement.rotation);
-
-      position.set(placement.x, baseY + (height * placement.scale) / 2, placement.z);
-      scale.set(width * placement.scale, height * placement.scale, depth * placement.scale);
-      matrix.compose(position, quaternion, scale);
-      body.setMatrixAt(index, matrix);
-
-      position.set(placement.x, baseY + height * placement.scale, placement.z);
-      scale.set(
-        (width + 0.65) * placement.scale,
-        (older ? 4.3 : 3.2) * placement.scale,
-        (depth + 0.7) * placement.scale,
-      );
-      matrix.compose(position, quaternion, scale);
-      roof.setMatrixAt(index, matrix);
-
-      const localPorch = new Vector3(0, 0, -(depth / 2 + 0.8) * placement.scale)
-        .applyQuaternion(quaternion)
-        .add(new Vector3(placement.x, baseY + 0.55, placement.z));
-      position.copy(localPorch);
-      scale.set(width * 0.55 * placement.scale, 0.35, 1.6 * placement.scale);
-      matrix.compose(position, quaternion, scale);
-      porch.setMatrixAt(index, matrix);
-    });
-
-    body.instanceMatrix.needsUpdate = true;
-    roof.instanceMatrix.needsUpdate = true;
-    porch.instanceMatrix.needsUpdate = true;
-    groups.Residential.add(body, roof, porch);
-  }
+function createRiver(){
+  const river=landmarkById.get("river"), parent=landmarkNodeById.get("river"); const samples=80,p=[],n=[],idx=[];
+  for(let k=0;k<samples;k++){ const x=plan.bounds.minX-25+(plan.bounds.maxX-plan.bounds.minX+50)*k/(samples-1); const z=riverCenterZ(x), width=10+1.8*Math.sin(k*.23); const y=terrainHeight(x,z)+3.15; p.push((x-river.position[0])*S,y-river.position[1],(z-width-river.position[2])*S,(x-river.position[0])*S,y-river.position[1],(z+width-river.position[2])*S); n.push(0,1,0,0,1,0); if(k<samples-1){const a=k*2;idx.push(a,a+2,a+1,a+1,a+2,a+3);} }
+  const mesh=customMesh("river",p,n,idx,MAT.water); addNode({name:"PRESENTATION_River_Surface",mesh,extras:classify("canon-feature-interpretive-course",river.source)},parent);
+  for(const side of [-1,1]){ const pts=[]; for(let k=0;k<50;k++){ const x=plan.bounds.minX+(plan.bounds.maxX-plan.bounds.minX)*k/49; pts.push([x,riverCenterZ(x)+side*13]); } const b=stripGeometry(pts,3,.08); const bm=customMesh(`river_bank_${side}`,b.p,b.n,b.idx,MAT.bank); addNode({name:`PRESENTATION_River_Bank_${side<0?"South":"North"}`,mesh:bm,extras:{classification:"presentation-river-bank"}},groupByName.get("River")); }
+  // One source-supported north/south crossing for Ledford's sequence; exact street remains interpretive.
+  const bx=148,bz=riverCenterZ(bx),by=Math.max(terrainHeight(bx,bz-16),terrainHeight(bx,bz+16))+1.2;
+  addPrimitive(groupByName.get("Transport_Infrastructure"),"PRESENTATION_Ledford_Bridge_Deck","box",MAT.asphalt,world([bx,by,bz]),[14,1.1,88],{classification:"canon-sequence-inferred-geometry",source:["Chapter 7:31"]});
+  addPrimitive(groupByName.get("Transport_Infrastructure"),"PRESENTATION_Ledford_Bridge_Rail_W","box",MAT.metal,world([bx-2.1,by+1.0,bz]),[.35,1.2,88],{classification:"presentation-bridge-detail"});
+  addPrimitive(groupByName.get("Transport_Infrastructure"),"PRESENTATION_Ledford_Bridge_Rail_E","box",MAT.metal,world([bx+2.1,by+1.0,bz]),[.35,1.2,88],{classification:"presentation-bridge-detail"});
 }
-
-function createFence(parent, name, points, height = 1.45) {
-  const group = new Group();
-  group.name = name;
-  classify(group, "presentation-boundary");
-  parent.add(group);
-
-  for (let index = 0; index < points.length - 1; index += 1) {
-    const start = new Vector3(...points[index]);
-    const end = new Vector3(...points[index + 1]);
-    const midpoint = start.clone().add(end).multiplyScalar(0.5);
-    const length = start.distanceTo(end);
-    const angle = Math.atan2(end.x - start.x, end.z - start.z);
-    addBox(
-      group,
-      `${name}_Rail_${index}`,
-      [0.09, 0.08, length],
-      [midpoint.x, midpoint.y + height * 0.55, midpoint.z],
-      palette.metal,
-      { rotationY: angle },
-    );
-    addBox(
-      group,
-      `${name}_Top_Rail_${index}`,
-      [0.09, 0.08, length],
-      [midpoint.x, midpoint.y + height, midpoint.z],
-      palette.metal,
-      { rotationY: angle },
-    );
-    for (let offset = 0; offset <= length; offset += 2.4) {
-      const fraction = length === 0 ? 0 : offset / length;
-      const post = start.clone().lerp(end, fraction);
-      addBox(
-        group,
-        `${name}_Post_${index}_${offset}`,
-        [0.11, height, 0.11],
-        [post.x, post.y + height / 2, post.z],
-        palette.metal,
-      );
-    }
-  }
-  return group;
+function groundAtPlan(x,z){return terrainHeight(x,z);}
+function addHouse(parent,name,xPlan,zPlan,{body=MAT.siding,red=false,dilapidated=false,stories=2,localBase=null}={}){
+  const absX=xPlan+(localBase?.[0]??0), absZ=zPlan+(localBase?.[2]??0);
+  const y=groundAtPlan(absX,absZ); const w=8.5,d=10.5,h=stories===2?6.8:4.2;
+  const pos=(xp,yp,zp)=>localBase?[xp*S,yp-localBase[1],zp*S]:world([xp,yp,zp]);
+  const bodyMat=red?MAT.redSiding:body; addPrimitive(parent,`${name}_Body`,`box`,bodyMat,pos(xPlan,y+h/2,zPlan),[w,h,d],{classification:"presentation-architecture"});
+  addPrimitive(parent,`${name}_Roof`,`gable`,dilapidated?MAT.rust:MAT.roof,pos(xPlan,y+h+.9,zPlan),[w+1,2.2,d+1],{classification:"presentation-architecture"});
+  addPrimitive(parent,`${name}_Porch`,`box`,dilapidated?MAT.wood:MAT.concrete,pos(xPlan+3.2/S,y+.45,zPlan),[2.4,.8,5.6],{classification:"presentation-architecture"});
+  for(const dz of [-2.7,2.7]) addPrimitive(parent,`${name}_Window_${dz}`,"box",MAT.darkWindow,pos(xPlan+4.28/S,y+stories*1.8,zPlan+dz/S),[.12,1.2,1.4],{classification:"presentation-lighting-detail"});
+  if(dilapidated) addPrimitive(parent,`${name}_Fence`,`box`,MAT.metal,pos(xPlan-4.8/S,y+.8,zPlan),[.15,1.6,10.8],{classification:"presentation-neighborhood-detail"});
 }
-
-function createTreeInstances(parent, name, placements, foliageMaterial, style = "deciduous") {
-  const trunkGeometry = geometry(
-    "unit-tree-trunk",
-    () => new CylinderGeometry(0.5, 0.7, 1, 7),
-  );
-  const crownGeometry =
-    style === "conifer"
-      ? geometry("unit-conifer-crown", () => new ConeGeometry(1, 2, 8))
-      : geometry("unit-deciduous-crown", () => new SphereGeometry(1, 7, 5));
-  const trunks = new InstancedMesh(trunkGeometry, palette.treeTrunk, placements.length);
-  const crowns = new InstancedMesh(crownGeometry, foliageMaterial, placements.length);
-  trunks.name = `${name}_Trunks`;
-  crowns.name = `${name}_Crowns`;
-  classify(trunks, "presentation-instanced-vegetation");
-  classify(crowns, "presentation-instanced-vegetation");
-
-  const matrix = new Matrix4();
-  const quaternion = new Quaternion();
-  const position = new Vector3();
-  const scale = new Vector3();
-
-  placements.forEach(({ x, z, size = 1, y }, index) => {
-    const baseY = y ?? terrainHeight(x, z);
-    quaternion.setFromAxisAngle(yAxis, random() * Math.PI * 2);
-    position.set(x, baseY + 1.8 * size, z);
-    scale.set(0.55 * size, 3.6 * size, 0.55 * size);
-    matrix.compose(position, quaternion, scale);
-    trunks.setMatrixAt(index, matrix);
-
-    position.set(x, baseY + (style === "conifer" ? 5.7 : 5.2) * size, z);
-    scale.set(
-      (style === "conifer" ? 3.2 : 3.7) * size,
-      (style === "conifer" ? 5.4 : 3.1) * size,
-      (style === "conifer" ? 3.2 : 3.7) * size,
-    );
-    matrix.compose(position, quaternion, scale);
-    crowns.setMatrixAt(index, matrix);
-  });
-
-  trunks.instanceMatrix.needsUpdate = true;
-  crowns.instanceMatrix.needsUpdate = true;
-  parent.add(trunks, crowns);
+function addFlatBuilding(parent,name,xPlan,zPlan,{w=16,d=14,stories=3,mat=MAT.grayBrick,storefront=false,localBase=null}={}){
+  const absX=xPlan+(localBase?.[0]??0), absZ=zPlan+(localBase?.[2]??0); const y=groundAtPlan(absX,absZ),h=stories*3.25;
+  const pos=(xp,yp,zp)=>localBase?[xp*S,yp-localBase[1],zp*S]:world([xp,yp,zp]);
+  addPrimitive(parent,`${name}_Body`,`box`,mat,pos(xPlan,y+h/2,zPlan),[w,h,d],{classification:"presentation-architecture"});
+  addPrimitive(parent,`${name}_Roof`,`box`,MAT.roof,pos(xPlan,y+h+.3,zPlan),[w+.4,.55,d+.4],{classification:"presentation-architecture"});
+  const floors=Math.min(stories,5); for(let f=0;f<floors;f++) addPrimitive(parent,`${name}_WindowBand_${f}`,"box",f===0&&storefront?MAT.warmWindow:MAT.darkWindow,pos(xPlan+w/(2*S),y+1.8+f*3.1,zPlan),[.15,1.2,d*.7],{classification:"presentation-lighting-detail"});
+  if(storefront) addPrimitive(parent,`${name}_Awning`,`box`,MAT.metal,pos(xPlan+w/(2*S)+.2/S,y+3.0,zPlan),[1.2,.25,d*.8],{classification:"presentation-storefront"});
 }
-
-function createVegetation() {
-  const townTrees = [];
-  let attempts = 0;
-  while (townTrees.length < 26 && attempts < 260) {
-    attempts += 1;
-    const [townMinX, , townMinZ] = toWorldPosition([-30, 0, -25]);
-    const [townMaxX, , townMaxZ] = toWorldPosition([180, 0, 130]);
-    const x = townMinX + random() * (townMaxX - townMinX);
-    const z = townMinZ + random() * (townMaxZ - townMinZ);
-    if (isWithinRoadCorridor(x, z, 1.4)) continue;
-    if (isWithinReservedTownSite(x, z, 0.8)) continue;
-    if (
-      residentialLotCenters.some(
-        ([houseX, houseZ]) => Math.hypot(x - houseX, z - houseZ) < 5.8,
-      )
-    ) {
-      continue;
-    }
-    townTrees.push({
-      x,
-      z,
-      size: 0.55 + random() * 0.45,
-    });
-  }
-  createTreeInstances(
-    groups.Residential,
-    "PRESENTATION_Town_Trees",
-    townTrees,
-    palette.townLeaves,
-  );
-
-  const riverTrees = [];
-  for (let index = 0; index < 38; index += 1) {
-    const x =
-      plan.bounds.minX +
-      random() * (plan.bounds.maxX - plan.bounds.minX);
-    const side = random() > 0.5 ? 1 : -1;
-    riverTrees.push({
-      x,
-      z: riverCenterZ(x) + side * (11 + random() * 8),
-      size: 0.65 + random() * 0.55,
-    });
-  }
-  createTreeInstances(
-    groups.River,
-    "PRESENTATION_Riverbank_Trees",
-    riverTrees,
-    palette.townLeaves,
-  );
-
-  const woodsTrees = [];
-  const ruins = landmarkById.get("old-ruins");
-  const farm = landmarkById.get("chalmers-property");
-  for (let index = 0; index < 150; index += 1) {
-    woodsTrees.push({
-      x: ruins.position[0] - 85 + random() * 210,
-      z: farm.position[2] + 80 + random() * 205,
-      size: 0.72 + random() * 0.75,
-    });
-  }
-  createTreeInstances(
-    groups.Woods,
-    "PRESENTATION_Dense_Woods",
-    woodsTrees,
-    palette.woodsLeaves,
-    "conifer",
-  );
+function createLandmarkParents(){
+  const groupFor=(id)=> id==="new-beginnings"||id==="jackies-house"||id==="jackies-window"?"New_Beginnings":id.startsWith("abby")||id==="bakery-storefront"?"Abby_District":id==="police-station"||id==="sheriffs-sons-house"||id==="detective-position"?"Police_District":id==="chalmers-property"?"Chalmers_Farm":id==="old-ruins"?"Ruins":id==="river"?"River":id==="trainyard"||id==="railroad-trestle"||id==="main-street"||id==="broad-main-intersection"?"Transport_Infrastructure":id==="southside-industry"||id==="ledford-home"||id.startsWith("stanford-")?"Southside_Industrial":id==="diner-strip-mall"?"Eastside_Commercial":"Downtown";
+  for(const lm of plan.landmarks){ const idx=addNode({name:lm.nodeName,translation:world(lm.position),extras:classify(lm.classification,lm.source)},groupByName.get(groupFor(lm.id))); landmarkNodeById.set(lm.id,idx); addNode({name:`LANDMARK_REF_${lm.id.replaceAll("-","_")}`,translation:world(lm.position),extras:{classification:"presentation-coordinate-reference"}},groupByName.get("Landmarks")); }
 }
-
-function createDowntown() {
-  const downtown = groups.Downtown;
-  const blocks = [
-    [52, 4, 12, 12, 16],
-    [67, 3, 10, 11, 22],
-    [82, 4, 12, 10, 18],
-    [98, 3, 9, 12, 13],
-    [113, 4, 11, 10, 15],
-    [53, 43, 11, 10, 13],
-    [69, 45, 10, 9, 18],
-    [84, 45, 11, 10, 15],
-    [99, 43, 8, 9, 11],
-  ].map(([x, z, width, depth, height]) => {
-    const [worldX, , worldZ] = toWorldPosition([x, 0, z]);
-    return [worldX, worldZ, width, depth, height];
-  });
-  blocks.forEach(([x, z, width, depth, height], index) => {
-    const y = terrainHeight(x, z);
-    const building = addBox(
-      downtown,
-      `PRESENTATION_Downtown_Block_${String(index + 1).padStart(2, "0")}`,
-      [width, height, depth],
-      [x, y + height / 2, z],
-      index % 3 === 0 ? palette.grayBrick : palette.brick,
-      { classification: "presentation-architecture" },
-    );
-    building.userData.maxStories = Math.min(Math.round(height / 3.2), 6);
-    for (let floor = 1; floor < height / 3; floor += 1) {
-      addWindow(
-        downtown,
-        `PRESENTATION_Downtown_Window_${index}_${floor}`,
-        [x + width / 2 + 0.05, y + floor * 3, z],
-        [0.12, 1.1, Math.max(depth - 2, 2)],
-        floor === 2 && index % 4 === 0 ? palette.warmWindow : palette.darkWindow,
-      );
-    }
-  });
-
-  const shopNames = [
-    "Pawn_And_Bail",
-    "Hair_Salon",
-    "Accountant",
-    "Hobby_Store",
-    "Bella_Miha_Diner",
-  ];
-  shopNames.forEach((shop, index) => {
-    const [x, , z] = toWorldPosition([50 + index * 10, 0, 73]);
-    const shopGroup = new Group();
-    shopGroup.name = `PRESENTATION_${shop}`;
-    shopGroup.position.set(x, terrainHeight(x, z), z);
-    classify(shopGroup, "canon-business-type-presentation-architecture", ["Chapter 2:67"]);
-    downtown.add(shopGroup);
-    addBox(shopGroup, `${shopGroup.name}_Body`, [6.6, 4.8, 6.4], [0, 2.4, 0], palette.grayBrick);
-    addWindow(
-      shopGroup,
-      `${shopGroup.name}_Storefront`,
-      [0, 2.05, -3.23],
-      [4.8, 2.4, 0.12],
-      shop === "Bella_Miha_Diner" ? palette.warmWindow : palette.darkWindow,
-    );
-    addBox(shopGroup, `${shopGroup.name}_Awning`, [5.1, 0.18, 1.1], [0, 3.1, -3.65], index % 2 ? palette.redSiding : palette.metal);
-  });
-
-  const industrialSites = [
-    [35, -82, 18, 11, 9],
-    [55, -82, 14, 10, 12],
-    [75, -81, 16, 10, 8],
-    [95, -82, 18, 11, 11],
-  ].map(([x, z, width, depth, height]) => {
-    const [worldX, , worldZ] = toWorldPosition([x, 0, z]);
-    return [worldX, worldZ, width, depth, height];
-  });
-  industrialSites.forEach(([x, z, width, depth, height], index) => {
-    const y = terrainHeight(x, z);
-    addBox(
-      downtown,
-      `PRESENTATION_River_Industry_${index + 1}`,
-      [width, height, depth],
-      [x, y + height / 2, z],
-      palette.industrial,
-    );
-    const stack = new Mesh(
-      geometry("unit-stack", () => new CylinderGeometry(0.5, 0.8, 1, 10)),
-      palette.brick,
-    );
-    stack.name = `PRESENTATION_Smokestack_${index + 1}`;
-    stack.position.set(x + width * 0.28, y + height + 7, z);
-    stack.scale.set(1.3, 14, 1.3);
-    classify(stack, "presentation-industrial-detail");
-    downtown.add(stack);
-  });
+function createLandmarks(){
+  // Cathedral
+  let p=landmarkNodeById.get("st-thomas"),lm=landmarkById.get("st-thomas"),g=groundAtPlan(lm.position[0],lm.position[2])-lm.position[1];
+  addPrimitive(p,"PRESENTATION_St_Thomas_Nave","box",MAT.grayBrick,[0,g+5.5,0],[18,11,26],{classification:"presentation-architecture"}); addPrimitive(p,"PRESENTATION_St_Thomas_Roof","gable",MAT.roof,[0,g+12,0],[19,3,28],{classification:"presentation-architecture"}); addPrimitive(p,"PRESENTATION_St_Thomas_Tower","box",MAT.grayBrick,[0,g+10,-10],[7,20,7],{classification:"presentation-architecture"}); addPrimitive(p,"PRESENTATION_St_Thomas_Spire","cylinder",MAT.metal,[0,g+23,-10],[4,13,4],{classification:"presentation-architecture"});
+  // New Beginnings houses #2-#4; Jackie is #5 and separate.
+  p=landmarkNodeById.get("new-beginnings"); lm=landmarkById.get("new-beginnings"); for(const [z,mat] of [[88,MAT.siding],[98,MAT.blueSiding],[108,MAT.greenSiding]]) addHouse(p,`PRESENTATION_NB_House_${z}`,0,(z-lm.position[2]),{body:mat,stories:2,localBase:lm.position});
+  p=landmarkNodeById.get("jackies-house"); lm=landmarkById.get("jackies-house"); g=groundAtPlan(lm.position[0],lm.position[2])-lm.position[1]; addPrimitive(p,"PRESENTATION_Jackies_House_Body","box",MAT.redSiding,[0,g+3.4,0],[8.8,6.8,10.5],{classification:"presentation-architecture"}); addPrimitive(p,"PRESENTATION_Jackies_House_Roof","gable",MAT.roof,[0,g+7.7,0],[9.8,2.4,11.5],{classification:"presentation-architecture"}); addPrimitive(p,"PRESENTATION_Jackies_Porch","box",MAT.wood,[3.5,g+.45,0],[2.5,.8,5.8],{classification:"presentation-architecture"});
+  p=landmarkNodeById.get("jackies-window"); addPrimitive(p,"PRESENTATION_Jackies_Window_Glass","box",MAT.warmWindow,[.15,0,0],[.2,1.5,1.7],{classification:"presentation-lighting-detail"});
+  // Old school + lot
+  p=landmarkNodeById.get("old-school-staging-lot"); lm=landmarkById.get("old-school-staging-lot"); g=groundAtPlan(lm.position[0],lm.position[2])-lm.position[1]; addPrimitive(p,"PRESENTATION_Old_School_Lot","box",MAT.asphalt,[0,g+.12,0],[31,.24,22],{classification:"canon-feature-relative-placement",source:lm.source});
+  p=landmarkNodeById.get("old-school"); lm=landmarkById.get("old-school"); g=groundAtPlan(lm.position[0],lm.position[2])-lm.position[1]; addPrimitive(p,"PRESENTATION_Old_School_Body","box",MAT.redBrick,[0,g+5.2,0],[28,10.4,20],{classification:"presentation-architecture"}); addPrimitive(p,"PRESENTATION_Old_School_Roof","box",MAT.rust,[0,g+10.8,0],[29,.9,21],{classification:"presentation-architecture"}); for(let z=-7;z<=7;z+=4.5)addPrimitive(p,`PRESENTATION_Old_School_Window_${z}`,"box",MAT.darkWindow,[-14.05,g+5.7,z],[.15,2.1,1.8],{classification:"presentation-lighting-detail"});
+  // Abby and bakery
+  p=landmarkNodeById.get("abbys-apartment"); lm=landmarkById.get("abbys-apartment"); g=groundAtPlan(lm.position[0],lm.position[2])-lm.position[1]; addPrimitive(p,"PRESENTATION_Abby_Building","box",MAT.brick,[0,g+6.5,0],[14,13,16],{classification:"presentation-architecture"}); for(let f=0;f<4;f++)addPrimitive(p,`PRESENTATION_Abby_Windows_${f}`,"box",f===3?MAT.warmWindow:MAT.darkWindow,[-7.05,g+2+f*3.0,0],[.15,1.3,9],{classification:"presentation-lighting-detail"});
+  p=landmarkNodeById.get("bakery-storefront"); lm=landmarkById.get("bakery-storefront"); g=groundAtPlan(lm.position[0],lm.position[2])-lm.position[1]; addPrimitive(p,"PRESENTATION_Bakery","box",MAT.grayBrick,[0,g+2.3,0],[10,4.6,13],{classification:"presentation-architecture"}); addPrimitive(p,"PRESENTATION_Bakery_Window","box",MAT.warmWindow,[5.05,g+2.0,0],[.15,2.2,7],{classification:"presentation-storefront"});
+  // Police, sheriff residence, Ledford residence
+  lm=landmarkById.get("police-station"); addFlatBuilding(landmarkNodeById.get("police-station"),"PRESENTATION_Police",0,0,{w:20,d:24,stories:3,mat:MAT.grayBrick,localBase:lm.position});
+  lm=landmarkById.get("sheriffs-sons-house"); addHouse(landmarkNodeById.get("sheriffs-sons-house"),"PRESENTATION_Sheriff_Son",0,0,{body:MAT.siding,stories:2,localBase:lm.position});
+  lm=landmarkById.get("ledford-home"); addHouse(landmarkNodeById.get("ledford-home"),"PRESENTATION_Ledford_Home",0,0,{body:MAT.siding,stories:2,localBase:lm.position});
+  // Diner and L-shaped mall
+  p=landmarkNodeById.get("diner-strip-mall"); lm=landmarkById.get("diner-strip-mall"); g=groundAtPlan(lm.position[0],lm.position[2])-lm.position[1]; addPrimitive(p,"PRESENTATION_Diner_Lot","box",MAT.asphalt,[0,g+.1,0],[65,.2,46],{classification:"presentation-commercial-site"}); addPrimitive(p,"PRESENTATION_Diner","box",MAT.grayBrick,[-5,g+2.3,-2],[15,4.6,12],{classification:"presentation-architecture"}); addPrimitive(p,"PRESENTATION_Diner_Front","box",MAT.warmWindow,[2.55,g+2.1,-2],[.15,2.1,8],{classification:"presentation-storefront"}); addPrimitive(p,"PRESENTATION_StripMall_Long","box",MAT.grayBrick,[8,g+2.4,16],[48,4.8,9],{classification:"presentation-architecture"}); addPrimitive(p,"PRESENTATION_StripMall_Leg","box",MAT.grayBrick,[-23,g+2.4,4],[9,4.8,32],{classification:"presentation-architecture"});
+  // Stanford towers, exact skyline anomaly.
+  for(const id of ["stanford-north-tower","stanford-south-tower"]){ p=landmarkNodeById.get(id); lm=landmarkById.get(id); g=groundAtPlan(lm.position[0],lm.position[2])-lm.position[1]; addPrimitive(p,`PRESENTATION_${id}_Body`,`box`,MAT.tower,[0,g+31,0],[24,62,24],{classification:"presentation-architecture"}); for(let f=0;f<10;f++)addPrimitive(p,`PRESENTATION_${id}_Band_${f}`,"box",MAT.darkWindow,[12.05,g+4+f*5.7,0],[.16,1.2,18],{classification:"presentation-lighting-detail"}); }
+  // Southside industry
+  p=landmarkNodeById.get("southside-industry"); lm=landmarkById.get("southside-industry"); g=groundAtPlan(lm.position[0],lm.position[2])-lm.position[1]; for(const [x,z,w,d,h] of [[-20,-8,35,20,10],[18,-12,28,18,8],[-5,17,45,15,9]]) addPrimitive(p,`PRESENTATION_Mill_${x}_${z}`,"box",MAT.soot,world([x,g+h/2,z]),[w,h,d],{classification:"presentation-industrial"}); for(const [x,z,h] of [[-25,-2,32],[8,5,26],[24,-8,36]]) addPrimitive(p,`PRESENTATION_Smokestack_${x}_${z}`,"cylinder",MAT.rust,world([x,g+h/2,z]),[4,h,4],{classification:"presentation-industrial"});
+  // Trainyard and trestle
+  p=landmarkNodeById.get("trainyard"); lm=landmarkById.get("trainyard"); g=groundAtPlan(lm.position[0],lm.position[2])-lm.position[1]; for(let z=-22;z<=22;z+=11){ addPrimitive(p,`PRESENTATION_Rail_${z}_A`,`box`,MAT.metal,world([0,g+.18,z]),[110,.22,.18],{classification:"presentation-rail"}); addPrimitive(p,`PRESENTATION_Rail_${z}_B`,`box`,MAT.metal,world([0,g+.18,z+1.1]),[110,.22,.18],{classification:"presentation-rail"}); } for(const [x,z] of [[-35,-15],[-10,10],[28,-6]]) addPrimitive(p,`PRESENTATION_Rail_Warehouse_${x}_${z}`,"box",MAT.rust,world([x,g+4.5,z]),[26,9,16],{classification:"presentation-industrial"}); for(let x=-42;x<=42;x+=14)addPrimitive(p,`PRESENTATION_Railcar_${x}`,"box",MAT.rust,world([x,g+1.8,18]),[10,3.5,3],{classification:"presentation-rail"});
+  p=landmarkNodeById.get("railroad-trestle"); lm=landmarkById.get("railroad-trestle"); g=groundAtPlan(lm.position[0],lm.position[2])-lm.position[1]; addPrimitive(p,"PRESENTATION_Trestle_Deck","box",MAT.metal,[0,g+5.6,0],[44,1.2,5],{classification:"presentation-infrastructure"}); for(const x of [-18,-8,8,18]) addPrimitive(p,`PRESENTATION_Trestle_Pier_${x}`,"box",MAT.concrete,[x,g+2.6,0],[2.2,5.2,4],{classification:"presentation-infrastructure"});
+  // Chalmers, park, ruins
+  lm=landmarkById.get("chalmers-property"); addHouse(landmarkNodeById.get("chalmers-property"),"PRESENTATION_Chalmers_House",0,0,{body:MAT.siding,stories:2,localBase:lm.position});
+  p=landmarkNodeById.get("city-park"); lm=landmarkById.get("city-park"); g=groundAtPlan(lm.position[0],lm.position[2])-lm.position[1]; addPrimitive(p,"PRESENTATION_City_Park_Lawn","box",MAT.grass,[0,g+.1,0],[32,.2,24],{classification:"presentation-park"});
+  p=landmarkNodeById.get("old-ruins"); lm=landmarkById.get("old-ruins"); g=groundAtPlan(lm.position[0],lm.position[2])-lm.position[1]; for(const [x,z,h] of [[-4,-3,4],[3,2,2.5],[0,5,3]]) addPrimitive(p,`PRESENTATION_Ruin_${x}_${z}`,"box",MAT.brick,world([x,g+h/2,z]),[6,h,2],{classification:"presentation-ruin"});
 }
-
-function createCathedral() {
-  const landmark = landmarkById.get("st-thomas");
-  const cathedral = new Group();
-  cathedral.name = landmark.nodeName;
-  cathedral.position.set(...landmark.position);
-  classify(cathedral, landmark.classification, landmark.source);
-  groups.Downtown.add(cathedral);
-
-  addBox(cathedral, "PRESENTATION_St_Thomas_Nave", [8, 8.5, 18], [0, 4.25, 0], palette.brick);
-  addBox(cathedral, "PRESENTATION_St_Thomas_Transept", [14, 7.4, 6], [0, 3.7, 1.5], palette.brick);
-  addGableRoof(cathedral, "PRESENTATION_St_Thomas_Nave_Roof", 8.8, 19, 3.4, [0, 8.5, 0], palette.roof);
-  addGableRoof(cathedral, "PRESENTATION_St_Thomas_Transept_Roof", 14.8, 6.8, 2.7, [0, 7.4, 1.5], palette.roof);
-  addBox(cathedral, "PRESENTATION_St_Thomas_Bell_Tower", [4.8, 16, 5.2], [0, 8, -8], palette.brick);
-
-  const spire = new Mesh(
-    geometry("cathedral-spire", () => new ConeGeometry(3.3, 11, 8)),
-    palette.roof,
-  );
-  spire.name = "PRESENTATION_St_Thomas_Spire";
-  spire.position.set(0, 21.5, -8);
-  classify(spire, "presentation-architecture");
-  cathedral.add(spire);
-
-  for (const x of [-2.3, 0, 2.3]) {
-    addWindow(
-      cathedral,
-      `PRESENTATION_St_Thomas_Stained_Glass_${x}`,
-      [x, 5, -9.05],
-      [1.15, 3, 0.12],
-      palette.cathedralGlass,
-    );
-  }
+function createNeighborhoodFabric(){
+  const parent=groupByName.get("Residential");
+  // Eight west-side Partridge houses: #1 is neighbor, #2-5 are campus, #5 is Jackie, #6-8 are neighbors.
+  for(const [num,z] of [[1,78],[6,128],[7,138],[8,148]]) addHouse(parent,`PRESENTATION_Partridge_West_${num}`,62,z,{body:num%2?MAT.siding:MAT.blueSiding,stories:2});
+  // Deteriorated school/rental side.
+  for(const z of [82,94,106,130,142]) addHouse(parent,`PRESENTATION_Partridge_East_${z}`,80,z,{body:MAT.siding,dilapidated:true,stories:2});
+  // 1950s edge: rows align to streets rather than scattering randomly.
+  let count=0; for(const x of [112,126,140,154]) for(const z of [78,92,106]){ if(Math.abs(x-123)<8) continue; addHouse(parent,`PRESENTATION_1950s_${++count}`,x,z,{body:[MAT.siding,MAT.blueSiding,MAT.greenSiding][count%3],stories:1}); }
+  for(const x of [20,35,50]) for(const z of [92,108,124,140]) addHouse(parent,`PRESENTATION_Northwest_House_${x}_${z}`,x,z,{body:MAT.siding,stories:1});
+  // Sound barrier at Oak T-intersection; trainyard lies beyond.
+  for(let z=100;z<=210;z+=12) addPrimitive(groupByName.get("Transport_Infrastructure"),`PRESENTATION_Sound_Barrier_${z}`,"box",MAT.grass,world([-2,groundAtPlan(-2,z)+2.2,z]),[5,4.4,12],{classification:"presentation-sound-barrier",source:["Chapter 6:57"]});
 }
-
-function createNewBeginnings() {
-  const landmark = landmarkById.get("new-beginnings");
-  const jackiesHouseLandmark = landmarkById.get("jackies-house");
-  const newBeginnings = new Group();
-  newBeginnings.name = landmark.nodeName;
-  newBeginnings.position.set(...landmark.position);
-  classify(newBeginnings, landmark.classification, landmark.source);
-  groups.New_Beginnings.add(newBeginnings);
-
-  const houses = [
-    {
-      name: "CANON_New_Beginnings_House_01",
-      x: 0,
-      z: -36 * horizontalScale,
-      width: 6,
-      depth: 7.6,
-      bodyMaterial: palette.tanSiding,
-      roofMaterial: palette.roofRust,
-      porchWidth: 4.4,
-    },
-    {
-      name: "CANON_New_Beginnings_House_02",
-      x: 0,
-      z: -24 * horizontalScale,
-      width: 5.6,
-      depth: 8,
-      bodyMaterial: palette.greenSiding,
-      roofMaterial: palette.roof,
-      porchWidth: 5,
-    },
-    {
-      name: "CANON_New_Beginnings_House_03",
-      x: 0,
-      z: -12 * horizontalScale,
-      width: 6.2,
-      depth: 7.5,
-      bodyMaterial: palette.whiteSiding,
-      roofMaterial: palette.roofRust,
-      porchWidth: 5.7,
-    },
-    {
-      name: "CANON_Jackies_House",
-      x: jackiesHouseLandmark.position[0] - landmark.position[0],
-      z: jackiesHouseLandmark.position[2] - landmark.position[2],
-      width: 6,
-      depth: 7.8,
-      bodyMaterial: palette.redSiding,
-      roofMaterial: palette.roof,
-      porchWidth: 4.7,
-      porchMaterial: palette.blackPaint,
-      glowWindow: true,
-      source: jackiesHouseLandmark.source,
-      classification: jackiesHouseLandmark.classification,
-    },
-  ];
-
-  for (const house of houses) {
-    const worldX = landmark.position[0] + house.x;
-    const worldZ = landmark.position[2] + house.z;
-    if (
-      doesFootprintIntersectRoad(
-        worldX,
-        worldZ,
-        house.width / 2,
-        house.depth / 2,
-      )
-    ) {
-      throw new Error(`${house.name} intersects a reserved road corridor`);
-    }
-    const result = createNamedHouse({
-      parent: newBeginnings,
-      name: house.name,
-      position: [house.x, 0, house.z],
-      width: house.width,
-      depth: house.depth,
-      floors: 2,
-      bodyMaterial: house.bodyMaterial,
-      roofMaterial: house.roofMaterial,
-      porchWidth: house.porchWidth,
-      porchMaterial: house.porchMaterial,
-      rotationY: Math.PI / 2,
-      glowWindow: house.glowWindow,
-      classification:
-        house.classification ?? "canon-location-presentation-architecture",
-      source: house.source ?? landmark.source,
-    });
-    result.userData.institutionalRow = true;
-
-    if (house.name === jackiesHouseLandmark.nodeName) {
-      const detailPrefix = "PRESENTATION_Jackies_House";
-      const exposedPatches = [
-        [`${detailPrefix}_Porch_Chip_01`, [0.7, 0.06, 0.16], [-1.45, 0.69, -5.38]],
-        [`${detailPrefix}_Porch_Chip_02`, [0.45, 0.06, 0.16], [0.85, 0.69, -5.38]],
-        [`${detailPrefix}_Porch_Post_Chip_01`, [0.22, 0.48, 0.22], [-2, 1.45, -5.52]],
-        [`${detailPrefix}_Porch_Post_Chip_02`, [0.22, 0.34, 0.22], [2, 2.25, -5.52]],
-      ];
-      for (const [name, size, position] of exposedPatches) {
-        addBox(result, name, size, position, palette.exposedWood);
-      }
-      for (let step = 0; step < 3; step += 1) {
-        addBox(
-          result,
-          `${detailPrefix}_Porch_Step_${step + 1}`,
-          [2.2 - step * 0.24, 0.22, 0.65],
-          [0, 0.62 - step * 0.2, -5.9 - step * 0.48],
-          palette.blackPaint,
-        );
-      }
-
-      const brokenWalk = new Group();
-      brokenWalk.name = "CANON_Jackies_Broken_Sidewalk";
-      classify(
-        brokenWalk,
-        "canon-feature-presentation-geometry",
-        ["Chapter 8:20"],
-      );
-      newBeginnings.add(brokenWalk);
-      const walkSlabs = [
-        [house.x - 0.08, 0.14, -4.55, 1.25, 1.4, -0.03],
-        [house.x + 0.12, 0.13, -5.95, 1.2, 1.25, 0.05],
-        [house.x - 0.16, 0.11, -7.25, 1.16, 1.2, -0.04],
-        [house.x + 0.2, 0.08, -8.55, 1.12, 1.28, 0.07],
-        [house.x - 0.22, 0.05, -9.85, 1.08, 1.3, -0.05],
-      ];
-      walkSlabs.forEach(([x, y, z, width, depth, rotationY], index) =>
-        addBox(
-          brokenWalk,
-          `PRESENTATION_Jackies_Broken_Sidewalk_Slab_${index + 1}`,
-          [width, 0.12, depth],
-          [x, y, z],
-          palette.concrete,
-          { rotationY },
-        ),
-      );
-    } else {
-      addBox(
-        newBeginnings,
-        `PRESENTATION_${house.name.replace(/^CANON_/, "")}_Walk`,
-        [1.25, 0.12, 7.2],
-        [house.x, 0.14, -7.2],
-        palette.concrete,
-      );
-    }
-  }
-
-  const jackiesWindowLandmark = landmarkById.get("jackies-window");
-  const jackieLocalX =
-    jackiesHouseLandmark.position[0] - landmark.position[0];
-  const jackiesWindow = new Object3D();
-  jackiesWindow.name = jackiesWindowLandmark.nodeName;
-  jackiesWindow.position.set(
-    jackiesWindowLandmark.position[0] - landmark.position[0],
-    jackiesWindowLandmark.position[1] - landmark.position[1],
-    jackiesWindowLandmark.position[2] - landmark.position[2],
-  );
-  classify(
-    jackiesWindow,
-    jackiesWindowLandmark.classification,
-    jackiesWindowLandmark.source,
-  );
-  newBeginnings.add(jackiesWindow);
-
-  createFence(
-    newBeginnings,
-    "PRESENTATION_New_Beginnings_West_Fence",
-    [
-      [-18 * horizontalScale - 5, 0, -6.2],
-      [jackieLocalX - 4.3, 0, -6.2],
-    ],
-    1.55,
-  );
-  createFence(
-    newBeginnings,
-    "PRESENTATION_New_Beginnings_East_Fence",
-    [
-      [jackieLocalX + 4.3, 0, -6.2],
-      [18 * horizontalScale + 5, 0, -6.2],
-    ],
-    1.55,
-  );
-
-  const sinkingFence = new Group();
-  sinkingFence.name = "CANON_Jackies_Sinking_Fence";
-  classify(
-    sinkingFence,
-    "canon-feature-presentation-geometry",
-    ["Chapter 8:20"],
-  );
-  newBeginnings.add(sinkingFence);
-  const fencePosts = [
-    [jackieLocalX - 4.3, 0.62, -6.2, -0.16],
-    [jackieLocalX - 1.45, 0.48, -6.2, -0.09],
-    [jackieLocalX + 1.45, 0.7, -6.2, 0.1],
-    [jackieLocalX + 4.3, 0.52, -6.2, 0.17],
-  ];
-  fencePosts.forEach(([x, y, z, tilt], index) => {
-    const post = addBox(
-      sinkingFence,
-      `PRESENTATION_Jackies_Sinking_Fence_Post_${index + 1}`,
-      [0.12, 1.45, 0.12],
-      [x, y, z],
-      palette.metal,
-    );
-    post.rotation.z = tilt;
-  });
-  const fenceRails = [
-    [jackieLocalX - 2.88, 1.02, -0.08],
-    [jackieLocalX, 0.88, 0.1],
-    [jackieLocalX + 2.88, 0.96, -0.12],
-  ];
-  fenceRails.forEach(([x, y, tilt], index) => {
-    const rail = addBox(
-      sinkingFence,
-      `PRESENTATION_Jackies_Sinking_Fence_Rail_${index + 1}`,
-      [2.35, 0.1, 0.1],
-      [x, y, -6.2],
-      palette.metal,
-    );
-    rail.rotation.z = tilt;
-  });
-
-  const potholeStreet = new Group();
-  potholeStreet.name = "CANON_Pothole_Ridden_Street_At_Jackies";
-  classify(
-    potholeStreet,
-    "canon-feature-presentation-geometry",
-    ["Chapter 8:20"],
-  );
-  newBeginnings.add(potholeStreet);
-  [
-    [jackieLocalX - 3.4, -12.1, 0.9, 0.58, 0.18],
-    [jackieLocalX, -11.35, 0.65, 0.42, -0.25],
-    [jackieLocalX + 3.2, -12.65, 0.78, 0.5, 0.08],
-  ].forEach(([x, z, radiusX, radiusZ, rotationY], index) => {
-    const pothole = new Mesh(
-      geometry("unit-pothole", () => new CylinderGeometry(1, 1, 1, 14)),
-      palette.pothole,
-    );
-    pothole.name = `PRESENTATION_Jackies_Street_Pothole_${index + 1}`;
-    pothole.position.set(x, -0.25, z);
-    pothole.scale.set(radiusX, 0.055, radiusZ);
-    pothole.rotation.y = rotationY;
-    classify(pothole, "presentation-infrastructure", ["Chapter 8:20"]);
-    potholeStreet.add(pothole);
-  });
+function createDowntownFabric(){
+  const parent=groupByName.get("Downtown"); let i=0;
+  const xs=[58,72,84,106,118,132,144], zs=[-8,14,34,54,68];
+  for(const x of xs) for(const z of zs){ if(Math.abs(x-95)<8||Math.abs(z)<7||Math.abs(x-123)<7) continue; const stories=2+(i%5); addFlatBuilding(parent,`PRESENTATION_Downtown_${++i}`,x,z,{w:11+(i%3)*2,d:12+(i%2)*3,stories,mat:i%3===0?MAT.brick:i%3===1?MAT.grayBrick:MAT.redBrick,storefront:z<40}); }
+  // Last-block Eisenhower storefront row near residential edge.
+  for(const [x,name] of [[116,"Pawn_Bail"],[128,"Salon"],[140,"Accountant"],[152,"Hobby"],[164,"Bella_Miha"]]) addFlatBuilding(parent,`PRESENTATION_${name}`,x,62,{w:10,d:11,stories:1,mat:MAT.grayBrick,storefront:true});
 }
-
-function createAbbyDistrict() {
-  const abbyLandmark = landmarkById.get("abbys-apartment");
-  const abby = new Group();
-  abby.name = abbyLandmark.nodeName;
-  abby.position.set(...abbyLandmark.position);
-  abby.rotation.y = Math.PI / 2;
-  classify(abby, abbyLandmark.classification, abbyLandmark.source);
-  groups.Abby_District.add(abby);
-
-  addBox(abby, "PRESENTATION_Abby_Apartment_Body", [9, 14.2, 11], [0, 7.1, 0], palette.brick);
-  addBox(abby, "PRESENTATION_Abby_Apartment_Cornice", [9.6, 0.65, 11.6], [0, 14.2, 0], palette.concrete);
-  for (let floor = 0; floor < 4; floor += 1) {
-    for (const x of [-2.5, 0, 2.5]) {
-      addWindow(
-        abby,
-        `PRESENTATION_Abby_Window_${floor}_${x}`,
-        [x, 2.2 + floor * 3.2, -5.55],
-        [1.25, 1.45, 0.12],
-        floor === 3 && x === 0 ? palette.warmWindow : palette.darkWindow,
-      );
-    }
-  }
-  addBox(abby, "PRESENTATION_Abby_Rooftop_Garden_Base", [7.2, 0.35, 7.8], [0, 14.7, 0], palette.concrete);
-  for (const x of [-2.5, 0, 2.5]) {
-    addBox(abby, `PRESENTATION_Abby_Roof_Planter_${x}`, [1.5, 0.8, 5], [x, 15.15, 0], palette.wood);
-    addBox(abby, `PRESENTATION_Abby_Roof_Growth_${x}`, [1.25, 0.65, 4.7], [x, 15.75, 0], palette.grass);
-  }
-  abby.userData.viewpoint = [
-    abbyLandmark.position[0],
-    abbyLandmark.position[1] + 13.3,
-    abbyLandmark.position[2],
-  ];
-
-  const bakeryLandmark = landmarkById.get("bakery-storefront");
-  const bakery = new Group();
-  bakery.name = bakeryLandmark.nodeName;
-  bakery.position.set(...bakeryLandmark.position);
-  classify(bakery, bakeryLandmark.classification, bakeryLandmark.source);
-  groups.Abby_District.add(bakery);
-  addBox(bakery, "PRESENTATION_Bakery_Storefront_Body", [7, 5.2, 9], [0, 2.6, 0], palette.grayBrick);
-  addWindow(bakery, "PRESENTATION_Bakery_Storefront_Glow", [3.55, 2.3, 0], [0.12, 2.8, 5.7], palette.warmWindow);
-  addBox(bakery, "PRESENTATION_Bakery_Storefront_Awning", [0.9, 0.24, 6.2], [4, 3.65, 0], palette.redSiding);
+function createIndustrialAndTrees(){
+  const trees=groupByName.get("Woods"); let t=0;
+  for(const [cx,cz,radius,count] of [[-125,220,48,22],[185,-25,28,10],[143,-73,22,8]]) for(let k=0;k<count;k++){ const a=k*2.3999632297, r=radius*Math.sqrt((k+.5)/count), x=cx+Math.cos(a)*r, z=cz+Math.sin(a)*r, y=groundAtPlan(x,z); addPrimitive(trees,`PRESENTATION_Tree_Trunk_${++t}`,"cylinder",MAT.treeTrunk,world([x,y+2.4,z]),[.7,4.8,.7],{classification:"presentation-vegetation"}); addPrimitive(trees,`PRESENTATION_Tree_Crown_${t}`,"cylinder",cx<0?MAT.woods:MAT.leaves,world([x,y+5.8,z]),[4.2,5.0,4.2],{classification:"presentation-vegetation"}); }
 }
-
-function createParadeDistrict() {
-  const schoolLandmark = landmarkById.get("old-school");
-  const stagingLotLandmark = landmarkById.get("old-school-staging-lot");
-  const school = new Group();
-  school.name = schoolLandmark.nodeName;
-  school.position.set(...schoolLandmark.position);
-  classify(school, schoolLandmark.classification, schoolLandmark.source);
-  groups.Parade_District.add(school);
-
-  addBox(school, "PRESENTATION_Old_School_Main", [13, 8, 8], [0, 4, 0], palette.redBrick);
-  addBox(school, "PRESENTATION_Old_School_Wing", [6.5, 5.7, 9], [-7, 2.85, 0.6], palette.redBrick);
-  addBox(school, "PRESENTATION_Old_School_Roof", [13.8, 0.65, 8.8], [0, 8.15, 0], palette.roof);
-  for (const x of [-4.2, -1.4, 1.4, 4.2]) {
-    addWindow(school, `PRESENTATION_Old_School_Boarded_Window_${x}`, [x, 3.9, -4.05], [1.45, 2.1, 0.18], palette.wood);
-  }
-  for (let step = 0; step < 5; step += 1) {
-    addBox(
-      school,
-      `PRESENTATION_Old_School_Side_Step_${step}`,
-      [2.8, 0.32, 0.72 + step * 0.58],
-      [7.4, 0.18 + step * 0.29, -2.5 - step * 0.29],
-      palette.concrete,
-    );
-  }
-
-  addBox(
-    groups.Parade_District,
-    stagingLotLandmark.nodeName,
-    [27, 0.24, 7.5],
-    stagingLotLandmark.position,
-    palette.asphalt,
-    {
-      classification: stagingLotLandmark.classification,
-      source: stagingLotLandmark.source,
-    },
-  );
-  const fadedPaint = material("MAT_Faded_Road_Paint", {
-    color: 0xa7a389,
-    roughness: 0.95,
-  });
-  for (
-    let x = stagingLotLandmark.position[0] - 10;
-    x <= stagingLotLandmark.position[0] + 10;
-    x += 4.8
-  ) {
-    addBox(
-      groups.Parade_District,
-      `PRESENTATION_Staging_Lot_Line_${x}`,
-      [0.12, 0.035, 4.2],
-      [x, stagingLotLandmark.position[1] + 0.15, stagingLotLandmark.position[2] - 1],
-      fadedPaint,
-    );
-  }
-
-  const stagingActivity = new Group();
-  stagingActivity.name = "CANON_Labor_Day_Staging_Activity";
-  stagingActivity.position.set(...stagingLotLandmark.position);
-  classify(
-    stagingActivity,
-    "canon-event-presentation-geometry",
-    ["Chapter 3:69", "Chapter 8:18", "Chapter 8:52", "Chapter 8:84-88"],
-  );
-  groups.Parade_District.add(stagingActivity);
-
-  const scoutClusters = [
-    [-7.8, -1.4],
-    [-5.9, 0.7],
-    [-3.9, -1.1],
-    [-1.8, 1.2],
-    [0.3, -0.8],
-    [2.4, 1.1],
-    [4.3, -1],
-  ];
-  scoutClusters.forEach(([x, z], index) => {
-    addBox(
-      stagingActivity,
-      `PRESENTATION_Webelos_Cluster_${index + 1}`,
-      [0.55, 1.25, 0.55],
-      [x, 0.72, z],
-      index % 2 === 0 ? palette.greenSiding : palette.tanSiding,
-      {
-        classification: "presentation-event-proxy",
-        source: ["Chapter 8:18", "Chapter 8:78-88"],
-      },
-    );
-  });
-
-  [
-    [7.3, 0.2, -0.08],
-    [9.2, -2.2, 0.05],
-  ].forEach(([x, z, rotationY], index) => {
-    const van = new Group();
-    van.name = `PRESENTATION_Staging_News_Van_${index + 1}`;
-    van.position.set(x, 0.25, z);
-    van.rotation.y = rotationY;
-    classify(van, "presentation-event-vehicle", ["Chapter 3:69", "Chapter 8:52"]);
-    stagingActivity.add(van);
-    addBox(van, `${van.name}_Body`, [3.4, 1.7, 1.65], [0, 0.9, 0], palette.whiteSiding);
-    addBox(van, `${van.name}_Cab`, [1.2, 1.35, 1.65], [2.05, 0.68, 0], palette.grayBrick);
-    addBox(van, `${van.name}_Mast`, [0.12, 3.5, 0.12], [-0.4, 3.15, 0], palette.metal);
-  });
-
-  const paradeFloat = new Group();
-  paradeFloat.name = "PRESENTATION_Labor_Day_Parade_Float";
-  const mainStreet = landmarkById.get("main-street");
-  paradeFloat.position.set(
-    mainStreet.position[0] + 24,
-    mainStreet.position[1] + 0.55,
-    mainStreet.position[2],
-  );
-  classify(paradeFloat, "presentation-event-vehicle", ["Chapter 8:52"]);
-  groups.Parade_District.add(paradeFloat);
-  addBox(paradeFloat, "PRESENTATION_Parade_Float_Base", [7.2, 0.65, 2.7], [0, 0.55, 0], palette.wood);
-  addBox(paradeFloat, "PRESENTATION_Parade_Float_Display", [4.2, 2.5, 1.7], [0, 2.05, 0], palette.redSiding);
+function createCamerasAndRoutes(){
+  const camParent=groupByName.get("Authored_Cameras"); const pathParent=groupByName.get("Authored_Paths");
+  for(const camera of plan.cameras){ const camIndex=(gltfCameras.push({type:"perspective",perspective:{yfov:48*Math.PI/180,znear:.1,zfar:5000}})-1); addNode({name:camera.name,camera:camIndex,translation:world(camera.position),extras:{classification:"presentation-camera",source:camera.source,target:world(camera.target)}},camParent); }
+  for(const route of plan.routes){ const ri=addNode({name:route.name,extras:classify(route.classification,route.source)},pathParent); route.points.forEach((pt,k)=>addNode({name:`${route.name}_Waypoint_${String(k+1).padStart(2,"0")}`,translation:world(pt),extras:{classification:"presentation-waypoint"}},ri)); }
 }
-
-function createPoliceDistrict() {
-  const policeLandmark = landmarkById.get("police-station");
-  const station = new Group();
-  station.name = policeLandmark.nodeName;
-  station.position.set(...policeLandmark.position);
-  classify(station, policeLandmark.classification, policeLandmark.source);
-  groups.Police_District.add(station);
-  addBox(station, "PRESENTATION_Police_Station_Body", [11, 6.5, 9], [0, 3.25, 0], palette.grayBrick);
-  addBox(station, "PRESENTATION_Police_Station_Entry", [4, 4.2, 2], [0, 2.1, -5], palette.concrete);
-  addWindow(station, "PRESENTATION_Police_Station_Light", [0, 2.4, -6.05], [2.4, 2.1, 0.12], palette.warmWindow);
-  addBox(station, "PRESENTATION_Police_Station_Lot", [17, 0.2, 13], [0, 0, 9], palette.asphalt);
-
-  const houseLandmark = landmarkById.get("sheriffs-sons-house");
-  const targetHouse = createNamedHouse({
-    parent: groups.Police_District,
-    name: houseLandmark.nodeName,
-    position: houseLandmark.position,
-    width: 7.8,
-    depth: 8.1,
-    floors: 1,
-    bodyMaterial: palette.tanSiding,
-    classification: houseLandmark.classification,
-    source: houseLandmark.source,
-    porchWidth: 4.2,
-  });
-  targetHouse.userData.frontElevationOrientation = "south";
-  const [houseX, houseY, houseZ] = houseLandmark.position;
-  createFence(
-    groups.Police_District,
-    "PRESENTATION_Sheriffs_Son_Chain_Link_Fence",
-    [
-      [houseX - 5, houseY - 0.3, houseZ - 6],
-      [houseX + 5, houseY - 0.3, houseZ - 6],
-      [houseX + 5, houseY - 0.3, houseZ + 5],
-      [houseX - 5, houseY - 0.3, houseZ + 5],
-      [houseX - 5, houseY - 0.3, houseZ - 6],
-    ],
-  );
-  addBox(
-    groups.Police_District,
-    "PRESENTATION_Sheriffs_Son_Gravel_Pull_Off",
-    [9, 0.15, 3.4],
-    [houseX, houseY - 0.2, houseZ - 6.3],
-    palette.concrete,
-  );
-  addBox(
-    groups.Police_District,
-    "PRESENTATION_Sheriffs_Buick_Roadmaster",
-    [5.2, 1.5, 2.1],
-    [houseX - 1.8, houseY + 0.65, houseZ - 6.3],
-    palette.metal,
-    {
-      classification: "canon-event-proxy",
-      source: ["Chapter 2:17-23"],
-    },
-  );
-
-  const detectiveLandmark = landmarkById.get("detective-position");
-  const detectivePosition = new Group();
-  detectivePosition.name = detectiveLandmark.nodeName;
-  detectivePosition.position.set(...detectiveLandmark.position);
-  classify(
-    detectivePosition,
-    detectiveLandmark.classification,
-    detectiveLandmark.source,
-  );
-  groups.Police_District.add(detectivePosition);
-  addBox(
-    detectivePosition,
-    "PRESENTATION_Surveillance_Commercial_Lot",
-    [14, 0.15, 8],
-    [0, -0.15, 0],
-    palette.asphalt,
-    {
-      classification: "canon-feature-presentation-geometry",
-      source: ["Chapter 2:57-67"],
-    },
-  );
-  addBox(
-    detectivePosition,
-    "PRESENTATION_Surveillance_Closed_Shop",
-    [7, 4.8, 6],
-    [0, 2.25, -7],
-    palette.grayBrick,
-    {
-      classification: "canon-business-type-presentation-architecture",
-      source: ["Chapter 2:67"],
-    },
-  );
-  addBox(
-    detectivePosition,
-    "PRESENTATION_Detective_Crown_Victoria",
-    [4.8, 1.45, 2.05],
-    [0, 0.85, 0],
-    palette.metal,
-    { rotationY: Math.PI / 2 },
-  );
-  detectivePosition.userData.targetNode = houseLandmark.nodeName;
-}
-
-function createCityPark() {
-  const parkLandmark = landmarkById.get("city-park");
-  const park = new Group();
-  park.name = parkLandmark.nodeName;
-  park.position.set(...parkLandmark.position);
-  classify(park, parkLandmark.classification, parkLandmark.source);
-  groups.Residential.add(park);
-  addBox(park, "PRESENTATION_City_Park_Lawn", [27, 0.18, 20], [0, 0, 0], palette.grass);
-  addBox(park, "PRESENTATION_City_Park_Path_NS", [2.2, 0.12, 18], [0, 0.14, 0], palette.concrete);
-  addBox(park, "PRESENTATION_City_Park_Path_EW", [23, 0.12, 2.2], [0, 0.14, 0], palette.concrete);
-
-  const circus = new Group();
-  circus.name = "INFERRED_Labor_Day_Circus_Grounds";
-  circus.position.set(4.8, 0.2, -1.8);
-  classify(
-    circus,
-    "inferred-event-placement",
-    ["Chapter 3:65", "Chapter 8:56"],
-  );
-  park.add(circus);
-
-  [
-    ["Main", [0, 0, 0], [5.1, 4.1, 5.1], [8.2, 2.2, 7]],
-    ["Side", [7.4, 0, 3.4], [3.1, 2.9, 3.1], [5.2, 1.7, 4.5]],
-  ].forEach(([label, position, canopyScale, bodySize]) => {
-    const tent = new Group();
-    tent.name = `PRESENTATION_Circus_Tent_${label}`;
-    tent.position.set(...position);
-    classify(tent, "presentation-event-geometry", ["Chapter 8:56"]);
-    circus.add(tent);
-
-    addBox(
-      tent,
-      `PRESENTATION_Circus_Tent_${label}_Canvas`,
-      bodySize,
-      [0, bodySize[1] / 2, 0],
-      palette.tentCanvas,
-      {
-        classification: "presentation-event-geometry",
-        source: ["Chapter 8:56"],
-      },
-    );
-    const canopy = new Mesh(
-      geometry("unit-circus-canopy", () => new ConeGeometry(1, 1, 16)),
-      palette.redSiding,
-    );
-    canopy.name = `PRESENTATION_Circus_Tent_${label}_Canopy`;
-    canopy.position.set(0, bodySize[1] + canopyScale[1] / 2, 0);
-    canopy.scale.set(...canopyScale);
-    classify(canopy, "presentation-event-geometry", ["Chapter 8:56"]);
-    tent.add(canopy);
-    addBox(
-      tent,
-      `PRESENTATION_Circus_Tent_${label}_Center_Pole`,
-      [0.15, bodySize[1] + canopyScale[1] + 1.2, 0.15],
-      [0, (bodySize[1] + canopyScale[1] + 1.2) / 2, 0],
-      palette.wood,
-      {
-        classification: "presentation-event-geometry",
-        source: ["Chapter 8:56"],
-      },
-    );
-  });
-}
-
-function createChalmersAndWoods() {
-  const farmLandmark = landmarkById.get("chalmers-property");
-  const farm = new Group();
-  farm.name = farmLandmark.nodeName;
-  farm.position.set(...farmLandmark.position);
-  classify(farm, farmLandmark.classification, farmLandmark.source);
-  groups.Chalmers_Farm.add(farm);
-  createNamedHouse({
-    parent: farm,
-    name: "CANON_Chalmers_White_Farmhouse",
-    position: [0, 0, 0],
-    width: 11.5,
-    depth: 10.5,
-    floors: 2,
-    bodyMaterial: palette.whiteSiding,
-    roofMaterial: palette.roofRust,
-    porchWidth: 9.5,
-    classification: "canon-feature-presentation-architecture",
-    source: ["Chapter 4:65"],
-  });
-
-  createFence(
-    farm,
-    "PRESENTATION_Chalmers_Field_Boundary",
-    [
-      [-34, -1, -19],
-      [20, -1, -19],
-      [20, -1, 14],
-      [10, -1, 14],
-      [7, -1, 14],
-      [-34, -1, 14],
-      [-34, -1, -19],
-    ],
-    1.2,
-  );
-
-  const bicycleRoute = plan.routes.find(
-    (route) => route.name === "PATH_Boys_Bicycle_Route",
-  );
-  const pathPoints = bicycleRoute.points.map(([x, , z]) => [
-    x,
-    terrainHeight(x, z) + 0.12,
-    z,
-  ]);
-  for (let index = 0; index < pathPoints.length - 1; index += 1) {
-    const start = new Vector3(...pathPoints[index]);
-    const end = new Vector3(...pathPoints[index + 1]);
-    const midpoint = start.clone().add(end).multiplyScalar(0.5);
-    const length = start.distanceTo(end);
-    const angle = Math.atan2(end.x - start.x, end.z - start.z);
-    addBox(
-      groups.Town_Ground,
-      `PRESENTATION_Bicycle_Path_Segment_${index + 1}`,
-      [1.35, 0.12, length],
-      [midpoint.x, midpoint.y, midpoint.z],
-      palette.wood,
-      {
-        rotationY: angle,
-        classification: "canon-route-presentation-geometry",
-        source: bicycleRoute.source,
-      },
-    );
-  }
-
-  const woodsThreshold = new Object3D();
-  woodsThreshold.name = "CANON_Woods_Threshold";
-  const [thresholdX, , thresholdZ] = pathPoints.at(-2);
-  woodsThreshold.position.set(
-    thresholdX,
-    terrainHeight(thresholdX, thresholdZ),
-    thresholdZ,
-  );
-  classify(woodsThreshold, "canon-feature-inferred-placement", [
-    "Chapter 4:57-63",
-  ]);
-  groups.Woods.add(woodsThreshold);
-}
-
-function createRuins() {
-  const ruinsLandmark = landmarkById.get("old-ruins");
-  const ruins = new Group();
-  ruins.name = ruinsLandmark.nodeName;
-  ruins.position.set(...ruinsLandmark.position);
-  classify(ruins, ruinsLandmark.classification, ruinsLandmark.source);
-  groups.Ruins.add(ruins);
-  const walls = [
-    [-4.5, 2.4, 0, 0.8, 4.8, 9],
-    [4.5, 1.7, 1.5, 0.7, 3.4, 6],
-    [0, 1.2, -4, 9, 2.4, 0.7],
-    [-1.5, 0.8, 4.3, 6, 1.6, 0.65],
-  ];
-  walls.forEach(([x, y, z, width, height, depth], index) =>
-    addBox(
-      ruins,
-      `PRESENTATION_Old_Ruins_Ambiguous_Wall_${index + 1}`,
-      [width, height, depth],
-      [x, y, z],
-      palette.industrial,
-      {
-        rotationY: (index - 1) * 0.11,
-        classification: "canon-feature-presentation-architecture",
-        source: ruinsLandmark.source,
-      },
-    ),
-  );
-  addBox(ruins, "PRESENTATION_Ruins_Fallen_Slab", [7, 0.6, 3], [1, 0.4, 1], palette.concrete, {
-    rotationY: 0.37,
-  });
-}
-
-function createCanonicalUrbanExtensions() {
-  const intersectionLandmark = landmarkById.get("broad-main-intersection");
-  const intersection = new Object3D();
-  intersection.name = intersectionLandmark.nodeName;
-  intersection.position.set(...intersectionLandmark.position);
-  classify(intersection, intersectionLandmark.classification, intersectionLandmark.source);
-  groups.Transport_Infrastructure.add(intersection);
-
-  const trestleLandmark = landmarkById.get("railroad-trestle");
-  const trestle = new Group();
-  trestle.name = trestleLandmark.nodeName;
-  trestle.position.set(...trestleLandmark.position);
-  classify(trestle, trestleLandmark.classification, trestleLandmark.source);
-  groups.Transport_Infrastructure.add(trestle);
-  addBox(trestle, "PRESENTATION_Trestle_Deck", [44, 1.4, 7], [0, 8.4, 0], palette.metal);
-  addBox(trestle, "PRESENTATION_Trestle_Railbed", [44, 0.8, 5.6], [0, 9.3, 0], palette.wood);
-  for (const x of [-16, -8, 8, 16]) {
-    addBox(
-      trestle,
-      `PRESENTATION_Trestle_Support_${String(x).replace("-", "N")}`,
-      [1.2, 8.4, 1.2],
-      [x, 4.2, 0],
-      palette.metal,
-    );
-  }
-  for (const z of [-1.25, 1.25]) {
-    addBox(trestle, `PRESENTATION_Trestle_Rail_${z < 0 ? "South" : "North"}`, [44, 0.2, 0.18], [0, 9.8, z], palette.metal);
-  }
-
-  const trainyardLandmark = landmarkById.get("trainyard");
-  const trainyard = new Group();
-  trainyard.name = trainyardLandmark.nodeName;
-  trainyard.position.set(...trainyardLandmark.position);
-  classify(trainyard, trainyardLandmark.classification, trainyardLandmark.source);
-  groups.Transport_Infrastructure.add(trainyard);
-  addBox(trainyard, "PRESENTATION_Trainyard_Gravel", [95, 0.22, 50], [0, 0, 0], palette.field);
-  for (let index = 0; index < 6; index += 1) {
-    const z = -19 + index * 7.5;
-    addBox(trainyard, `PRESENTATION_Trainyard_Rail_${index + 1}_A`, [88, 0.16, 0.16], [0, 0.32, z - 0.75], palette.metal);
-    addBox(trainyard, `PRESENTATION_Trainyard_Rail_${index + 1}_B`, [88, 0.16, 0.16], [0, 0.32, z + 0.75], palette.metal);
-  }
-  addBox(trainyard, "PRESENTATION_Trainyard_Warehouse", [31, 8, 13], [-24, 4, 15], palette.industrial);
-  for (let index = 0; index < 5; index += 1) {
-    addBox(
-      trainyard,
-      `PRESENTATION_Train_Car_${index + 1}`,
-      [11, 3.2, 3.1],
-      [-20 + index * 13, 1.9, -10],
-      index % 2 ? palette.roofRust : palette.industrial,
-    );
-  }
-
-  const ledfordLandmark = landmarkById.get("ledford-home");
-  createNamedHouse({
-    parent: groups.Southside_Industrial,
-    name: ledfordLandmark.nodeName,
-    position: ledfordLandmark.position,
-    width: 6,
-    depth: 7,
-    floors: 2,
-    bodyMaterial: palette.tanSiding,
-    classification: ledfordLandmark.classification,
-    source: ledfordLandmark.source,
-  });
-
-  const industryLandmark = landmarkById.get("southside-industry");
-  const industry = new Group();
-  industry.name = industryLandmark.nodeName;
-  industry.position.set(...industryLandmark.position);
-  classify(industry, industryLandmark.classification, industryLandmark.source);
-  groups.Southside_Industrial.add(industry);
-  addBox(industry, "PRESENTATION_Southside_Mill", [44, 12, 22], [-18, 6, 0], palette.industrial);
-  addBox(industry, "PRESENTATION_Southside_Warehouse", [30, 8, 18], [23, 4, 8], palette.roofRust);
-  addBox(industry, "PRESENTATION_Southside_Dock", [70, 1, 8], [0, 0.5, 28], palette.wood);
-  for (const x of [-29, -18, 18]) {
-    const stack = new Mesh(
-      geometry("urban-extension-stack", () => new CylinderGeometry(0.65, 0.9, 1, 10)),
-      palette.brick,
-    );
-    stack.name = `PRESENTATION_Southside_Stack_${String(x).replace("-", "N")}`;
-    stack.position.set(x, 17, x > 0 ? 7 : -4);
-    stack.scale.set(1, 28, 1);
-    classify(stack, "canon-district-presentation-architecture", industryLandmark.source);
-    industry.add(stack);
-  }
-
-  const dinerLandmark = landmarkById.get("diner-strip-mall");
-  const diner = new Group();
-  diner.name = dinerLandmark.nodeName;
-  diner.position.set(...dinerLandmark.position);
-  classify(diner, dinerLandmark.classification, dinerLandmark.source);
-  groups.Eastside_Commercial.add(diner);
-  addBox(diner, "PRESENTATION_Diner_Asphalt_Lot", [65, 0.18, 46], [0, 0, 0], palette.asphalt);
-  addBox(diner, "PRESENTATION_Diner_Building", [16, 5.5, 11], [-13, 2.75, 2], palette.grayBrick);
-  addWindow(diner, "PRESENTATION_Diner_Windows", [-13, 2.4, -3.56], [12, 2.4, 0.12], palette.warmWindow);
-  addBox(diner, "PRESENTATION_Strip_Mall_Long_Wing", [42, 6, 10], [8, 3, 17], palette.grayBrick);
-  addBox(diner, "PRESENTATION_Strip_Mall_Short_Wing", [10, 6, 28], [27, 3, 3], palette.grayBrick);
-
-  for (const [id, label] of [
-    ["stanford-north-tower", "North"],
-    ["stanford-south-tower", "South"],
-  ]) {
-    const landmark = landmarkById.get(id);
-    const tower = new Group();
-    tower.name = landmark.nodeName;
-    tower.position.set(...landmark.position);
-    classify(tower, landmark.classification, landmark.source);
-    groups.Downtown.add(tower);
-    addBox(tower, `PRESENTATION_Stanford_${label}_Tower`, [14, 62, 14], [0, 31, 0], palette.concrete);
-    for (let floor = 2; floor < 20; floor += 3) {
-      addWindow(
-        tower,
-        `PRESENTATION_Stanford_${label}_Windows_${floor}`,
-        [0, floor * 3, -7.06],
-        [10, 1.2, 0.12],
-        palette.darkWindow,
-      );
-    }
-  }
-}
-
-function createLightingProxies() {
-  const jackiesWindowPosition = landmarkById.get("jackies-window").position;
-  const bakeryPosition = landmarkById.get("bakery-storefront").position;
-  const abbyPosition = landmarkById.get("abbys-apartment").position;
-  const cathedralPosition = landmarkById.get("st-thomas").position;
-  const policePosition = landmarkById.get("police-station").position;
-  const lights = [
-    ["PRESENTATION_Light_Bakery", [bakeryPosition[0], bakeryPosition[1] + 4, bakeryPosition[2]], 0xd69050, 42, 22],
-    ["PRESENTATION_Light_Abby", [abbyPosition[0], abbyPosition[1] + 13, abbyPosition[2]], 0xd59b61, 30, 18],
-    ["PRESENTATION_Light_Jackie", jackiesWindowPosition, 0xd17b4c, 36, 20],
-    ["PRESENTATION_Light_Cathedral", [cathedralPosition[0], cathedralPosition[1] + 9.4, cathedralPosition[2]], 0x7c668f, 44, 25],
-    ["PRESENTATION_Light_Police", [policePosition[0], policePosition[1] + 4, policePosition[2] - 4], 0x8ca2a8, 28, 19],
-  ];
-  lights.forEach(([name, position, color, intensity, distance]) => {
-    const light = new PointLight(color, intensity, distance, 2);
-    light.name = name;
-    light.position.set(...position);
-    classify(light, "presentation-lighting-proxy");
-    groups.Lighting_Proxies.add(light);
-  });
-}
-
-function createAuthoredCameras() {
-  for (const cameraDefinition of plan.cameras) {
-    const camera = new PerspectiveCamera(44, 16 / 9, 0.1, 1_200);
-    camera.name = cameraDefinition.name;
-    camera.position.set(...cameraDefinition.position);
-    camera.lookAt(new Vector3(...cameraDefinition.target));
-    camera.userData = {
-      classification: "authored-presentation-camera",
-      label: cameraDefinition.label,
-      target: cameraDefinition.target,
-      source: cameraDefinition.source,
-    };
-    groups.Authored_Cameras.add(camera);
-  }
-}
-
-function createAuthoredPaths() {
-  for (const route of plan.routes) {
-    const routeGroup = new Group();
-    routeGroup.name = route.name;
-    routeGroup.userData = {
-      classification: route.classification,
-      presentationDefault: "hidden",
-      points: route.points,
-      source: route.source ?? [],
-    };
-    groups.Authored_Paths.add(routeGroup);
-
-    route.points.forEach((point, index) => {
-      const waypoint = new Object3D();
-      waypoint.name = `${route.name}_Waypoint_${String(index + 1).padStart(2, "0")}`;
-      waypoint.position.set(...point);
-      waypoint.userData = {
-        classification: "route-waypoint",
-        sequence: index + 1,
-        source: route.source ?? [],
-      };
-      routeGroup.add(waypoint);
-    });
-  }
-}
-
-function createLandmarkReferences() {
-  for (const landmark of plan.landmarks) {
-    const reference = new Object3D();
-    reference.name = `LANDMARK_REF_${landmark.id.replaceAll("-", "_")}`;
-    reference.position.set(...landmark.position);
-    reference.userData = {
-      classification: "landmark-reference",
-      targetNode: landmark.nodeName,
-      sourceClassification: landmark.classification,
-      source: landmark.source,
-      publicInteraction: false,
-    };
-    groups.Landmarks.add(reference);
-  }
-}
-
-assertNamedBuildingClearance();
+const gltfCameras=[];
+createLandmarkParents();
 createTerrain();
 createRiver();
-createStreetGrid();
-createResidentialInstances();
-createVegetation();
-createDowntown();
-createCathedral();
-createNewBeginnings();
-createAbbyDistrict();
-createParadeDistrict();
-createPoliceDistrict();
-createCityPark();
-createChalmersAndWoods();
-createRuins();
-createCanonicalUrbanExtensions();
-createLightingProxies();
-createAuthoredCameras();
-createAuthoredPaths();
-createLandmarkReferences();
+createRoads();
+createLandmarks();
+createNeighborhoodFabric();
+createDowntownFabric();
+createIndustrialAndTrees();
+createCamerasAndRoutes();
 
-scene.updateMatrixWorld(true);
+const binary=Buffer.concat(buffers); const gltf={
+  asset:{version:"2.0",generator:"Rock Springs deterministic map generator v8"},
+  scene:0, scenes:[{name:"Rock_Springs_Source_Derived_Map",nodes:sceneNodes,extras:{modelId:plan.id,source:plan.source.work,writingRevision:plan.source.writingRevision,canonNotice:"Named locations and stated relationships are source-derived. Unspecified coordinates, bearings, dimensions, architecture, and filler geometry remain interpretive."}}],
+  nodes, meshes, materials, cameras:gltfCameras, accessors, bufferViews, buffers:[{byteLength:binary.length}]
+};
+const jsonRaw=Buffer.from(JSON.stringify(gltf)); const jsonPad=Buffer.concat([jsonRaw,Buffer.alloc((4-jsonRaw.length%4)%4,0x20)]); const binPad=Buffer.concat([binary,Buffer.alloc((4-binary.length%4)%4)]);
+const total=12+8+jsonPad.length+8+binPad.length; const header=Buffer.alloc(12); header.write("glTF",0); header.writeUInt32LE(2,4); header.writeUInt32LE(total,8); const jh=Buffer.alloc(8); jh.writeUInt32LE(jsonPad.length,0); jh.writeUInt32LE(0x4E4F534A,4); const bh=Buffer.alloc(8); bh.writeUInt32LE(binPad.length,0); bh.writeUInt32LE(0x004E4942,4); const glb=Buffer.concat([header,jh,jsonPad,bh,binPad]);
+mkdirSync(dirname(outputPath),{recursive:true}); writeFileSync(outputPath,glb);
 
-const exporter = new GLTFExporter();
-const arrayBuffer = await exporter.parseAsync(scene, {
-  binary: true,
-  onlyVisible: true,
-  trs: true,
-  includeCustomExtensions: false,
-});
-const model = Buffer.from(arrayBuffer);
-mkdirSync(dirname(outputPath), { recursive: true });
-writeFileSync(outputPath, model);
-
-const hash = createHash("sha256").update(model).digest("hex");
-const jsonChunkLength = model.readUInt32LE(12);
-const gltf = JSON.parse(
-  model
-    .subarray(20, 20 + jsonChunkLength)
-    .toString("utf8")
-    .replace(/\0+$/g, "")
-    .trim(),
-);
-let primitives = 0;
-let baseTriangles = 0;
-for (const mesh of gltf.meshes ?? []) {
-  for (const primitive of mesh.primitives ?? []) {
-    primitives += 1;
-    if (primitive.indices !== undefined) {
-      baseTriangles += Math.floor(gltf.accessors[primitive.indices].count / 3);
-    }
-  }
+let baseTriangles=0,primitives=0; for(const mesh of meshes){ for(const primitive of mesh.primitives){ primitives++; baseTriangles+=Math.floor(accessors[primitive.indices].count/3); } }
+if(manifestPath){
+  let manifest={schemaVersion:1,id:plan.id,title:"Rock Springs",model:{},fallback:{kind:"neutral",alt:"Neutral background behind the interpretive scene"},provenance:{},canon:{},requiredLandmarkNodes:[],authoredViews:[],descent:{},authoredRoutes:[],anchors:[]};
+  try{ manifest=JSON.parse(readFileSync(manifestPath,"utf8")); }catch{}
+  manifest.schemaVersion=1; manifest.id=plan.id; manifest.title="Rock Springs";
+  manifest.model={url:"/assets/scenes/jackies-window/rock-springs-jackies-window.glb",sha256:createHash("sha256").update(glb).digest("hex"),bytes:glb.length,format:"glTF 2.0 binary",stats:{nodes:nodes.length,meshes:meshes.length,primitives,baseTriangles,materials:materials.length,cameras:gltfCameras.length},extensions:[]};
+  manifest.fallback={kind:"neutral",alt:"Neutral background behind the interpretive scene"};
+  manifest.provenance={classification:"generated-presentation-media",sourceReferences:["Jackie's Window, Part 1, Chapters 1–8","Canonical unpublished-derived map evidence (no manuscript prose)"],auditedAgainstRevision:plan.source.writingRevision,spatialPlan:"scene-data/jackies-window-spatial-plan.json",evidenceDocument:"docs/phase-2/JACKIES_WINDOW_SPATIAL_EVIDENCE.md",generator:"scripts/generate-town-scene.mjs"};
+  manifest.canon={geometry:"interpretive",distances:"source-stated distances are scaled; otherwise approximate",architecture:"source-derived categories; dimensions and filler structures are interpretive",publicLandmarks:false,nodeNaming:"CANON_* identifies source-established locations or relationships; INFERRED_* identifies reasoned placement; PRESENTATION_* identifies connective geometry.",notice:"The scene is an interpretive visualization. Unspecified distances, coordinates, bearings, and architecture are not asserted as canon."};
+  manifest.requiredLandmarkNodes=plan.landmarks.map(x=>x.nodeName);
+  manifest.authoredViews=plan.cameras.map(c=>({cameraNode:c.name,label:c.label,sourceReferences:c.source}));
+  manifest.descent={startCameraNode:"Camera_Town_Overview",endCameraNode:"Camera_Downtown"};
+  manifest.authoredRoutes=plan.routes.map(r=>r.name); manifest.anchors=[];
+  writeFileSync(manifestPath,JSON.stringify(manifest,null,2)+"\n");
 }
-
-if (manifestPath) {
-  const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
-  manifest.id = plan.id;
-  manifest.title = "Rock Springs";
-  manifest.model.sha256 = hash;
-  manifest.model.bytes = model.length;
-  manifest.model.stats = {
-    nodes: gltf.nodes?.length ?? 0,
-    meshes: gltf.meshes?.length ?? 0,
-    primitives,
-    baseTriangles,
-    materials: gltf.materials?.length ?? 0,
-    cameras: gltf.cameras?.length ?? 0,
-  };
-  manifest.model.extensions = gltf.extensionsUsed ?? [];
-  manifest.provenance.sourceReferences = [
-    "Jackie's Window, Part 1, Chapters 1–8",
-    "Canonical unpublished-derived map evidence (no manuscript prose)",
-  ];
-  manifest.provenance.auditedAgainstRevision = sourcePlan.source.writingRevision;
-  manifest.provenance.spatialPlan = "scene-data/jackies-window-spatial-plan.json";
-  manifest.requiredLandmarkNodes = sourcePlan.landmarks.map((landmark) => landmark.nodeName);
-  manifest.authoredViews = sourcePlan.cameras
-    .filter((camera) => !camera.name.startsWith("Camera_Descent_"))
-    .map((camera) => ({
-      cameraNode: camera.name,
-      label: camera.label,
-      sourceReferences: camera.source,
-    }));
-  manifest.authoredRoutes = sourcePlan.routes.map((route) => route.name);
-  writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
-}
-console.log(
-  [
-    `Generated ${plan.id}.`,
-    `${model.length} bytes`,
-    `SHA256 ${hash}`,
-    `${geometryCache.size} shared geometries`,
-  ].join(" · "),
-);
+console.log(`Generated ${outputPath}: ${glb.length} bytes · ${nodes.length} nodes · ${meshes.length} meshes · ${baseTriangles} base triangles · ${gltfCameras.length} cameras`);
