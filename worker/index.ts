@@ -4,6 +4,9 @@ import {
   collectionResponse,
   contentResponse,
   relationshipsResponse,
+  workEntryResponse,
+  workResponse,
+  worksResponse,
 } from "./api/content";
 
 function notFound() {
@@ -12,7 +15,7 @@ function notFound() {
       ok: false,
       error: "not_found",
     },
-    { status: 404 }
+    { status: 404 },
   );
 }
 
@@ -30,11 +33,34 @@ export default {
 
     const segments = url.pathname.split("/").filter(Boolean);
 
-    if (segments[0] === "api" && segments[1] === "collections" && segments.length === 3) {
+    if (segments[0] === "api" && segments[1] === "works" && segments.length === 2) {
+      return worksResponse();
+    }
+
+    if (segments[0] === "api" && segments[1] === "works" && segments.length === 3) {
+      return workResponse(decodeURIComponent(segments[2]));
+    }
+
+    if (segments[0] === "api" && segments[1] === "works" && segments.length === 4) {
+      return workEntryResponse(
+        decodeURIComponent(segments[2]),
+        decodeURIComponent(segments[3]),
+      );
+    }
+
+    if (
+      segments[0] === "api" &&
+      segments[1] === "collections" &&
+      segments.length === 3
+    ) {
       return collectionResponse(decodeURIComponent(segments[2]));
     }
 
-    if (segments[0] === "api" && segments[1] === "content" && segments.length === 4) {
+    if (
+      segments[0] === "api" &&
+      segments[1] === "content" &&
+      segments.length === 4
+    ) {
       return contentResponse(
         decodeURIComponent(segments[2]),
         decodeURIComponent(segments[3]),

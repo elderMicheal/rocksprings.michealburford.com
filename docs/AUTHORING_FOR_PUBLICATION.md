@@ -1,150 +1,239 @@
 # Authoring for Publication
 
-This document is for writers working in the separate Writing repository who want Rock Springs material to be eligible for presentation at `rocksprings.michealburford.com`.
+This document defines the author-side contract for Rock Springs material intended for presentation at `rocksprings.michealburford.com`.
 
-It describes the **author-side contract**. It does not grant publication approval and it does not replace application-side work when a new content type or top-level work needs presentation support.
+Writing and publication remain separate concerns:
 
-## The central rule
+- the Writing repository owns manuscript prose, editorial metadata, and canon;
+- the application repository owns public approval, stable web identity, normalization, routing, presentation, and deployment.
 
-Writing and publication are separate concerns.
+A source file is not public merely because it is canonical or marked `publish: true`.
 
-The Writing repository owns the words and their editorial state. The application repository decides what may cross the public boundary and how approved material is presented.
+## Author metadata
 
-A source file does not appear on the site simply because:
+A public candidate should accurately describe itself in YAML front matter.
 
-- it exists under `Rock Springs Chronicles/`;
-- its filename looks like a route;
-- it is canonical;
-- it contains `publish: true`; or
-- it is linked from another note.
-
-Those signals may establish author intent or editorial authority. They are not, by themselves, public approval.
-
-## What an author controls
-
-Authors should make the source file internally coherent and stable enough for a maintainer to approve without inventing metadata.
-
-For publishable prose, preserve these concepts in YAML front matter:
+Common fields:
 
 ```yaml
 ---
 publish: true
 series: "The Rock Springs Chronicles"
-type: "..."
-title: "..."
+type: "story"
+title: "Example Title"
+slug: "example-title"
 order: 1
 status: "draft"
 canonical_status: "canonical"
 ---
 ```
 
-Additional fields depend on the source family. Existing chapter files use fields such as `book`, `part`, and `chapter`. Anthology material may use a named container instead of a numeric book. Follow the established convention for the family you are writing; do not falsify a numeric book or chapter merely to fit the current reader.
+### Common meanings
 
-### Meaning of the common fields
+- `publish` — author intent that the source may be considered for public presentation.
+- `series` — owning series.
+- `type` — semantic source type.
+- `title` — human-facing entry title.
+- `slug` — stable public entry identifier when required.
+- `order` — authored order inside its immediate work/section.
+- `status` — editorial state in Writing.
+- `canonical_status` — authority of the material within the writing system.
 
-- `publish`: author intent that this source may be considered for public presentation. It is necessary for the current chapter importer but is not final approval.
-- `series`: owning series.
-- `type`: semantic source kind, such as `chapter` or `anthology-entry`.
-- `title`: human-facing title.
-- `order`: authored ordering within its immediate container.
-- `status`: editorial lifecycle in the Writing repository.
-- `canonical_status`: authority of the material within the writing system.
+`status: published` is not application approval.
 
-Do not use `status: published` as a substitute for application approval.
+## Supported readable source types
 
-## Slugs
+The current generic publication builder accepts:
 
-A public slug is a stable route identifier, not a display title.
+- `chapter`
+- `interlude`
+- `anthology-entry`
+- `story`
+
+Do not mislabel a source to fit the importer. If a legitimate new source type is unsupported, extend the shared publication model deliberately.
+
+## Chapter metadata
+
+A chapter normally includes:
+
+```yaml
+publish: true
+series: "The Rock Springs Chronicles"
+type: "chapter"
+title: "Chapter 1"
+book: 1
+part: 1
+order: 1
+chapter: 1
+status: "draft"
+canonical_status: "canonical"
+```
+
+For chapters, the application may derive:
+
+`chapter-01`
+
+from the positive numeric `chapter` value when no explicit `slug` is present.
+
+Authors may provide an explicit stable slug if the entry should use something else.
+
+## Non-chapter slugs
+
+Non-chapter readable entries must provide an explicit slug.
 
 Use lowercase ASCII words separated by single hyphens:
 
 ```text
 crosses-on-the-overpass
-the-feud-of-the-vampires
-chapter-01
+a-night-at-the-river
+the-last-bell
 ```
 
-Do not use spaces, punctuation, underscores, smart quotes, file extensions, or a full URL.
+Do not use:
 
-### Current implementation warning
+- spaces;
+- underscores;
+- punctuation;
+- smart quotes;
+- file extensions;
+- a complete URL.
 
-The current application does **not** yet read an arbitrary author-supplied `slug` and automatically publish the file.
+Once a slug has shipped publicly, treat it as permanent unless a deliberate migration/redirect is approved.
 
-The existing _Jackie's Window_ Part One importer derives chapter slugs mechanically:
+## Work identity
 
-```text
-chapter-01
-chapter-02
-...
+An entry slug identifies a readable entry.
+
+The parent **work** is registered in the application's approval manifest, not inferred from a filename.
+
+Supported work kinds are:
+
+- `novel`
+- `anthology`
+- `collection`
+- `standalone`
+
+A work registration provides:
+
+- stable work ID;
+- stable work slug;
+- work kind;
+- ordering within the public series.
+
+The visible work title is derived from the source's top-level Markdown heading. Sources assigned to the same work must agree on that title.
+
+This division is intentional:
+
+- authors own the title and prose;
+- the application owns public route identity.
+
+## Public route shape
+
+A registered work receives:
+
+`/read/<work-slug>`
+
+Entries with a numeric `part` use:
+
+`/read/<work-slug>/part-<n>/<entry-slug>`
+
+Entries without a numeric part use:
+
+`/read/<work-slug>/<entry-slug>`
+
+The site reader, navigation, and index derive these paths from the generated work registry.
+
+Authors should not rename source files merely to manipulate public URLs.
+
+## What elevates a source to presentation
+
+A source becomes public only when all required layers agree:
+
+1. **Source:** the Writing file contains the intended prose and accurate metadata.
+2. **Intent:** `publish: true` reflects deliberate public intent.
+3. **Canon:** `canonical_status` accurately describes source authority.
+4. **Slug:** a valid stable slug exists when the source type requires one.
+5. **Exact approval:** the application's `content-policy/approved-sources.json` names the exact source path.
+6. **Work registration:** that approval identifies the stable parent work.
+7. **Requirement match:** the approved front-matter requirements match the actual file.
+8. **Supported adapter:** the generic builder recognizes the source type.
+9. **Deterministic export:** the generated package records the source revision, work, route, and public entry.
+10. **Validation:** the relevant content/package checks pass.
+
+If one of these layers is missing, the source remains absent. The application must not guess.
+
+## Adding an entry to an existing supported work
+
+Author work:
+
+1. put the source in its correct Writing location;
+2. use the real source type;
+3. set stable title/order metadata;
+4. set `publish: true` only when public presentation is intended;
+5. provide a slug when required;
+6. commit the Writing change.
+
+Application work:
+
+1. add the exact path to an approval for the correct work;
+2. declare requirements that match the source;
+3. regenerate the source audit and publication package;
+4. review the generated work/entry path;
+5. run the content validation tier.
+
+If the source type and work kind are already supported, adding another title should not require React routing code.
+
+## Adding a new top-level work
+
+For a new novel, anthology, collection, or standalone work using supported types, register a new work in the approval manifest.
+
+Conceptually:
+
+```json
+{
+  "id": "approval-id",
+  "collection": "chronicles",
+  "publicationState": "published",
+  "work": {
+    "id": "work:stable-id",
+    "slug": "stable-work-slug",
+    "kind": "anthology",
+    "order": 2
+  },
+  "sourcePaths": [
+    "exact/repository/path.md"
+  ],
+  "requirements": {
+    "publish": true,
+    "type": "anthology-entry"
+  }
+}
 ```
 
-For material outside that specialized pipeline, an author may record a proposed stable slug in front matter for future presentation work:
+This is application configuration, not manuscript content.
 
-```yaml
-slug: "crosses-on-the-overpass"
-```
+Multiple approvals may contribute to the same work, but their work registration must agree exactly on ID, slug, kind, and order.
 
-but that field is currently **publication intent metadata**, not an automatic switch. A maintainer must still admit the exact source path and provide presentation support for its content family.
+## What authors should not edit
 
-Once a public slug has shipped, treat it as permanent unless there is a deliberate redirect/migration plan.
+Do not manually edit generated application artifacts:
 
-## What actually elevates a source to presentation
+- `generated/source-inventory.json`
+- `src/content/generated/publication-package.json`
+- generated scene GLBs;
+- generator-owned scene manifest metadata.
 
-A source reaches the public site only when all applicable layers agree:
+Do not copy manuscript prose into React components, route tables, or presentation fixtures.
 
-1. **Authored source:** the Writing file contains valid metadata and the intended prose.
-2. **Publication intent:** the author marks the source appropriately, including `publish: true` when public presentation is intended.
-3. **Explicit approval:** the exact source path is added to `content-policy/approved-sources.json` in the application repository.
-4. **Supported source type:** an application adapter knows how to normalize that source family safely.
-5. **Stable identity:** the application assigns/accepts a unique public ID and slug.
-6. **Package generation:** the deterministic publication package contains the entry and records the Writing revision.
-7. **Presentation registration:** the reader/index/router exposes the supported entry without duplicating its content in application code.
-8. **Validation:** the appropriate source, package, routing, and presentation checks pass.
-
-If any layer is missing, the material should remain absent rather than being guessed into place.
-
-## Adding another story to an existing collection
-
-Author-side work:
-
-1. Put the file in the correct Writing subject/container.
-2. Use the source family's established front matter.
-3. Give it a stable title and order.
-4. If public presentation is intended, set `publish: true`.
-5. If a future public route is known, reserve a stable lowercase-hyphen `slug`.
-6. Commit the Writing change normally.
-
-Application-side work is still required unless that source family already has a generic importer and presentation index.
-
-Do not rename files merely to make the site notice them. File names are provenance; public routes are application identities.
-
-## Adding a new top-level work or volume
-
-A new book, anthology, collection, or comparable top-level work is not just another route.
-
-Before it can appear, the application must have a generic representation for:
-
-- the work's stable identity;
-- its title and kind;
-- its ordering within the series;
-- child entries and their ordering;
-- the public route shape;
-- index/home-page presentation;
-- approval behavior;
-- withdrawal behavior; and
-- provenance back to Writing.
-
-The correct implementation is to extend the shared content model/registry so later works of the same kind use the same path.
-
-The incorrect implementation is to add a title-specific `if` statement, hard-code prose, or create a one-off route that only understands one story.
+Do not use one-off application title checks to make a story appear.
 
 ## Editorial state versus public state
 
-These are intentionally separate.
+Editorial and public states remain independent.
 
-A working draft may be publicly presented when the owner explicitly approves that exact source. Conversely, canonical or internally "published" back matter may remain private.
+A draft may be publicly presented when the owner explicitly approves the exact source. Canonical/internal material may remain private.
 
-The public application currently understands these application lifecycle states:
+Application lifecycle states are:
 
 - `private`
 - `draft`
@@ -153,31 +242,21 @@ The public application currently understands these application lifecycle states:
 - `published`
 - `withdrawn`
 
-Only application state `published` appears in public collections.
-
-## What authors should not edit
-
-Authors should not manually edit generated site artifacts to publish prose:
-
-- `generated/source-inventory.json`
-- `src/content/generated/publication-package.json`
-- scene manifests or generated GLBs
-
-Authors also should not copy unpublished prose into React components, JSON presentation fixtures, or route code.
-
-If the site cannot express a legitimate source type, that is an application-model gap to fix explicitly.
+Only application state `published` is emitted into public collections.
 
 ## Author handoff checklist
 
-Before asking for a source to appear publicly, verify:
+Before requesting public presentation, verify:
 
-- the file is in the correct Rock Springs source location;
+- the file is in the correct Rock Springs subject/container;
 - the prose is the intended version;
-- the metadata describes what the file actually is;
+- the top-level work heading is correct;
+- the metadata describes the actual source type;
 - `canonical_status` is accurate;
-- `publish: true` reflects deliberate public intent;
-- ordering metadata is stable;
-- any proposed slug is lowercase, hyphenated, unique, and intended to remain stable; and
+- `publish: true` is deliberate;
+- `order` is stable;
+- a required slug is lowercase, hyphenated, unique within its work, and intended to remain stable;
+- chapter/part metadata is present when the source is actually a chapter/interlude;
 - the Writing commit containing the change is available for the application audit.
 
-The application maintainer can then perform the approval, package, route/index, and validation steps described in [CONTENT_SYNC.md](CONTENT_SYNC.md).
+Application maintainers then follow [CONTENT_SYNC.md](CONTENT_SYNC.md).

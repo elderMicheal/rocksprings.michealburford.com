@@ -42,15 +42,29 @@ for (const [subject, revision] of [
   if (revision !== mapRevision) fail(`${subject} revision differs from the spatial plan`);
 }
 
-const approval = approvalPolicy.approvals.find(
-  (candidate) => candidate.id === publicationPackage.manifest.approvalId,
+const approvalIds = publicationPackage.manifest.approvalIds ?? [
+  publicationPackage.manifest.approvalId,
+].filter(Boolean);
+const approvals = approvalIds.map((approvalId) => {
+  const approval = approvalPolicy.approvals.find(
+    (candidate) => candidate.id === approvalId,
+  );
+  if (!approval) fail(`publication package approval is missing from policy: ${approvalId}`);
+  return approval;
+});
+const mapReaderApproval = approvals.find(
+  (approval) => approval.id === spatialPlan.source.readerApprovalId,
 );
-if (!approval) fail("publication package approval is not present in policy");
-if (spatialPlan.source.readerApprovalId !== approval.id) {
-  fail("spatial plan does not preserve the reader publication boundary");
+if (!mapReaderApproval) {
+  fail("spatial plan reader approval is not present in the publication package");
 }
 
-const approvedReaderPaths = approval.sourcePaths.map(
+const approvedReaderPaths = approvals.flatMap((approval) =>
+  approval.sourcePaths.map(
+    (sourcePath) => `Rock Springs Chronicles/${sourcePath}`,
+  ),
+);
+const mapReaderPaths = mapReaderApproval.sourcePaths.map(
   (sourcePath) => `Rock Springs Chronicles/${sourcePath}`,
 );
 const publishedPaths = publicationPackage.collections.chronicles.map(
@@ -78,7 +92,7 @@ const publishedEvidenceSources = evidenceCatalog.sources
   .map((source) => source.path);
 assertSameValues(
   publishedEvidenceSources,
-  approvedReaderPaths,
+  mapReaderPaths,
   "published map-evidence sources",
 );
 
@@ -199,7 +213,7 @@ for (const view of sceneManifest.authoredViews) {
 
 assertSameValues(
   sceneSourceManifest.publishedReaderSources,
-  approvedReaderPaths,
+  mapReaderPaths,
   "scene source manifest published boundary",
 );
 assertSameValues(
@@ -241,5 +255,5 @@ for (const structure of [
 }
 
 console.log(
-  `Reader content verified at ${publicationRevision}; map evidence verified independently at ${mapRevision} with ${publishedPaths.length} published chapters, ${evidenceCatalog.sources.filter((source) => source.publicationState === "unpublished").length} canonical unpublished evidence source, ${spatialPlan.map2d.landmarks.length} map landmarks, and ${sceneManifest.authoredViews.length} scene views.`,
+  `Reader content verified at ${publicationRevision}; map evidence verified independently at ${mapRevision} with ${publishedPaths.length} published reader entries, ${evidenceCatalog.sources.filter((source) => source.publicationState === "unpublished").length} canonical unpublished evidence source, ${spatialPlan.map2d.landmarks.length} map landmarks, and ${sceneManifest.authoredViews.length} scene views.`,
 );

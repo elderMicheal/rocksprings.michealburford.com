@@ -10,6 +10,7 @@ export function manifestResponse() {
       sourceRevision: publicationPackage.manifest.sourceRevision,
       contentDigest: publicationPackage.manifest.contentDigest,
       world: publicationPackage.manifest.world,
+      workCount: publicationPackage.manifest.workCount,
       collections: publicationPackage.manifest.collections,
       relationshipCount: publicationPackage.relationships.length,
       withdrawnCount: publicationPackage.withdrawn.length,

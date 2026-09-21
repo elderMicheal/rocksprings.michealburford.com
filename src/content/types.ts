@@ -8,7 +8,13 @@ export const collectionNames = [
   "media",
 ] as const;
 
+export const workKinds = ["novel", "anthology", "collection", "standalone"] as const;
+export const entryKinds = ["chapter", "interlude", "anthology-entry", "story"] as const;
+
 export type CollectionName = (typeof collectionNames)[number];
+export type WorkKind = (typeof workKinds)[number];
+export type EntryKind = (typeof entryKinds)[number];
+
 export type PublicationState =
   | "private"
   | "draft"
@@ -23,6 +29,36 @@ export interface Provenance {
   approvalId: string;
 }
 
+export interface PublishedWorkEntry {
+  id: string;
+  slug: string;
+  kind: EntryKind;
+  path: string;
+  sectionId?: string;
+}
+
+export interface PublishedWorkSection {
+  id: string;
+  slug: string;
+  title: string;
+  navigationLabel: string;
+  order: number;
+  path: string;
+  entryIds: string[];
+}
+
+export interface PublishedWork {
+  id: string;
+  slug: string;
+  title: string;
+  kind: WorkKind;
+  order: number;
+  publicationState: "published";
+  path: string;
+  sections: PublishedWorkSection[];
+  entries: PublishedWorkEntry[];
+}
+
 export interface ChronicleEntry {
   id: string;
   slug: string;
@@ -34,10 +70,10 @@ export interface ChronicleEntry {
   sequence: {
     series: string;
     bookTitle: string;
-    book: number;
-    part: number;
+    book?: number;
+    part?: number;
     order: number;
-    chapter: number;
+    chapter?: number;
   };
   body: {
     format: "safe-inline-markdown";
@@ -78,7 +114,9 @@ export interface PublicationManifest {
   packageId: string;
   sourceRevision: string;
   contentDigest: string;
-  approvalId: string;
+  approvalId?: string;
+  approvalIds: string[];
+  workCount: number;
   world: {
     id: "rock-springs-chronicles";
     title: string;
@@ -92,8 +130,9 @@ export interface WithdrawnRecord {
 }
 
 export interface PublicationPackage {
-  schemaVersion: 1;
+  schemaVersion: 2;
   manifest: PublicationManifest;
+  works: PublishedWork[];
   collections: {
     chronicles: ChronicleEntry[];
     people: EmptyCollectionEntry[];

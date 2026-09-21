@@ -4,15 +4,181 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  classify:
+    name: Classify changes
+    runs-on: ubuntu-latest
+    outputs:
+      docs_only: ${{ steps.flags.outputs.docs_only }}
+      content: ${{ steps.flags.outputs.content }}
+      scene: ${{ steps.flags.outputs.scene }}
+      app: ${{ steps.flags.outputs.app }}
+      toolchain: ${{ steps.flags.outputs.toolchain }}
+      dependency_audit: ${{ steps.flags.outputs.dependency_audit }}
+      browser_reader: ${{ steps.flags.outputs.browser_reader }}
+      browser_front: ${{ steps.flags.outputs.browser_front }}
+      browser_map: ${{ steps.flags.outputs.browser_map }}
+      browser_scene: ${{ steps.flags.outputs.browser_scene }}
+      browser_all: ${{ steps.flags.outputs.browser_all }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+
+      - name: Classify affected surfaces
+        id: flags
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          content=false
+          scene=false
+          app=false
+          toolchain=false
+          dependency_audit=false
+          browser_reader=false
+          browser_front=false
+          browser_map=false
+          browser_scene=false
+          browser_all=false
+
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            changed_files="__FULL_RELEASE_VALIDATION__"
+          else
+            if [[ "$EVENT_NAME" == "pull_request" ]]; then
+              base="$BASE_SHA"
+            elif [[ -n "${BEFORE_SHA:-}" && "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]]; then
+              base="$BEFORE_SHA"
+            else
+              base="$(git rev-parse HEAD^)"
+            fi
+            changed_files="$(git diff --name-only "$base" "$HEAD_SHA")"
+          fi
+
+          printf '%s\n' "$changed_files"
+
+          if grep -qx "__FULL_RELEASE_VALIDATION__" <<<"$changed_files"; then
+            content=true
+            scene=true
+            app=true
+            toolchain=true
+            dependency_audit=true
+            browser_all=true
+          else
+            while IFS= read -r file; do
+              [[ -z "$file" ]] && continue
+
+              case "$file" in
+                package.json|package-lock.json|.nvmrc|wrangler.jsonc|vite.config.ts|vitest.config.ts|playwright.config.ts|tsconfig.json|worker-configuration.d.ts|.github/workflows/*)
+                  toolchain=true
+                  content=true
+                  scene=true
+                  app=true
+                  browser_all=true
+                  ;;
+              esac
+
+              case "$file" in
+                package-lock.json)
+                  dependency_audit=true
+                  ;;
+              esac
+
+              case "$file" in
+                content-policy/*|content-policy/**/*|generated/*|generated/**/*|src/content/generated/*|scripts/audit-rsc-source.mjs|scripts/build-publication.mjs|scripts/sync-*.mjs|scripts/*content*.mjs|worker/api/content.ts|worker/api/manifest.ts|tests/content.test.ts)
+                  content=true
+                  ;;
+                src/content/schema.ts|src/content/types.ts|src/content/publication.ts)
+                  content=true
+                  app=true
+                  browser_reader=true
+                  ;;
+              esac
+
+              case "$file" in
+                scene-data/*|scene-data/**/*|public/assets/scenes/*|public/assets/scenes/**/*|scripts/generate-town-scene.mjs|scripts/validate-scene.mjs|scripts/check-phase-2-integrity.mjs)
+                  scene=true
+                  ;;
+                src/components/scene/*|src/components/scene/**/*|src/scenes/*|src/scenes/**/*|src/styles/town-scene-page.css)
+                  scene=true
+                  app=true
+                  browser_scene=true
+                  ;;
+                src/components/chronicle/TownMapPanel.tsx|tests/e2e/map.spec.ts)
+                  scene=true
+                  app=true
+                  browser_map=true
+                  ;;
+                tests/e2e/scene.spec.ts)
+                  scene=true
+                  app=true
+                  browser_scene=true
+                  ;;
+              esac
+
+              case "$file" in
+                src/components/reading/*|src/components/reading/**/*|tests/e2e/reading.spec.ts)
+                  app=true
+                  browser_reader=true
+                  ;;
+                src/components/chronicle/*|src/components/chronicle/**/*|src/styles/front-page.css|tests/e2e/responsive-front-page.spec.ts)
+                  app=true
+                  browser_front=true
+                  ;;
+                src/App.tsx|src/main.tsx|src/styles/app.css|src/styles/global.css|src/styles/tokens.css|src/components/SiteHeader.tsx|src/components/SiteFooter.tsx)
+                  app=true
+                  browser_all=true
+                  ;;
+                worker/*|worker/**/*|tests/worker.test.ts|index.html)
+                  app=true
+                  ;;
+                tests/*|tests/**/*)
+                  app=true
+                  ;;
+              esac
+            done <<<"$changed_files"
+          fi
+
+          docs_only=false
+          if [[ "$content" == false && "$scene" == false && "$app" == false && "$toolchain" == false ]]; then
+            docs_only=true
+          fi
+
+          {
+            echo "docs_only=$docs_only"
+            echo "content=$content"
+            echo "scene=$scene"
+            echo "app=$app"
+            echo "toolchain=$toolchain"
+            echo "dependency_audit=$dependency_audit"
+            echo "browser_reader=$browser_reader"
+            echo "browser_front=$browser_front"
+            echo "browser_map=$browser_map"
+            echo "browser_scene=$browser_scene"
+            echo "browser_all=$browser_all"
+          } >> "$GITHUB_OUTPUT"
+
   validate:
+    name: Validate affected surfaces
+    needs: classify
+    if: needs.classify.outputs.docs_only != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
     steps:
       - name: Check out repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -26,34 +192,85 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
-
       - name: Audit dependencies
+        if: needs.classify.outputs.dependency_audit == 'true'
         run: npm audit --audit-level=high
 
       - name: Verify generated Worker types
+        if: needs.classify.outputs.app == 'true' || needs.classify.outputs.toolchain == 'true'
         run: |
           npm run types
           git diff --exit-code -- worker-configuration.d.ts
 
       - name: Type-check
+        if: needs.classify.outputs.app == 'true' || needs.classify.outputs.toolchain == 'true'
         run: npm run check
 
-      - name: Validate published chapter package
+      - name: Validate published content package
+        if: needs.classify.outputs.content == 'true' || needs.classify.outputs.toolchain == 'true'
         run: |
           npm run content:audit
           npm run content:check
           npm run public:check
 
       - name: Validate presentation scene
+        if: needs.classify.outputs.scene == 'true' || needs.classify.outputs.toolchain == 'true'
         run: |
           npm run scene:generate
           git diff --exit-code -- public/assets/scenes/jackies-window/rock-springs-jackies-window.glb
+          git diff --exit-code -- public/assets/scenes/jackies-window/scene-manifest.json
           npm run scene:check
+          npm run public:check
 
-      - name: Run unit and responsive browser tests
-        run: npm test
+      - name: Run unit tests
+        if: needs.classify.outputs.content == 'true' || needs.classify.outputs.app == 'true' || needs.classify.outputs.toolchain == 'true'
+        run: npm run test:unit
+
+      - name: Install Playwright Chromium
+        if: needs.classify.outputs.browser_all == 'true' || needs.classify.outputs.browser_reader == 'true' || needs.classify.outputs.browser_front == 'true' || needs.classify.outputs.browser_map == 'true' || needs.classify.outputs.browser_scene == 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Run affected browser tests
+        if: needs.classify.outputs.browser_all == 'true' || needs.classify.outputs.browser_reader == 'true' || needs.classify.outputs.browser_front == 'true' || needs.classify.outputs.browser_map == 'true' || needs.classify.outputs.browser_scene == 'true'
+        shell: bash
+        env:
+          BROWSER_ALL: ${{ needs.classify.outputs.browser_all }}
+          BROWSER_READER: ${{ needs.classify.outputs.browser_reader }}
+          BROWSER_FRONT: ${{ needs.classify.outputs.browser_front }}
+          BROWSER_MAP: ${{ needs.classify.outputs.browser_map }}
+          BROWSER_SCENE: ${{ needs.classify.outputs.browser_scene }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$BROWSER_ALL" == "true" ]]; then
+            npm run test:e2e
+            exit 0
+          fi
+
+          specs=()
+          [[ "$BROWSER_READER" == "true" ]] && specs+=(tests/e2e/reading.spec.ts)
+          [[ "$BROWSER_FRONT" == "true" ]] && specs+=(tests/e2e/responsive-front-page.spec.ts)
+          [[ "$BROWSER_MAP" == "true" ]] && specs+=(tests/e2e/map.spec.ts)
+          [[ "$BROWSER_SCENE" == "true" ]] && specs+=(tests/e2e/scene.spec.ts)
+
+          npx playwright test "${specs[@]}"
 
       - name: Build production bundle
+        if: needs.classify.outputs.app == 'true' || needs.classify.outputs.toolchain == 'true'
         run: npm run build
+
+  ci-complete:
+    name: CI complete
+    needs: [classify, validate]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm required validation completed
+        shell: bash
+        env:
+          CLASSIFY_RESULT: ${{ needs.classify.result }}
+          VALIDATE_RESULT: ${{ needs.validate.result }}
+        run: |
+          set -euo pipefail
+          [[ "$CLASSIFY_RESULT" == "success" ]]
+          [[ "$VALIDATE_RESULT" == "success" || "$VALIDATE_RESULT" == "skipped" ]]

@@ -177,7 +177,7 @@ function publicationAssessment(frontMatter, path) {
     return { classification: "conflict", publicEligible: false };
   }
   if (status === "published" && publishFlag) {
-    return { classification: "explicit-published", publicEligible: true };
+    return { classification: "unapproved-published-source", publicEligible: false };
   }
   if (status === "published") {
     return { classification: "published-without-publish-flag", publicEligible: false };
@@ -256,6 +256,8 @@ const files = allPaths.map((absolutePath) => {
         "chapter",
         "order",
         "collection",
+        "slug",
+        "canonical_status",
         "excerpt",
       ]
         .filter((key) => frontMatter[key] !== undefined)

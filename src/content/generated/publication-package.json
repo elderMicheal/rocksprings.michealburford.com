@@ -1,10 +1,14 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "manifest": {
-    "packageId": "rsc-00350c94f115-ada590c2b97c",
+    "packageId": "rsc-00350c94f115-d13ad8a310d6",
     "sourceRevision": "00350c94f1152116e1d27250dfb0674c5ccfea37",
-    "contentDigest": "ada590c2b97c561f42b81fd1e7f6a4e7c82d75c090c20bc2f3537d161e06d87b",
+    "contentDigest": "d13ad8a310d601850cf14b61a05948a8c4bf139f6041c4da2e2fa55b0d704803",
     "approvalId": "jackies-window-part-one-chapters",
+    "approvalIds": [
+      "jackies-window-part-one-chapters"
+    ],
+    "workCount": 1,
     "world": {
       "id": "rock-springs-chronicles",
       "title": "The Rock Springs Chronicles"
@@ -19,6 +23,95 @@
       "media": 0
     }
   },
+  "works": [
+    {
+      "id": "work:jackies-window",
+      "slug": "jackies-window",
+      "title": "Jackie's Window",
+      "kind": "novel",
+      "order": 1,
+      "publicationState": "published",
+      "path": "/read/jackies-window",
+      "sections": [
+        {
+          "id": "work:jackies-window:part-1",
+          "slug": "part-1",
+          "title": "Part 1",
+          "navigationLabel": "Part One",
+          "order": 1,
+          "path": "/read/jackies-window/part-1",
+          "entryIds": [
+            "chronicle:jackies-window:part-1:chapter-01",
+            "chronicle:jackies-window:part-1:chapter-02",
+            "chronicle:jackies-window:part-1:chapter-03",
+            "chronicle:jackies-window:part-1:chapter-04",
+            "chronicle:jackies-window:part-1:chapter-05",
+            "chronicle:jackies-window:part-1:chapter-06",
+            "chronicle:jackies-window:part-1:chapter-07",
+            "chronicle:jackies-window:part-1:chapter-08"
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "id": "chronicle:jackies-window:part-1:chapter-01",
+          "slug": "chapter-01",
+          "kind": "chapter",
+          "path": "/read/jackies-window/part-1/chapter-01",
+          "sectionId": "work:jackies-window:part-1"
+        },
+        {
+          "id": "chronicle:jackies-window:part-1:chapter-02",
+          "slug": "chapter-02",
+          "kind": "chapter",
+          "path": "/read/jackies-window/part-1/chapter-02",
+          "sectionId": "work:jackies-window:part-1"
+        },
+        {
+          "id": "chronicle:jackies-window:part-1:chapter-03",
+          "slug": "chapter-03",
+          "kind": "chapter",
+          "path": "/read/jackies-window/part-1/chapter-03",
+          "sectionId": "work:jackies-window:part-1"
+        },
+        {
+          "id": "chronicle:jackies-window:part-1:chapter-04",
+          "slug": "chapter-04",
+          "kind": "chapter",
+          "path": "/read/jackies-window/part-1/chapter-04",
+          "sectionId": "work:jackies-window:part-1"
+        },
+        {
+          "id": "chronicle:jackies-window:part-1:chapter-05",
+          "slug": "chapter-05",
+          "kind": "chapter",
+          "path": "/read/jackies-window/part-1/chapter-05",
+          "sectionId": "work:jackies-window:part-1"
+        },
+        {
+          "id": "chronicle:jackies-window:part-1:chapter-06",
+          "slug": "chapter-06",
+          "kind": "chapter",
+          "path": "/read/jackies-window/part-1/chapter-06",
+          "sectionId": "work:jackies-window:part-1"
+        },
+        {
+          "id": "chronicle:jackies-window:part-1:chapter-07",
+          "slug": "chapter-07",
+          "kind": "chapter",
+          "path": "/read/jackies-window/part-1/chapter-07",
+          "sectionId": "work:jackies-window:part-1"
+        },
+        {
+          "id": "chronicle:jackies-window:part-1:chapter-08",
+          "slug": "chapter-08",
+          "kind": "chapter",
+          "path": "/read/jackies-window/part-1/chapter-08",
+          "sectionId": "work:jackies-window:part-1"
+        }
+      ]
+    }
+  ],
   "collections": {
     "chronicles": [
       {
