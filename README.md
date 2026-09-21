@@ -90,7 +90,7 @@ CI so every environment installs the reviewed dependency graph.
 Cloudflare's current stable Miniflare release pins `sharp@0.34.5`, which is
 affected by inherited libvips security advisories. The root `package.json`
 temporarily and narrowly overrides only Miniflare's Sharp dependency to the
-patched `sharp@0.35.3`.
+patched `sharp@0.35.4`.
 
 Cloudflare has already prepared an upstream Miniflare update that uses a
 patched Sharp release. Dependabot checks npm dependencies weekly. Remove the
