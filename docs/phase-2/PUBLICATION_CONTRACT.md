@@ -2,83 +2,145 @@
 
 ## Scope
 
-This contract governs Rock Springs Chronicles material exported from the
-Writing repository into the public exhibit application.
+This contract governs Rock Springs Chronicles material exported from the Writing repository into the public application.
 
-The Writing repository is authoritative for manuscript text. The application
-repository is authoritative for approval records, normalization, validation,
-routing, presentation, and deployment.
+Writing is authoritative for manuscript text and editorial/canonical metadata.
 
-## Admission Rule
+The application repository is authoritative for explicit public approval, stable web identity, normalization, routing, presentation, validation, and deployment.
 
-A source file enters a public package only when all of these are true:
+## Admission rule
+
+A source enters the public package only when:
 
 1. it is below `Rock Springs Chronicles/`;
-2. its relative path exactly matches `content-policy/approved-sources.json`;
-3. every approval requirement matches its front matter;
-4. the exporter recognizes its type and schema;
-5. the complete package passes deterministic validation.
+2. its exact relative path appears in an active approval;
+3. approval requirements match its actual front matter;
+4. `publish: true` confirms author intent;
+5. its source type is supported;
+6. its parent work is validly registered;
+7. required slug/sequence metadata is valid;
+8. the complete deterministic package validates.
 
-No directory-wide implicit approval, status-only approval, or fallback content
-is allowed.
+There is no directory-wide implicit approval.
 
-## Publication and Editorial States
+`publish: true`, canonical status, internal `status: published`, links, mentions, and filenames do not independently grant web publication.
 
-The application publication states are `private`, `draft`, `review`,
-`publishable`, `published`, and `withdrawn`.
+## Works
 
-Source editorial status and application publication state are independent.
-For the current package, the product owner's explicit approval maps the eight
-Part 1 chapter paths to application state `published`; their source
-`status: draft` remains exposed as `editorialStatus` and is rendered as
-“Working draft.”
+Every readable public entry belongs to exactly one work.
 
-Only application state `published` can appear in a collection. Withdrawn
-records become minimal tombstones and return HTTP 410. Every other state is
-excluded.
+Supported work kinds:
 
-## Stable Identity
+- `novel`
+- `anthology`
+- `collection`
+- `standalone`
 
-- Entry ID: `chronicle:<book-slug>:part-<n>:chapter-<nn>`
-- Public slug: lowercase ASCII words separated by hyphens
-- Provenance reference: repository-relative RSC path
-- Package identity: source-revision prefix plus content-digest prefix
+Work registration lives in the approval policy and defines:
 
-IDs and slugs must be unique within a package. Changing a source filename does
-not silently retain identity; it requires an approval-manifest update and
-review.
+- stable ID;
+- stable slug;
+- kind;
+- order.
 
-## Public Chapter Fields
+The visible work title is derived from source Markdown and must agree across sources registered to the same work.
 
-The current `chronicles` entries may expose:
+Multiple approvals may contribute to one work only when their registration is identical.
 
-- ID, slug, title, and `published` state
-- source editorial status
-- series, book, part, order, and chapter sequence
-- approved manuscript paragraphs
-- mechanically computed excerpt, word count, and reading time
+## Readable entry kinds
 
-The public API removes provenance paths. The package retains provenance for
-build diagnostics.
+Supported source adapters:
 
-## Text Safety
+- `chapter`
+- `interlude`
+- `anthology-entry`
+- `story`
 
-The exporter removes Markdown and wiki-link destinations while retaining
-visible labels. The reader supports only plain text plus emphasis and strong
-emphasis. React escapes all text. Raw HTML, scripts, embeds, images, and
-arbitrary URLs are never rendered from manuscript input.
+Chapter slugs may derive mechanically from chapter number.
 
-## Relationships and Media
+Other supported entry kinds require an explicit author slug.
 
-Relationships require an authored, typed link between two approved public
-entries. Plain mentions do not create public relationships.
+## Publication and editorial states
 
-Media requires a separate approved entry with descriptive alt text. The
-current package contains no approved canonical media.
+Source editorial state and application publication state remain independent.
 
-## Failure and Evolution
+Only application state `published` enters public collections.
 
-Malformed front matter, an approval mismatch, duplicate identity, unsafe
-provenance, broken relationships, or an inconsistent manifest fails the build.
-Schema changes increment `schemaVersion`; incompatible readers must fail rather
-than guess.
+A source may remain an editorial draft while being explicitly approved for public presentation. Conversely, canonical/internal material may remain private.
+
+Withdrawn records retain only the minimum public tombstone required for HTTP 410 behavior.
+
+## Stable identity and routes
+
+Work path:
+
+`/read/<work-slug>`
+
+Part section:
+
+`/read/<work-slug>/part-<n>`
+
+Sectioned entry:
+
+`/read/<work-slug>/part-<n>/<entry-slug>`
+
+Unsectioned entry:
+
+`/read/<work-slug>/<entry-slug>`
+
+Work IDs/slugs and reader paths must be unique. Entry slugs must be unique inside their work.
+
+Existing shipped paths must not be changed without an explicit compatibility/migration plan.
+
+## Text safety
+
+The exporter removes Markdown/wiki-link destinations while retaining visible labels.
+
+The public reader supports sanitized paragraph strings with limited inline emphasis. React escapes text.
+
+Raw HTML, scripts, embeds, manuscript images, and arbitrary manuscript URLs are not rendered from source input.
+
+## Provenance
+
+Every readable entry records:
+
+- repository-relative source reference;
+- complete Writing revision;
+- approval ID.
+
+Provenance remains in the generated package for build diagnostics but is removed from public entry API responses.
+
+## Package identity
+
+The package records:
+
+- complete Writing revision;
+- active approval IDs;
+- work registry;
+- collection counts;
+- SHA-256 content digest.
+
+The digest covers works, collections, relationships, and withdrawal tombstones.
+
+## Relationships and media
+
+Relationships require an authored typed link between approved public entries. Plain mentions do not create public relationships.
+
+Media requires its own approved public entry/contract. No source mention automatically publishes media.
+
+## Failure behavior
+
+The build fails rather than guessing when it encounters:
+
+- missing approved paths;
+- approval requirement mismatch;
+- unsupported source/work kind;
+- invalid/missing required slug;
+- conflicting work registration;
+- duplicate identities/routes;
+- inconsistent work membership;
+- unsafe provenance;
+- broken relationships;
+- stale generated package.
+
+Schema-incompatible readers must fail rather than reinterpret data.

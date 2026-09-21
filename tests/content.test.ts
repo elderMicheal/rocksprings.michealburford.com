@@ -5,6 +5,7 @@ import {
   publicationIssues,
   validatePublicationPackage,
 } from "../src/content/schema";
+import type { PublicationPackage } from "../src/content/types";
 
 function clonePackage() {
   return structuredClone(publicationPackageJson) as unknown;
@@ -76,7 +77,7 @@ describe("publication package", () => {
   });
 
   it("accepts a second generic work without title-specific schema changes", () => {
-    const candidate = clonePackage() as typeof publicationPackageJson;
+    const candidate = clonePackage() as PublicationPackage;
     const fixture = structuredClone(candidate.collections.chronicles[0]);
     fixture.id = "chronicle:fixture-anthology:fixture-story";
     fixture.slug = "fixture-story";
