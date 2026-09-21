@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 const canonicalRevision = "3fd095b8f3e36215deef39e7de899c278a147e94";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/chronicle");
   await expect(page.locator(".map-panel")).toHaveAttribute(
     "data-writing-revision",
     canonicalRevision,

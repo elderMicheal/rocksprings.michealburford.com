@@ -2,6 +2,11 @@
 
 The full-stack reader and world application for [The Rock Springs Chronicles](https://rocksprings.michealburford.com).
 
+The home page is a plain clickable index of all approved chapters in the
+publication package. Approved chapters without prose are labeled accordingly.
+The previous front-page presentation remains available at `/chronicle`, and
+the interactive map remains at `/map`; neither is shown on the home page.
+
 This repository contains the React interface, same-origin Cloudflare Workers API, styling, deployment configuration, and a generated publication package for manuscript text explicitly marked `publish: true`. The Writing repository remains the source of truth; private and unpublished writing material is not copied here.
 
 ## Development

@@ -1,0 +1,54 @@
+body:has(.file-index) {
+  background: #fff;
+  color: #171717;
+}
+
+.file-index {
+  max-width: 52rem;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 2rem 1.25rem;
+  font-family: system-ui, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.file-index h1 {
+  margin: 0 0 1rem;
+  font-size: 1.75rem;
+  line-height: 1.3;
+}
+
+.file-index h2 {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+}
+
+.file-index ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.file-index li {
+  margin: 0.5rem 0;
+}
+
+.file-index a {
+  color: #0645ad;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.file-index a:visited {
+  color: #663399;
+}
+
+.file-index a:hover {
+  color: #002966;
+}
+
+.file-index a:focus-visible {
+  outline: 3px solid #0645ad;
+  outline-offset: 3px;
+}

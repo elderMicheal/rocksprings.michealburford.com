@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/chronicle");
   await expect(
     page.getByRole("heading", { name: "The Rock Springs Chronicles", level: 1 }),
   ).toBeVisible();

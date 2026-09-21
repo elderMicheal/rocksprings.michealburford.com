@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { ChronicleShell } from "./components/chronicle/ChronicleShell";
+import { ApprovedFileIndex } from "./components/reading/ApprovedFileIndex";
 
 const PartOneReader = lazy(() =>
   import("./components/reading/PartOneReader").then((module) => ({
@@ -53,5 +54,7 @@ export function App() {
     );
   }
 
-  return <ChronicleShell />;
+  if (pathname === "/chronicle") return <ChronicleShell />;
+
+  return <ApprovedFileIndex />;
 }
