@@ -23,6 +23,7 @@ jobs:
       scene: ${{ steps.flags.outputs.scene }}
       app: ${{ steps.flags.outputs.app }}
       toolchain: ${{ steps.flags.outputs.toolchain }}
+      dependency_audit: ${{ steps.flags.outputs.dependency_audit }}
       browser_reader: ${{ steps.flags.outputs.browser_reader }}
       browser_front: ${{ steps.flags.outputs.browser_front }}
       browser_map: ${{ steps.flags.outputs.browser_map }}
@@ -49,6 +50,7 @@ jobs:
           scene=false
           app=false
           toolchain=false
+          dependency_audit=false
           browser_reader=false
           browser_front=false
           browser_map=false
@@ -75,6 +77,7 @@ jobs:
             scene=true
             app=true
             toolchain=true
+            dependency_audit=true
             browser_all=true
           else
             while IFS= read -r file; do
@@ -87,6 +90,12 @@ jobs:
                   scene=true
                   app=true
                   browser_all=true
+                  ;;
+              esac
+
+              case "$file" in
+                package-lock.json)
+                  dependency_audit=true
                   ;;
               esac
 
@@ -156,6 +165,7 @@ jobs:
             echo "scene=$scene"
             echo "app=$app"
             echo "toolchain=$toolchain"
+            echo "dependency_audit=$dependency_audit"
             echo "browser_reader=$browser_reader"
             echo "browser_front=$browser_front"
             echo "browser_map=$browser_map"
@@ -183,7 +193,7 @@ jobs:
         run: npm ci
 
       - name: Audit dependencies
-        if: needs.classify.outputs.toolchain == 'true'
+        if: needs.classify.outputs.dependency_audit == 'true'
         run: npm audit --audit-level=high
 
       - name: Verify generated Worker types

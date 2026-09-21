@@ -160,9 +160,9 @@ function readRevision(writingRoot) {
   }
 }
 
-function digestFor(collections, relationships, withdrawn) {
+function digestFor(works, collections, relationships, withdrawn) {
   return createHash("sha256")
-    .update(JSON.stringify({ collections, relationships, withdrawn }))
+    .update(JSON.stringify({ works, collections, relationships, withdrawn }))
     .digest("hex");
 }
 
@@ -546,6 +546,7 @@ function validatePackage(publicationPackage) {
   if (
     publicationPackage.manifest.contentDigest !==
     digestFor(
+      publicationPackage.works,
       publicationPackage.collections,
       publicationPackage.relationships,
       publicationPackage.withdrawn,
@@ -638,7 +639,7 @@ function generatePackage() {
   };
   const relationships = [];
   const withdrawn = [];
-  const contentDigest = digestFor(collections, relationships, withdrawn);
+  const contentDigest = digestFor(works, collections, relationships, withdrawn);
   const firstSeries = chronicles[0]?.sequence.series;
   if (!firstSeries) fail("the public package has no series title");
 
