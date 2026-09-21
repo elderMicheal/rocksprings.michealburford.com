@@ -1,5 +1,9 @@
 import publicationPackageJson from "../../src/content/generated/publication-package.json";
-import { collectionNames, type CollectionName, type PublicationPackage } from "../../src/content/types";
+import {
+  collectionNames,
+  type CollectionName,
+  type PublicationPackage,
+} from "../../src/content/types";
 import { publicChronicle } from "../../src/content/schema";
 
 const publicationPackage = publicationPackageJson as PublicationPackage;
@@ -23,7 +27,101 @@ function publicEntries(
   if (collection === "chronicles") {
     return packageData.collections.chronicles.map(publicChronicle);
   }
-  return packageData.collections[collection].map(({ provenance: _provenance, ...entry }) => entry);
+  return packageData.collections[collection].map(
+    ({ provenance: _provenance, ...entry }) => entry,
+  );
+}
+
+function publicWork(packageData: PublicationPackage, workSlug: string) {
+  const work = packageData.works.find((candidate) => candidate.slug === workSlug);
+  if (!work) return undefined;
+
+  const entryIds = new Set(work.entries.map((entry) => entry.id));
+  return {
+    ...work,
+    entries: work.entries.map((descriptor) => ({
+      ...descriptor,
+      entry: packageData.collections.chronicles
+        .filter((entry) => entryIds.has(entry.id))
+        .find((entry) => entry.id === descriptor.id)
+        ? publicChronicle(
+            packageData.collections.chronicles.find(
+              (entry) => entry.id === descriptor.id,
+            )!,
+          )
+        : undefined,
+    })),
+  };
+}
+
+export function worksResponseFor(packageData: PublicationPackage) {
+  return json({
+    ok: true,
+    state: packageData.works.length > 0 ? "ready" : "empty",
+    count: packageData.works.length,
+    works: packageData.works,
+  });
+}
+
+export function workResponseFor(
+  packageData: PublicationPackage,
+  workSlug: string,
+) {
+  const work = publicWork(packageData, workSlug);
+  if (!work) {
+    return json(
+      { ok: false, state: "unavailable", error: "work_not_found", workSlug },
+      404,
+    );
+  }
+
+  return json({ ok: true, state: "ready", work });
+}
+
+export function workEntryResponseFor(
+  packageData: PublicationPackage,
+  workSlug: string,
+  entrySlug: string,
+) {
+  const work = packageData.works.find((candidate) => candidate.slug === workSlug);
+  if (!work) {
+    return json(
+      { ok: false, state: "unavailable", error: "work_not_found", workSlug },
+      404,
+    );
+  }
+
+  const descriptor = work.entries.find((entry) => entry.slug === entrySlug);
+  if (!descriptor) {
+    return json(
+      {
+        ok: false,
+        state: "unavailable",
+        error: "content_not_found",
+        workSlug,
+        slug: entrySlug,
+      },
+      404,
+    );
+  }
+
+  const entry = packageData.collections.chronicles.find(
+    (candidate) => candidate.id === descriptor.id,
+  );
+  if (!entry) {
+    return json(
+      {
+        ok: false,
+        state: "unavailable",
+        error: "content_not_found",
+        workSlug,
+        slug: entrySlug,
+      },
+      404,
+    );
+  }
+
+  return json({ ok: true, state: "ready", entry: publicChronicle(entry) });
 }
 
 export function collectionResponseFor(
@@ -76,9 +174,23 @@ export function contentResponseFor(
     );
   }
 
-  const entry = publicEntries(packageData, collection).find(
+  const matches = publicEntries(packageData, collection).filter(
     (candidate) => candidate.slug === slug,
   );
+  if (matches.length > 1) {
+    return json(
+      {
+        ok: false,
+        state: "ambiguous",
+        error: "content_slug_requires_work",
+        collection,
+        slug,
+      },
+      409,
+    );
+  }
+
+  const entry = matches[0];
   if (!entry) {
     return json(
       {
@@ -107,9 +219,23 @@ export function relationshipsResponseFor(
     );
   }
 
-  const entry = packageData.collections[collection].find(
+  const matchingEntries = packageData.collections[collection].filter(
     (candidate) => candidate.slug === slug,
   );
+  if (matchingEntries.length > 1) {
+    return json(
+      {
+        ok: false,
+        state: "ambiguous",
+        error: "content_slug_requires_work",
+        collection,
+        slug,
+      },
+      409,
+    );
+  }
+
+  const entry = matchingEntries[0];
   if (!entry) {
     return json(
       { ok: false, state: "unavailable", error: "content_not_found" },
@@ -128,6 +254,18 @@ export function relationshipsResponseFor(
     slug,
     relationships,
   });
+}
+
+export function worksResponse() {
+  return worksResponseFor(publicationPackage);
+}
+
+export function workResponse(workSlug: string) {
+  return workResponseFor(publicationPackage, workSlug);
+}
+
+export function workEntryResponse(workSlug: string, entrySlug: string) {
+  return workEntryResponseFor(publicationPackage, workSlug, entrySlug);
 }
 
 export function collectionResponse(collection: string) {

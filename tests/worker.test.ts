@@ -6,7 +6,7 @@ import type { PublicationPackage } from "../src/content/types";
 
 function request(path: string) {
   return workerExports.default.fetch(
-    new Request(`https://rocksprings.test${path}`),
+    new Request("https://rocksprings.test" + path),
   );
 }
 
@@ -25,12 +25,13 @@ describe("Rock Springs Worker API", () => {
     });
   });
 
-  it("publishes a revision-traced collection manifest", async () => {
+  it("publishes a revision-traced collection and work manifest", async () => {
     const response = await request("/api/manifest");
     const body = await response.json<{
       ok: boolean;
       state: string;
       sourceRevision: string;
+      workCount: number;
       collections: Record<string, number>;
     }>();
 
@@ -42,6 +43,7 @@ describe("Rock Springs Worker API", () => {
       ok: true,
       state: "ready",
       sourceRevision: publicationPackage.manifest.sourceRevision,
+      workCount: 1,
       collections: {
         chronicles: 8,
         people: 0,
@@ -52,6 +54,44 @@ describe("Rock Springs Worker API", () => {
         media: 0,
       },
     });
+  });
+
+  it("serves generic work indexes and work-scoped entries", async () => {
+    const worksResponse = await request("/api/works");
+    const works = await worksResponse.json<{
+      state: string;
+      count: number;
+      works: Array<{ slug: string; path: string }>;
+    }>();
+    expect(worksResponse.status).toBe(200);
+    expect(works.state).toBe("ready");
+    expect(works.count).toBe(1);
+    expect(works.works[0]).toMatchObject({
+      slug: "jackies-window",
+      path: "/read/jackies-window",
+    });
+
+    const workResponse = await request("/api/works/jackies-window");
+    const work = await workResponse.json<{
+      work: { slug: string; entries: Array<{ entry?: Record<string, unknown> }> };
+    }>();
+    expect(workResponse.status).toBe(200);
+    expect(work.work.slug).toBe("jackies-window");
+    expect(work.work.entries).toHaveLength(8);
+    expect(work.work.entries[0].entry).not.toHaveProperty("provenance");
+
+    const entryResponse = await request(
+      "/api/works/jackies-window/chapter-01",
+    );
+    const entry = await entryResponse.json<{
+      entry: Record<string, unknown>;
+    }>();
+    expect(entryResponse.status).toBe(200);
+    expect(entry.entry).toMatchObject({
+      slug: "chapter-01",
+      title: "Chapter 1",
+    });
+    expect(entry.entry).not.toHaveProperty("provenance");
   });
 
   it("returns public collections and explicit empty states", async () => {
@@ -76,7 +116,7 @@ describe("Rock Springs Worker API", () => {
     });
   });
 
-  it("serves a chapter by stable slug without private provenance", async () => {
+  it("preserves the legacy collection-plus-slug content endpoint", async () => {
     const response = await request("/api/content/chronicles/chapter-01");
     const body = await response.json<{
       ok: boolean;
@@ -107,13 +147,21 @@ describe("Rock Springs Worker API", () => {
 
   it("returns structured unavailable states for unknown public content", async () => {
     const missingEntry = await request(
-      "/api/content/chronicles/not-a-chapter",
+      "/api/works/jackies-window/not-a-chapter",
     );
     expect(missingEntry.status).toBe(404);
     await expect(missingEntry.json()).resolves.toMatchObject({
       ok: false,
       state: "unavailable",
       error: "content_not_found",
+    });
+
+    const missingWork = await request("/api/works/not-a-work");
+    expect(missingWork.status).toBe(404);
+    await expect(missingWork.json()).resolves.toMatchObject({
+      ok: false,
+      state: "unavailable",
+      error: "work_not_found",
     });
 
     const missingCollection = await request("/api/collections/private-notes");
@@ -125,7 +173,7 @@ describe("Rock Springs Worker API", () => {
     });
   });
 
-  it("returns a non-disclosing withdrawn state for tombstoned content", async () => {
+  it("returns a non-disclosing withdrawn state for tombstoned legacy content", async () => {
     const packageWithTombstone = structuredClone(
       publicationPackage,
     ) as unknown as PublicationPackage;

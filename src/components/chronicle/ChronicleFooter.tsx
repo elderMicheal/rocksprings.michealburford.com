@@ -1,6 +1,15 @@
-import { publicationPackage, publishedChronicles } from "../../content/publication";
+import {
+  defaultReaderPath,
+  firstPublishedWork,
+  publicationPackage,
+} from "../../content/publication";
 
 export function ChronicleFooter() {
+  const firstSection = firstPublishedWork?.sections[0];
+  const recordLabel = firstSection
+    ? firstPublishedWork?.title + " · " + firstSection.navigationLabel
+    : firstPublishedWork?.title ?? "Written record";
+
   return (
     <footer className="chronicle-footer">
       <div className="footer-office">
@@ -21,15 +30,12 @@ export function ChronicleFooter() {
         Interpretive media is labelled separately from the written record.
       </p>
       <p className="record-stamp">
-        Book {publishedChronicles[0].sequence.book}<br />
-        <strong>Part {publishedChronicles[0].sequence.part}</strong>
+        Published work<br />
+        <strong>{firstPublishedWork?.title ?? "—"}</strong>
       </p>
       <div className="footer-links">
         <strong>Read the record</strong>
-        <a href="/read/jackies-window/part-1">
-          {publishedChronicles[0].sequence.bookTitle} · Part{" "}
-          {publishedChronicles[0].sequence.part}
-        </a>
+        <a href={defaultReaderPath()}>{recordLabel}</a>
         <a href="https://www.michealburford.com">MichealBurford.com</a>
       </div>
     </footer>

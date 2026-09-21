@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "approvals": [
     {
       "id": "jackies-window-part-one-chapters",
@@ -34,7 +34,13 @@
       ],
       "approvalBasis": "Explicit product-owner directive to make the chapters in Part One available to read.",
       "approvedOn": "2026-07-26",
-      "notes": "The source editorial status remains visible as working-draft metadata. This approval changes public eligibility only; it does not edit or reinterpret manuscript text."
+      "notes": "The source editorial status remains visible as working-draft metadata. This approval changes public eligibility only; it does not edit or reinterpret manuscript text.",
+      "work": {
+        "id": "work:jackies-window",
+        "slug": "jackies-window",
+        "kind": "novel",
+        "order": 1
+      }
     }
   ]
 }

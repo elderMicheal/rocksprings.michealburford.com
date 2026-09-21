@@ -1,9 +1,9 @@
 import { lazy, Suspense } from "react";
 import { ChronicleShell } from "./components/chronicle/ChronicleShell";
 
-const PartOneReader = lazy(() =>
-  import("./components/reading/PartOneReader").then((module) => ({
-    default: module.PartOneReader,
+const PublicationReader = lazy(() =>
+  import("./components/reading/PublicationReader").then((module) => ({
+    default: module.PublicationReader,
   })),
 );
 
@@ -13,13 +13,12 @@ const TownScenePage = lazy(() =>
   })),
 );
 
-const partOnePath = "/read/jackies-window/part-1";
-
 export function App() {
   const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
-  const isPartOneIndex =
-    pathname === partOnePath || pathname === "/stories" || pathname === "/latest";
-  const isPartOneChapter = pathname.startsWith(`${partOnePath}/`);
+  const isReaderPath =
+    pathname.startsWith("/read/") ||
+    pathname === "/stories" ||
+    pathname === "/latest";
 
   if (pathname === "/map") {
     return (
@@ -35,11 +34,7 @@ export function App() {
     );
   }
 
-  if (isPartOneIndex || isPartOneChapter) {
-    const chapterSlug = isPartOneChapter
-      ? pathname.slice(partOnePath.length + 1)
-      : undefined;
-
+  if (isReaderPath) {
     return (
       <Suspense
         fallback={
@@ -48,7 +43,7 @@ export function App() {
           </div>
         }
       >
-        <PartOneReader chapterSlug={chapterSlug} />
+        <PublicationReader pathname={pathname} />
       </Suspense>
     );
   }

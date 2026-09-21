@@ -215,6 +215,19 @@
   font-style: italic;
 }
 
+.front-anthologies a {
+  color: var(--news-ink);
+  font-size: 0.58em;
+  line-height: 1.2;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+
+.front-anthologies a:hover,
+.front-anthologies a:focus-visible {
+  color: var(--news-red);
+}
+
 .front-section-label {
   margin: 0 0 0.6rem;
   padding-bottom: 0.35rem;
