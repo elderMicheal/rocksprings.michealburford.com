@@ -1,16 +1,11 @@
-import publicationPackageJson from "./generated/publication-package.json";
-import { validatePublicationPackage } from "./schema";
+import { writingSnapshot } from "../adapters/writing-source";
 import type {
   ChronicleEntry,
   PublishedWork,
   PublishedWorkSection,
-  PublicationPackage,
 } from "./types";
 
-validatePublicationPackage(publicationPackageJson);
-
-export const publicationPackage =
-  publicationPackageJson as PublicationPackage;
+export const publicationPackage = writingSnapshot;
 export const publishedChronicles = publicationPackage.collections.chronicles;
 export const publishedWorks = [...publicationPackage.works].sort(
   (left, right) => left.order - right.order,

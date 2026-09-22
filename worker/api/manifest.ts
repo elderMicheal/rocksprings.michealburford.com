@@ -1,4 +1,6 @@
-import publicationPackage from "../../src/content/generated/publication-package.json";
+import { writingSnapshot } from "../../src/adapters/writing-source";
+
+const publicationPackage = writingSnapshot;
 
 export function manifestResponse() {
   return Response.json(

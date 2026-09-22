@@ -1,4 +1,4 @@
-import publicationPackageJson from "../../src/content/generated/publication-package.json";
+import { writingSnapshot } from "../../src/adapters/writing-source";
 import {
   collectionNames,
   type CollectionName,
@@ -6,7 +6,7 @@ import {
 } from "../../src/content/types";
 import { publicChronicle } from "../../src/content/schema";
 
-const publicationPackage = publicationPackageJson as PublicationPackage;
+const publicationPackage = writingSnapshot;
 const cacheHeaders = {
   "cache-control": "public, max-age=300, stale-while-revalidate=3600",
   "x-rsc-package": publicationPackage.manifest.packageId,
