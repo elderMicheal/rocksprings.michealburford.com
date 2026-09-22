@@ -31,8 +31,8 @@
     "content:check:source": "node scripts/build-publication.mjs --check-source",
     "public:check": "node scripts/check-phase-2-integrity.mjs",
     "phase2:check": "npm run public:check",
-    "scene:generate": "node scripts/generate-town-scene.mjs",
-    "scene:check": "node scripts/validate-scene.mjs",
+    "scene:generate": "node toolchain/reconstruction/generate-town-scene.mjs",
+    "scene:check": "node toolchain/reconstruction/validate-scene.mjs",
     "types": "wrangler types"
   },
   "dependencies": {

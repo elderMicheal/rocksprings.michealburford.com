@@ -111,7 +111,7 @@ jobs:
               esac
 
               case "$file" in
-                scene-data/*|scene-data/**/*|public/assets/scenes/*|public/assets/scenes/**/*|scripts/generate-town-scene.mjs|scripts/validate-scene.mjs|scripts/check-phase-2-integrity.mjs)
+                scene-data/*|scene-data/**/*|public/assets/scenes/*|public/assets/scenes/**/*|toolchain/reconstruction/*|toolchain/reconstruction/**/*|scripts/generate-town-scene.mjs|scripts/validate-scene.mjs|scripts/check-phase-2-integrity.mjs)
                   scene=true
                   ;;
                 src/components/scene/*|src/components/scene/**/*|src/scenes/*|src/scenes/**/*|src/styles/town-scene-page.css)

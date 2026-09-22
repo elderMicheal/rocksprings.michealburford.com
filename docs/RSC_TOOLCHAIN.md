@@ -39,8 +39,9 @@ Reconstruction consumes structured evidence and produces spatial/visual interpre
 Current Reconstruction-like material includes:
 
 - `scene-data/jackies-window-spatial-plan.json`
-- `scripts/generate-town-scene.mjs`
-- `scripts/validate-scene.mjs`
+- `toolchain/reconstruction/generate-town-scene.mjs`
+- `toolchain/reconstruction/validate-scene.mjs`
+- compatibility wrappers remain at `scripts/generate-town-scene.mjs` and `scripts/validate-scene.mjs` during migration
 - `public/assets/scenes/**`
 
 Reconstruction must preserve distinctions among:
