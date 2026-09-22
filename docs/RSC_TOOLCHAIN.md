@@ -29,6 +29,7 @@ Analysis does not generate final maps or GLBs and does not modify manuscripts.
 The current repository already contains derived evidence that belongs conceptually on this side of the boundary:
 
 - `scene-data/rock-springs-map-evidence.json`
+- `toolchain/analysis/evidence.mjs` owns the shared evidence validation contract used by Reconstruction and public-integrity checks
 
 During migration, existing files may remain in place until their interfaces are stable.
 
