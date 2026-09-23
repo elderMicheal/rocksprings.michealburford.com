@@ -67,3 +67,15 @@ See `docs/RSC_TOOLCHAIN.md`.
 ## Hosting
 
 The architecture migration does not change the production hosting model. The React application and same-origin Worker remain one Cloudflare Worker deployment.
+
+
+## Presentation adapters
+
+The website must not know the storage layout of upstream/derived data.
+
+Current presentation seams:
+
+- `src/adapters/writing-source.ts` — transitional writing-data boundary.
+- `src/adapters/rock-springs-toolchain.ts` — website-facing boundary for map/scene outputs.
+
+`npm run boundary:check` enforces these seams and prevents presentation/Worker code from reaching around them.

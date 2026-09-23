@@ -18,6 +18,7 @@
     "preview": "npm run build && vite preview",
     "deploy": "npm run build && wrangler deploy",
     "check": "tsc --noEmit",
+    "boundary:check": "node scripts/check-architecture-boundaries.mjs",
     "typecheck": "npm run check",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "vitest run",

@@ -206,6 +206,10 @@ jobs:
         if: needs.classify.outputs.app == 'true' || needs.classify.outputs.toolchain == 'true'
         run: npm run check
 
+      - name: Check architecture boundaries
+        if: needs.classify.outputs.content == 'true' || needs.classify.outputs.scene == 'true' || needs.classify.outputs.app == 'true' || needs.classify.outputs.toolchain == 'true'
+        run: npm run boundary:check
+
       - name: Validate published content package
         if: needs.classify.outputs.content == 'true' || needs.classify.outputs.toolchain == 'true'
         run: |

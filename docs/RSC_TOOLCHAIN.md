@@ -91,3 +91,12 @@ Rock Springs Reconstruction
             v
     Rock Springs Website
 ```
+
+
+## Website consumer seam
+
+Presentation code consumes Rock Springs Toolchain output through:
+
+`src/adapters/rock-springs-toolchain.ts`
+
+The 2D map and interactive scene must not bind directly to `scene-data/` or hard-code the scene-manifest storage path. This keeps Reconstruction storage separate from website presentation.
