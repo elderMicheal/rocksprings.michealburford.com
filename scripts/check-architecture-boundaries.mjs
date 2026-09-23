@@ -21,6 +21,10 @@ const allowed = new Map([
     "transitional/writing-adapter/build-publication.mjs",
     ["RSC_WRITING_ROOT", "Obsidian Vaults"],
   ],
+  [
+    "scripts/check-phase-2-integrity.mjs",
+    ["content/generated/publication-package.json", "scene-data/"],
+  ],
 ]);
 
 const forbidden = [
