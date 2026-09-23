@@ -23,7 +23,11 @@ const allowed = new Map([
   ],
   [
     "scripts/check-phase-2-integrity.mjs",
-    ["content/generated/publication-package.json", "scene-data/"],
+    [
+      "content/generated/publication-package.json",
+      "scene-data/",
+      "/assets/scenes/jackies-window/scene-manifest.json",
+    ],
   ],
 ]);
 
