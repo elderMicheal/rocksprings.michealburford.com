@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { rockSpringsSceneManifestUrl } from "../../adapters/rock-springs-toolchain";
 import type {
   AutoMotionState,
   SceneManifest,
   ScenePhase,
   TownSceneRuntime,
 } from "../../scenes/sceneTypes";
-
-const manifestUrl = "/assets/scenes/jackies-window/scene-manifest.json";
 
 function isSceneManifest(value: unknown): value is SceneManifest {
   if (!value || typeof value !== "object") return false;
@@ -99,7 +98,7 @@ export function RockSpringsScene() {
       try {
         setPhase("loading");
         setMessage("Preparing interactive town view…");
-        const response = await fetch(manifestUrl, { signal: abortController.signal });
+        const response = await fetch(rockSpringsSceneManifestUrl, { signal: abortController.signal });
         if (!response.ok) throw new Error("Scene manifest unavailable");
 
         const candidate: unknown = await response.json();

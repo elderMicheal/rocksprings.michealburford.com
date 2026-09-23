@@ -1,6 +1,10 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  createSourceReferenceAsserter,
+  validateEvidenceCatalog,
+} from "../toolchain/analysis/evidence.mjs";
 
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 const readJson = (relativePath) =>
@@ -96,42 +100,14 @@ assertSameValues(
   "published map-evidence sources",
 );
 
-for (const source of evidenceCatalog.sources) {
-  if (!/^[0-9a-f]{40}$/.test(source.gitBlob)) {
-    fail(`map-evidence source is not pinned to a Git blob: ${source.id}`);
-  }
-  if (
-    source.publicationState === "unpublished" &&
-    (source.canonicalStatus !== "canonical" || !source.usage?.includes("no prose"))
-  ) {
-    fail(`unpublished map source is missing the canonical/no-prose boundary: ${source.id}`);
-  }
-}
-
-const evidenceSourceIds = new Set(evidenceCatalog.sources.map((source) => source.id));
-const evidenceFactIds = new Set();
-for (const fact of evidenceCatalog.facts) {
-  if (!fact.id || evidenceFactIds.has(fact.id)) {
-    fail(`missing or duplicate evidence fact id: ${fact.id ?? "(missing)"}`);
-  }
-  if (!evidenceSourceIds.has(fact.sourceId)) {
-    fail(`evidence fact ${fact.id} references an unknown source`);
-  }
-  evidenceFactIds.add(fact.id);
-}
-
-function assertMapSourceReferences(sourceReferences, subject) {
-  if (!Array.isArray(sourceReferences) || sourceReferences.length === 0) {
-    fail(`${subject} has no source references`);
-  }
-  for (const reference of sourceReferences) {
-    if (/^Chapter [1-8]:\d+(?:-\d+)?$/.test(reference)) continue;
-    const evidence = /^Evidence:([a-z0-9-]+)$/.exec(reference);
-    if (!evidence || !evidenceFactIds.has(evidence[1])) {
-      fail(`${subject} has an invalid source reference: ${reference}`);
-    }
-  }
-}
+const { evidenceFactIds } = validateEvidenceCatalog(evidenceCatalog, {
+  expectedRevision: mapRevision,
+  fail,
+});
+const assertMapSourceReferences = createSourceReferenceAsserter({
+  evidenceFactIds,
+  fail,
+});
 
 const landmarkById = new Map(
   spatialPlan.landmarks.map((landmark) => [landmark.id, landmark]),

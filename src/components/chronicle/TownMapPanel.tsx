@@ -1,55 +1,8 @@
-import spatialPlanJson from "../../../scene-data/jackies-window-spatial-plan.json";
+import {
+  rockSpringsMapPlan as spatialPlan,
+  type RockSpringsMapPlan as SpatialPlan,
+} from "../../adapters/rock-springs-toolchain";
 
-type Point3 = [number, number, number];
-
-interface SpatialPlan {
-  source: {
-    writingRevision: string;
-  };
-  landmarks: Array<{
-    id: string;
-    position: Point3;
-  }>;
-  roads: Array<{
-    id: string;
-    landmarkId?: string;
-    position?: Point3;
-    axis: "x" | "z";
-    length: number;
-    width: number;
-  }>;
-  routes: Array<{
-    name: string;
-    points: Point3[];
-  }>;
-  map2d: {
-    title: string;
-    description: string;
-    extent: {
-      minX: number;
-      maxX: number;
-      minZ: number;
-      maxZ: number;
-    };
-    roads: string[];
-    routes: string[];
-    regions: Array<{
-      id: string;
-      label: string;
-      center: [number, number];
-      size: [number, number];
-      classification: "relative" | "inferred";
-    }>;
-    landmarks: Array<{
-      id: string;
-      label: string;
-      confidence: "relative" | "inferred";
-      labelOffset: [number, number];
-    }>;
-  };
-}
-
-const spatialPlan = spatialPlanJson as unknown as SpatialPlan;
 const mapWidth = 1_000;
 const mapHeight = 1_054;
 const mapPadding = 42;

@@ -100,10 +100,10 @@ jobs:
               esac
 
               case "$file" in
-                content-policy/*|content-policy/**/*|generated/*|generated/**/*|src/content/generated/*|scripts/audit-rsc-source.mjs|scripts/build-publication.mjs|scripts/sync-*.mjs|scripts/*content*.mjs|worker/api/content.ts|worker/api/manifest.ts|tests/content.test.ts)
+                content-policy/*|content-policy/**/*|generated/*|generated/**/*|src/content/generated/*|transitional/writing-adapter/*|transitional/writing-adapter/**/*|scripts/audit-rsc-source.mjs|scripts/build-publication.mjs|scripts/sync-*.mjs|scripts/*content*.mjs|worker/api/content.ts|worker/api/manifest.ts|tests/content.test.ts)
                   content=true
                   ;;
-                src/content/schema.ts|src/content/types.ts|src/content/publication.ts)
+                src/content/schema.ts|src/content/types.ts|src/content/publication.ts|src/adapters/*|src/adapters/**/*)
                   content=true
                   app=true
                   browser_reader=true
@@ -111,7 +111,7 @@ jobs:
               esac
 
               case "$file" in
-                scene-data/*|scene-data/**/*|public/assets/scenes/*|public/assets/scenes/**/*|scripts/generate-town-scene.mjs|scripts/validate-scene.mjs|scripts/check-phase-2-integrity.mjs)
+                scene-data/*|scene-data/**/*|public/assets/scenes/*|public/assets/scenes/**/*|toolchain/analysis/*|toolchain/analysis/**/*|toolchain/reconstruction/*|toolchain/reconstruction/**/*|scripts/generate-town-scene.mjs|scripts/validate-scene.mjs|scripts/check-phase-2-integrity.mjs)
                   scene=true
                   ;;
                 src/components/scene/*|src/components/scene/**/*|src/scenes/*|src/scenes/**/*|src/styles/town-scene-page.css)
@@ -205,6 +205,10 @@ jobs:
       - name: Type-check
         if: needs.classify.outputs.app == 'true' || needs.classify.outputs.toolchain == 'true'
         run: npm run check
+
+      - name: Check architecture boundaries
+        if: needs.classify.outputs.content == 'true' || needs.classify.outputs.scene == 'true' || needs.classify.outputs.app == 'true' || needs.classify.outputs.toolchain == 'true'
+        run: npm run boundary:check
 
       - name: Validate published content package
         if: needs.classify.outputs.content == 'true' || needs.classify.outputs.toolchain == 'true'

@@ -1,144 +1,81 @@
-# Rock Springs Architecture
+# Current Architecture
 
-RockSprings.MichealBurford.com is the deployed reader/explorer application for _The Rock Springs Chronicles_.
+## Core rule
 
-It is not the manuscript repository and it is not an editing environment.
+**Write once. Draftworks provides structured access. Consumers decide what to do with it.**
 
-## Repository boundary
+Rock Springs is a consumer.
 
-### Writing repository
+## Authority and responsibility
 
-Authoritative for:
+```text
+micheal-writes
+    |
+    v
+Draftworks
+    |- Telemetry
+    |- Library
+    |- Read-only API
+    '- Editorial Tools
+          |
+          +--------------------+
+          |                    |
+          v                    v
+Writing Monitor        Rock Springs Toolchain
+web + desktop              |
+                           |- Analysis
+                           '- Reconstruction
+                                  |
+                                  v
+                         Rock Springs Website
+```
 
-- manuscript prose;
-- source organization;
-- editorial metadata;
-- canonical source material.
+## Rock Springs application boundary
 
-### Rock Springs application repository
+The Rock Springs website may consume:
 
-Authoritative for:
+- permitted writing content and metadata from Draftworks;
+- maps, GLBs, scene data, and other derived assets from the Rock Springs Toolchain.
 
-- exact public approvals;
-- stable public work identity;
-- normalization and validation;
-- deterministic publication package;
-- React reader/index routing;
-- same-origin Worker API;
-- map/scene presentation data;
-- deployment configuration.
+The website should not own:
 
-Runtime access to Writing is prohibited. Public prose is exported at build time from an explicitly approved Writing revision.
+- manuscript parsing;
+- general publication eligibility for the writing platform;
+- direct Writing repository synchronization;
+- evidence extraction;
+- spatial interpretation;
+- GLB generation.
 
-## Publication architecture
+## Transitional state
 
-The package schema separates **works** from readable **entries**.
+Draftworks API v1 does not yet exist.
 
-A work is a public container such as a novel, anthology, collection, or standalone work.
+For compatibility, Rock Springs currently consumes its existing generated publication package through one replaceable adapter:
 
-Readable entries remain in the `chronicles` collection. The work registry provides:
+`src/adapters/writing-source.ts`
 
-- stable work ID/slug;
-- kind/order;
-- work path;
-- optional part/section paths;
-- entry membership;
-- entry kind;
-- final reader paths.
+No other application module should bind directly to that generated package.
 
-This lets UI/navigation resolve approved material generically without branching on titles.
+Once Draftworks API v1 exists, the adapter changes implementation while the Rock Springs consumer-facing code remains stable.
 
-### Approval boundary
+## Toolchain boundary
 
-`content-policy/approved-sources.json` is the permission boundary.
+Rock Springs Analysis and Reconstruction are specialized consumers, not Draftworks components.
 
-An active approval contains exact source paths, metadata requirements, public state, and work registration.
+See `docs/RSC_TOOLCHAIN.md`.
 
-The publication builder iterates approvals and dispatches by supported source type. It does not scan a directory and publish whatever looks eligible.
+## Hosting
 
-`publish: true` is author intent, not public permission.
+The architecture migration does not change the production hosting model. The React application and same-origin Worker remain one Cloudflare Worker deployment.
 
-### Generated package
 
-`src/content/generated/publication-package.json` contains:
+## Presentation adapters
 
-- schema/manifest;
-- source revision;
-- approval IDs;
-- work registry;
-- public collections;
-- relationships;
-- withdrawal tombstones;
-- digest covering works and public package content.
+The website must not know the storage layout of upstream/derived data.
 
-The generated package is application data, not a second manuscript source.
+Current presentation seams:
 
-## Reader routing
+- `src/adapters/writing-source.ts` — transitional writing-data boundary.
+- `src/adapters/rock-springs-toolchain.ts` — website-facing boundary for map/scene outputs.
 
-Generic reader paths are carried by the work registry.
-
-Work:
-
-`/read/<work-slug>`
-
-Part/section:
-
-`/read/<work-slug>/part-<n>`
-
-Entry:
-
-`/read/<work-slug>/part-<n>/<entry-slug>`
-
-or, for unsectioned work:
-
-`/read/<work-slug>/<entry-slug>`
-
-The current _Jackie's Window_ Part One paths remain stable.
-
-The front page, masthead navigation, footer, lead story, and reader use package-derived work/path information rather than title-specific route constants.
-
-## API architecture
-
-The same-origin Worker exposes both generic work-scoped routes and compatibility collection routes.
-
-Work-scoped API is unambiguous even when separate works use the same local entry slug.
-
-The collection-plus-slug route remains for compatibility and refuses ambiguous matches rather than selecting one arbitrarily.
-
-## Map architecture
-
-The publication trust boundary and map-evidence trust boundary remain separate.
-
-The 2D front-page map and interactive 3D scene at `/map` are two views of:
-
-`scene-data/jackies-window-spatial-plan.json`
-
-A second coordinate model is not permitted.
-
-Canonical unpublished writing may contribute pinned, paraphrased map facts under `scene-data/rock-springs-map-evidence.json`. That does not add those source files to the reader and does not permit their prose to be copied into the application.
-
-The deterministic scene generator owns the GLB and synchronized scene-manifest metadata.
-
-## CI architecture
-
-CI classifies affected repository surfaces before installing dependencies.
-
-One validation job then conditionally runs the checks required by those surfaces, so dependencies are installed once per validation run.
-
-Playwright and scene generation are not executed for changes that cannot affect them.
-
-A manual full-validation path remains available before release.
-
-CI optimization does not alter the production release contract in `AGENTS.md`.
-
-## Production architecture
-
-Production remains one Cloudflare Worker application containing:
-
-- React static assets;
-- SPA fallback;
-- same-origin `/api/*` Worker routes.
-
-`wrangler.jsonc` is authoritative.
-
-GitHub Actions validates the repository. GitHub Pages is not a deployment target.
+`npm run boundary:check` enforces these seams and prevents presentation/Worker code from reaching around them.
