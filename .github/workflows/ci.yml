@@ -100,7 +100,7 @@ jobs:
               esac
 
               case "$file" in
-                content-policy/*|content-policy/**/*|generated/*|generated/**/*|src/content/generated/*|scripts/audit-rsc-source.mjs|scripts/build-publication.mjs|scripts/sync-*.mjs|scripts/*content*.mjs|worker/api/content.ts|worker/api/manifest.ts|tests/content.test.ts)
+                content-policy/*|content-policy/**/*|generated/*|generated/**/*|src/content/generated/*|transitional/writing-adapter/*|transitional/writing-adapter/**/*|scripts/audit-rsc-source.mjs|scripts/build-publication.mjs|scripts/sync-*.mjs|scripts/*content*.mjs|worker/api/content.ts|worker/api/manifest.ts|tests/content.test.ts)
                   content=true
                   ;;
                 src/content/schema.ts|src/content/types.ts|src/content/publication.ts|src/adapters/*|src/adapters/**/*)

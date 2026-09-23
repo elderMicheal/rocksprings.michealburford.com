@@ -3,7 +3,7 @@ import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
-const scanRoots = ["src", "worker"];
+const scanRoots = ["src", "worker", "scripts", "transitional"];
 const allowed = new Map([
   [
     "src/adapters/writing-source.ts",
@@ -12,6 +12,14 @@ const allowed = new Map([
   [
     "src/adapters/rock-springs-toolchain.ts",
     ["scene-data/", "/assets/scenes/jackies-window/scene-manifest.json"],
+  ],
+  [
+    "transitional/writing-adapter/audit-rsc-source.mjs",
+    ["RSC_WRITING_ROOT", "Obsidian Vaults"],
+  ],
+  [
+    "transitional/writing-adapter/build-publication.mjs",
+    ["RSC_WRITING_ROOT", "Obsidian Vaults"],
   ],
 ]);
 
@@ -27,6 +35,14 @@ const forbidden = [
   {
     token: "/assets/scenes/jackies-window/scene-manifest.json",
     reason: "scene asset locations belong behind src/adapters/rock-springs-toolchain.ts",
+  },
+  {
+    token: "RSC_WRITING_ROOT",
+    reason: "direct Writing-repository access is confined to transitional/writing-adapter",
+  },
+  {
+    token: "Obsidian Vaults",
+    reason: "direct Writing-repository filesystem knowledge is confined to transitional/writing-adapter",
   },
 ];
 
@@ -48,6 +64,7 @@ const violations = [];
 for (const root of scanRoots) {
   for (const absolutePath of filesUnder(root)) {
     const path = relative(projectRoot, absolutePath).replaceAll("\\", "/");
+    if (path === "scripts/check-architecture-boundaries.mjs") continue;
     const source = readFileSync(absolutePath, "utf8");
     const permitted = allowed.get(path) ?? [];
 
