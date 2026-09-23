@@ -25,6 +25,7 @@ Rock Springs extraction begins on:
 
 - replace contradictory governing documentation;
 - centralize current writing-data access behind one transitional adapter;
+- box legacy Writing-repository inspection/export under `transitional/writing-adapter/`;
 - identify Analysis, Reconstruction, and Website responsibilities;
 - stop adding new direct Writing/package coupling.
 

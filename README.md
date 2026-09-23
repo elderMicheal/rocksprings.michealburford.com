@@ -36,7 +36,9 @@ The application currently still uses the generated publication package. During m
 
 That adapter is temporary. Its purpose is to give the Rock Springs application one replaceable writing-data boundary. The intended replacement is the Draftworks read-only API.
 
-New application code must not import the generated publication package directly.
+Legacy source inspection/export is now boxed under `transitional/writing-adapter/`. The old script paths remain compatibility entry points only.
+
+New application code must not import the generated publication package directly or inspect the Writing repository directly.
 
 ## Rock Springs Toolchain
 

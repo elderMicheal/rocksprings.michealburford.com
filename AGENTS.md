@@ -30,7 +30,13 @@ The only transitional application module permitted to directly import the local 
 
 `src/adapters/writing-source.ts`
 
-Direct package imports elsewhere are prohibited.
+The only Rock Springs implementation permitted to inspect the Writing repository directly during migration is:
+
+`transitional/writing-adapter/`
+
+The old audit/build script paths are compatibility entry points into that directory.
+
+Direct package imports or direct Writing-repository filesystem knowledge elsewhere are prohibited.
 
 ## 3. Rock Springs Toolchain
 
