@@ -6,7 +6,13 @@ It has two responsibilities.
 
 ## 1. Analysis
 
-Analysis reads permitted Rock Springs source material and produces structured, source-traced evidence.
+Analysis reads permitted Rock Springs source material through Draftworks API v1 and produces structured, source-traced evidence.
+
+The active read boundary is:
+
+`toolchain/analysis/draftworks-source.mjs`
+
+Analysis code must not read `micheal-writes` paths directly.
 
 Typical outputs include:
 

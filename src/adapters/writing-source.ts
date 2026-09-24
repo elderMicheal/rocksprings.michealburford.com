@@ -1,19 +1,44 @@
-import publicationPackageJson from "../content/generated/publication-package.json";
 import { validatePublicationPackage } from "../content/schema";
 import type { PublicationPackage } from "../content/types";
 
-/**
- * Transitional writing-data boundary for the Rock Springs consumer.
- *
- * During the Draftworks migration this is the only application module allowed
- * to import the locally generated publication package directly. Consumers
- * should depend on this boundary instead of the package implementation.
- *
- * Draftworks API v1 will eventually replace the implementation behind this
- * module without requiring the rest of the Rock Springs application to know
- * where writing data comes from.
- */
-validatePublicationPackage(publicationPackageJson);
+const CACHE_KEY = "rsc:last-valid-publication";
+let writingSnapshot: PublicationPackage | undefined;
 
-export const writingSnapshot =
-  publicationPackageJson as PublicationPackage;
+function accept(value: unknown) {
+  validatePublicationPackage(value);
+  writingSnapshot = value;
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(value));
+  } catch {
+    // Browser storage is only a resilience cache.
+  }
+  return value;
+}
+
+export async function initializeWritingSnapshot() {
+  try {
+    const response = await fetch("/api/publication", {
+      cache: "no-store",
+      headers: { accept: "application/json" },
+    });
+    if (!response.ok) {
+      throw new Error(`Publication request failed: ${response.status}`);
+    }
+    return accept(await response.json());
+  } catch (error) {
+    try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) return accept(JSON.parse(cached));
+    } catch {
+      // Fall through to the original network/validation error.
+    }
+    throw error;
+  }
+}
+
+export function requireWritingSnapshot(): PublicationPackage {
+  if (!writingSnapshot) {
+    throw new Error("Rock Springs writing data was accessed before initialization.");
+  }
+  return writingSnapshot;
+}
