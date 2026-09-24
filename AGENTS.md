@@ -26,17 +26,15 @@ The 2026-09-22 migration follows this order:
 
 During migration, compatibility code may remain temporarily. New coupling must not be added.
 
-The only transitional application module permitted to directly import the local generated publication package is:
+Active Rock Springs application/Worker code must consume Draftworks through the runtime API boundary.
 
-`src/adapters/writing-source.ts`
+- Worker adapter: `worker/api/draftworks.ts`
+- Browser boundary: `src/adapters/writing-source.ts`
+- Same-origin browser resource: `/api/publication`
 
-The only Rock Springs implementation permitted to inspect the Writing repository directly during migration is:
+The local generated package and `transitional/writing-adapter/` are rollback/verification material only during this stage. They must not be imported by active application or Worker code.
 
-`transitional/writing-adapter/`
-
-The old audit/build script paths are compatibility entry points into that directory.
-
-Direct package imports or direct Writing-repository filesystem knowledge elsewhere are prohibited.
+Direct Writing-repository filesystem knowledge in new or active runtime code is prohibited.
 
 ## 3. Rock Springs Toolchain
 
