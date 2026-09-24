@@ -140,7 +140,7 @@ describe("publication package", () => {
 
     expect(publicationIssues(candidate)).toEqual(
       expect.arrayContaining([
-        "collections.chronicles[0].provenance.sourceRef must remain inside the RSC allowlist",
+        "collections.chronicles[0].provenance.sourceRef must be a legacy RSC source path or Draftworks document ID",
         "relationships[0] contains a broken public reference",
       ]),
     );
