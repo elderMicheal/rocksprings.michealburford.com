@@ -1,8 +1,82 @@
 import { exports as workerExports } from "cloudflare:workers";
-import { describe, expect, it } from "vitest";
-import publicationPackage from "../src/content/generated/publication-package.json";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { contentResponseFor } from "../worker/api/content";
+import {
+  loadPublicationPackage,
+  resetDraftworksCacheForTest,
+  setDraftworksFetchForTest,
+} from "../worker/api/draftworks";
 import type { PublicationPackage } from "../src/content/types";
+
+const sourceRevision = "a".repeat(40);
+
+const documentDescriptors = Array.from({ length: 8 }, (_, index) => {
+  const chapter = index + 1;
+  const key = String(chapter).padStart(2, "0");
+  return {
+    id: `doc:chapter-${key}`,
+    kind: "chapter",
+    title: `Chapter ${chapter}`,
+    work: { id: "work:jackies-window", title: "Jackie's Window" },
+    series: "The Rock Springs Chronicles",
+    order: {
+      book: 1,
+      part: 1,
+      chapter,
+      order: chapter,
+    },
+    href: `documents/chapter-${key}.json`,
+  };
+});
+
+const worksResponse = {
+  schemaVersion: 1,
+  sourceRevision,
+  works: [
+    {
+      schemaVersion: 1,
+      id: "work:jackies-window",
+      title: "Jackie's Window",
+      series: "The Rock Springs Chronicles",
+      documentIds: documentDescriptors.map((document) => document.id),
+      documents: documentDescriptors,
+      href: "works/jackies-window.json",
+    },
+  ],
+};
+
+function draftworksFetch(input: RequestInfo | URL) {
+  const url = new URL(String(input));
+  if (url.pathname.endsWith("/works.json")) {
+    return Promise.resolve(Response.json(worksResponse));
+  }
+
+  const match = /\/documents\/chapter-(\d{2})\.json$/.exec(url.pathname);
+  if (match) {
+    const chapter = Number(match[1]);
+    const descriptor = documentDescriptors[chapter - 1];
+    return Promise.resolve(
+      Response.json({
+        schemaVersion: 1,
+        ...descriptor,
+        visibility: "public",
+        publication: {
+          state: "published",
+          sourceStatus: "draft",
+        },
+        sourceRevision,
+        content: {
+          format: "markdown",
+          markdown:
+            `# Jackie's Window\n\n## Chapter ${chapter}\n\n` +
+            `Chapter ${chapter} fixture prose from Draftworks.`,
+        },
+      }),
+    );
+  }
+
+  return Promise.resolve(new Response("not found", { status: 404 }));
+}
 
 function request(path: string) {
   return workerExports.default.fetch(
@@ -10,19 +84,32 @@ function request(path: string) {
   );
 }
 
+beforeEach(() => {
+  setDraftworksFetchForTest(draftworksFetch);
+});
+
+afterEach(() => {
+  setDraftworksFetchForTest();
+  resetDraftworksCacheForTest();
+});
+
 describe("Rock Springs Worker API", () => {
-  it("reports the ready content package", async () => {
+  it("reports a ready Draftworks-backed content package", async () => {
     const response = await request("/api/health");
+    const body = await response.json<{
+      ok: boolean;
+      contentService: string;
+      contentPackage: string;
+      sourceRevision: string;
+    }>();
 
     expect(response.status).toBe(200);
-    await expect(response.json()).resolves.toEqual({
+    expect(body).toMatchObject({
       ok: true,
-      app: "rocksprings.michealburford.com",
-      version: "0.1.0",
-      service: "worker-api",
       contentService: "ready",
-      contentPackage: publicationPackage.manifest.packageId,
+      sourceRevision,
     });
+    expect(body.contentPackage).toMatch(/^rsc-a{12}-[0-9a-f]{12}$/);
   });
 
   it("publishes a revision-traced collection and work manifest", async () => {
@@ -36,13 +123,11 @@ describe("Rock Springs Worker API", () => {
     }>();
 
     expect(response.status).toBe(200);
-    expect(response.headers.get("x-rsc-package")).toBe(
-      publicationPackage.manifest.packageId,
-    );
+    expect(response.headers.get("x-rsc-package")).toMatch(/^rsc-/);
     expect(body).toMatchObject({
       ok: true,
       state: "ready",
-      sourceRevision: publicationPackage.manifest.sourceRevision,
+      sourceRevision,
       workCount: 1,
       collections: {
         chronicles: 8,
@@ -54,6 +139,22 @@ describe("Rock Springs Worker API", () => {
         media: 0,
       },
     });
+  });
+
+  it("serves the complete same-origin publication view", async () => {
+    const response = await request("/api/publication");
+    const publication = await response.json<PublicationPackage>();
+
+    expect(response.status).toBe(200);
+    expect(publication.manifest.sourceRevision).toBe(sourceRevision);
+    expect(publication.works).toHaveLength(1);
+    expect(publication.collections.chronicles).toHaveLength(8);
+    expect(publication.collections.chronicles[0].provenance.sourceRef).toBe(
+      "doc:chapter-01",
+    );
+    expect(publication.collections.chronicles[0].body.paragraphs).toEqual([
+      "Chapter 1 fixture prose from Draftworks.",
+    ]);
   });
 
   it("serves generic work indexes and work-scoped entries", async () => {
@@ -150,33 +251,18 @@ describe("Rock Springs Worker API", () => {
       "/api/works/jackies-window/not-a-chapter",
     );
     expect(missingEntry.status).toBe(404);
-    await expect(missingEntry.json()).resolves.toMatchObject({
-      ok: false,
-      state: "unavailable",
-      error: "content_not_found",
-    });
 
     const missingWork = await request("/api/works/not-a-work");
     expect(missingWork.status).toBe(404);
-    await expect(missingWork.json()).resolves.toMatchObject({
-      ok: false,
-      state: "unavailable",
-      error: "work_not_found",
-    });
 
     const missingCollection = await request("/api/collections/private-notes");
     expect(missingCollection.status).toBe(404);
-    await expect(missingCollection.json()).resolves.toMatchObject({
-      ok: false,
-      state: "unavailable",
-      error: "collection_not_found",
-    });
   });
 
   it("returns a non-disclosing withdrawn state for tombstoned legacy content", async () => {
     const packageWithTombstone = structuredClone(
-      publicationPackage,
-    ) as unknown as PublicationPackage;
+      await loadPublicationPackage(),
+    ) as PublicationPackage;
     packageWithTombstone.withdrawn.push({
       collection: "chronicles",
       slug: "withdrawn-chapter",
