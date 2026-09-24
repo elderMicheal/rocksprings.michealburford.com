@@ -28,17 +28,21 @@ Exact baseline and rollback revisions are recorded in [docs/MIGRATION.md](docs/M
 
 The active migration begins by isolating Rock Springs-specific behavior before Draftworks is restructured.
 
-## Transitional writing boundary
+## Writing boundary
 
-The application currently still uses the generated publication package. During migration, direct access to that package is isolated behind:
+Rock Springs now consumes Draftworks at runtime.
 
-`src/adapters/writing-source.ts`
+The Cloudflare Worker reads the generic Draftworks API and converts it into the Rock Springs reader model in:
 
-That adapter is temporary. Its purpose is to give the Rock Springs application one replaceable writing-data boundary. The intended replacement is the Draftworks read-only API.
+`worker/api/draftworks.ts`
 
-Legacy source inspection/export is now boxed under `transitional/writing-adapter/`. The old script paths remain compatibility entry points only.
+The browser consumes that adapted model through the same-origin endpoint:
 
-New application code must not import the generated publication package directly or inspect the Writing repository directly.
+`/api/publication`
+
+`src/adapters/writing-source.ts` initializes the browser from that endpoint and may use a last-valid browser cache during a temporary outage.
+
+The old generated publication package and `transitional/writing-adapter/` remain only as rollback/verification material until this migration stage is fully verified. Active application code must not read manuscripts or import the generated package.
 
 ## Rock Springs Toolchain
 
