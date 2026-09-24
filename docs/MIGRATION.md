@@ -50,7 +50,7 @@ Outside this repository:
 - Writing Monitor web/desktop consumers use Draftworks API v1;
 - Rock Springs Worker runtime adapter consumes Draftworks API v1;
 - Rock Springs browser consumes the same-origin adapted publication endpoint;
-- Rock Springs Analysis migration to Draftworks API remains to be completed;
+- Rock Springs Analysis reads permitted writing through `toolchain/analysis/draftworks-source.mjs` and Draftworks API v1;
 - legacy generated-package machinery remains only until runtime verification is complete.
 
 ### Phase 5 — Cleanup
