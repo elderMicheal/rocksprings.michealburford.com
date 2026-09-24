@@ -21,13 +21,13 @@ Rock Springs extraction begins on:
 
 ## Migration order
 
-### Phase 1 — Box Rock Springs
+### Phase 1 — Box Rock Springs — complete
 
-- replace contradictory governing documentation;
-- centralize current writing-data access behind one transitional adapter;
-- box legacy Writing-repository inspection/export under `transitional/writing-adapter/`;
-- identify Analysis, Reconstruction, and Website responsibilities;
-- stop adding new direct Writing/package coupling.
+- replaced contradictory governing documentation;
+- centralized writing access behind an adapter;
+- boxed legacy Writing-repository inspection/export under `transitional/writing-adapter/`;
+- identified Analysis, Reconstruction, and Website responsibilities;
+- stopped new direct Writing/package coupling.
 
 ### Phase 2 — Separate the Rock Springs Toolchain
 
@@ -45,11 +45,13 @@ Outside this repository:
 - define Editorial Tools mutation boundary;
 - build read-only versioned API.
 
-### Phase 4 — Migrate consumers
+### Phase 4 — Migrate consumers — in progress
 
-- point Rock Springs Analysis at Draftworks API;
-- point Writing Monitor web/desktop consumer at Draftworks API;
-- reduce Rock Springs website to presentation consumption.
+- Writing Monitor web/desktop consumers use Draftworks API v1;
+- Rock Springs Worker runtime adapter consumes Draftworks API v1;
+- Rock Springs browser consumes the same-origin adapted publication endpoint;
+- Rock Springs Analysis migration to Draftworks API remains to be completed;
+- legacy generated-package machinery remains only until runtime verification is complete.
 
 ### Phase 5 — Cleanup
 
