@@ -1,8 +1,7 @@
-import { writingSnapshot } from "../../src/adapters/writing-source";
+import { loadPublicationPackage } from "./draftworks";
 
-const publicationPackage = writingSnapshot;
-
-export function manifestResponse() {
+export async function manifestResponse() {
+  const publicationPackage = await loadPublicationPackage();
   return Response.json(
     {
       ok: true,
