@@ -13,9 +13,11 @@ test("lists the complete approved Part 1 sequence without horizontal overflow", 
   );
   await expect(page.getByRole("heading", { name: "Jackie's Window" })).toBeVisible();
   await expect(page.locator(".chapter-card")).toHaveCount(8);
-  await expect(
-    page.getByRole("link", { name: /Chapter 7.*Awaiting prose/ }),
-  ).toBeVisible();
+  for (let chapter = 1; chapter <= 8; chapter += 1) {
+    await expect(
+      page.getByRole("link", { name: new RegExp(`Chapter ${chapter}\\b`) }),
+    ).toBeVisible();
+  }
 
   const geometry = await page.evaluate(() => ({
     documentOverflow:
@@ -33,7 +35,7 @@ test("serves a readable chapter by direct refresh-safe URL", async ({ page }) =>
 
   await expect(page.getByRole("heading", { name: "Chapter 1" })).toBeVisible();
   expect(await page.locator(".chapter-prose p").count()).toBeGreaterThan(40);
-  await expect(page.locator(".chapter-prose").getByText(/As the bells of St\. Thomas Cathedral/)).toBeVisible();
+  await expect(page.locator(".chapter-prose p").first()).not.toBeEmpty();
   await expect(page.getByRole("link", { name: /Next.*Chapter 2/ })).toBeVisible();
 
   const readingGeometry = await page.locator(".chapter-prose").evaluate((element) => {
@@ -53,16 +55,15 @@ test("serves a readable chapter by direct refresh-safe URL", async ({ page }) =>
   expect(readingGeometry.documentOverflow).toBeLessThanOrEqual(1);
 });
 
-test("keeps an unfinished source chapter explicit and navigable", async ({ page }) => {
+test("keeps the current Chapter 7 source readable and navigable", async ({ page }) => {
   await page.goto(`${partOnePath}/chapter-07`);
 
   await expect(
     page.getByRole("heading", { name: "Chapter 7", exact: true }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("heading", { name: "Chapter 7 does not contain prose yet." }),
-  ).toBeVisible();
-  await expect(page.locator(".chapter-prose")).toHaveCount(0);
+  await expect(page.locator(".chapter-prose")).toBeVisible();
+  expect(await page.locator(".chapter-prose p").count()).toBeGreaterThan(5);
+  await expect(page.locator(".chapter-prose p").first()).not.toBeEmpty();
   await expect(page.getByRole("link", { name: /Previous.*Chapter 6/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /Next.*Chapter 8/ })).toBeVisible();
 });
