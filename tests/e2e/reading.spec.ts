@@ -13,10 +13,11 @@ test("lists the complete approved Part 1 sequence without horizontal overflow", 
   );
   await expect(page.getByRole("heading", { name: "Jackie's Window" })).toBeVisible();
   await expect(page.locator(".chapter-card")).toHaveCount(8);
+  const chapterCards = page.locator(".chapter-card");
   for (let chapter = 1; chapter <= 8; chapter += 1) {
     await expect(
-      page.getByRole("link", { name: new RegExp(`Chapter ${chapter}\\b`) }),
-    ).toBeVisible();
+      chapterCards.filter({ hasText: new RegExp(`Chapter ${chapter}\\b`) }),
+    ).toHaveCount(1);
   }
 
   const geometry = await page.evaluate(() => ({
