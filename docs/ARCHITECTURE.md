@@ -46,17 +46,17 @@ The website should not own:
 - spatial interpretation;
 - GLB generation.
 
-## Transitional state
+## Draftworks runtime consumption
 
-Draftworks API v1 does not yet exist.
+Draftworks API v1 is the active writing-data boundary.
 
-For compatibility, Rock Springs currently consumes its existing generated publication package through one replaceable adapter:
+The Worker fetches Draftworks server-side in `worker/api/draftworks.ts`, converts generic Draftworks resources into the Rock Springs reader model, and exposes that adapted model at `/api/publication`.
 
-`src/adapters/writing-source.ts`
+The browser initializes `src/adapters/writing-source.ts` from the same-origin publication endpoint before loading the React application.
 
-No other application module should bind directly to that generated package.
+The Worker keeps a short in-memory cache and may serve its last valid package during a temporary Draftworks failure. The browser may similarly use its last valid public package as a resilience cache.
 
-Once Draftworks API v1 exists, the adapter changes implementation while the Rock Springs consumer-facing code remains stable.
+The legacy generated package is no longer runtime authority.
 
 ## Toolchain boundary
 

@@ -75,14 +75,20 @@ function validateChronicle(
     }
     if (
       typeof value.provenance.sourceRef !== "string" ||
-      !value.provenance.sourceRef.startsWith("Rock Springs Chronicles/")
+      !(
+        value.provenance.sourceRef.startsWith("Rock Springs Chronicles/") ||
+        value.provenance.sourceRef.startsWith("doc:")
+      )
     ) {
       issues.push(
-        label + ".provenance.sourceRef must remain inside the RSC allowlist",
+        label + ".provenance.sourceRef must be a legacy RSC source path or Draftworks document ID",
       );
     }
-    if (typeof value.provenance.approvalId !== "string") {
-      issues.push(label + ".provenance.approvalId is required");
+    if (
+      value.provenance.approvalId !== undefined &&
+      typeof value.provenance.approvalId !== "string"
+    ) {
+      issues.push(label + ".provenance.approvalId must be a string when present");
     }
   }
 

@@ -1,5 +1,6 @@
 import { healthResponse } from "./api/health";
 import { manifestResponse } from "./api/manifest";
+import { publicationResponse } from "./api/draftworks";
 import {
   collectionResponse,
   contentResponse,
@@ -24,25 +25,29 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === "/api/health") {
-      return healthResponse();
+      return await healthResponse();
     }
 
     if (url.pathname === "/api/manifest") {
-      return manifestResponse();
+      return await manifestResponse();
+    }
+
+    if (url.pathname === "/api/publication") {
+      return await publicationResponse();
     }
 
     const segments = url.pathname.split("/").filter(Boolean);
 
     if (segments[0] === "api" && segments[1] === "works" && segments.length === 2) {
-      return worksResponse();
+      return await worksResponse();
     }
 
     if (segments[0] === "api" && segments[1] === "works" && segments.length === 3) {
-      return workResponse(decodeURIComponent(segments[2]));
+      return await workResponse(decodeURIComponent(segments[2]));
     }
 
     if (segments[0] === "api" && segments[1] === "works" && segments.length === 4) {
-      return workEntryResponse(
+      return await workEntryResponse(
         decodeURIComponent(segments[2]),
         decodeURIComponent(segments[3]),
       );
@@ -53,7 +58,7 @@ export default {
       segments[1] === "collections" &&
       segments.length === 3
     ) {
-      return collectionResponse(decodeURIComponent(segments[2]));
+      return await collectionResponse(decodeURIComponent(segments[2]));
     }
 
     if (
@@ -61,7 +66,7 @@ export default {
       segments[1] === "content" &&
       segments.length === 4
     ) {
-      return contentResponse(
+      return await contentResponse(
         decodeURIComponent(segments[2]),
         decodeURIComponent(segments[3]),
       );
@@ -72,7 +77,7 @@ export default {
       segments[1] === "relationships" &&
       segments.length === 4
     ) {
-      return relationshipsResponse(
+      return await relationshipsResponse(
         decodeURIComponent(segments[2]),
         decodeURIComponent(segments[3]),
       );

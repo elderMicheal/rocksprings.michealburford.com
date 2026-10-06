@@ -26,7 +26,7 @@ export type PublicationState =
 export interface Provenance {
   sourceRef: string;
   sourceRevision: string;
-  approvalId: string;
+  approvalId?: string;
 }
 
 export interface PublishedWorkEntry {

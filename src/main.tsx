@@ -5,10 +5,29 @@ import "./styles/global.css";
 import "./styles/app.css";
 import "./styles/front-page.css";
 import "./styles/town-scene-page.css";
-import { App } from "./App";
+import { initializeWritingSnapshot } from "./adapters/writing-source";
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement,
 );
+
+async function bootstrap() {
+  try {
+    await initializeWritingSnapshot();
+    const { App } = await import("./App");
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+    );
+  } catch (error) {
+    console.error(error);
+    root.render(
+      <main className="reader-loading" role="alert">
+        The written record is temporarily unavailable.
+      </main>,
+    );
+  }
+}
+
+void bootstrap();

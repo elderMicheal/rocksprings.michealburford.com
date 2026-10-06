@@ -1,11 +1,11 @@
-import { writingSnapshot } from "../adapters/writing-source";
+import { requireWritingSnapshot } from "../adapters/writing-source";
 import type {
   ChronicleEntry,
   PublishedWork,
   PublishedWorkSection,
 } from "./types";
 
-export const publicationPackage = writingSnapshot;
+export const publicationPackage = requireWritingSnapshot();
 export const publishedChronicles = publicationPackage.collections.chronicles;
 export const publishedWorks = [...publicationPackage.works].sort(
   (left, right) => left.order - right.order,

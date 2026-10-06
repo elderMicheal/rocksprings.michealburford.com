@@ -1,4 +1,4 @@
-import { writingSnapshot } from "../../src/adapters/writing-source";
+import { loadPublicationPackage } from "./draftworks";
 import {
   collectionNames,
   type CollectionName,
@@ -6,10 +6,8 @@ import {
 } from "../../src/content/types";
 import { publicChronicle } from "../../src/content/schema";
 
-const publicationPackage = writingSnapshot;
 const cacheHeaders = {
   "cache-control": "public, max-age=300, stale-while-revalidate=3600",
-  "x-rsc-package": publicationPackage.manifest.packageId,
 };
 
 function json(body: unknown, status = 200) {
@@ -256,26 +254,26 @@ export function relationshipsResponseFor(
   });
 }
 
-export function worksResponse() {
-  return worksResponseFor(publicationPackage);
+export async function worksResponse() {
+  return worksResponseFor(await loadPublicationPackage());
 }
 
-export function workResponse(workSlug: string) {
-  return workResponseFor(publicationPackage, workSlug);
+export async function workResponse(workSlug: string) {
+  return workResponseFor(await loadPublicationPackage(), workSlug);
 }
 
-export function workEntryResponse(workSlug: string, entrySlug: string) {
-  return workEntryResponseFor(publicationPackage, workSlug, entrySlug);
+export async function workEntryResponse(workSlug: string, entrySlug: string) {
+  return workEntryResponseFor(await loadPublicationPackage(), workSlug, entrySlug);
 }
 
-export function collectionResponse(collection: string) {
-  return collectionResponseFor(publicationPackage, collection);
+export async function collectionResponse(collection: string) {
+  return collectionResponseFor(await loadPublicationPackage(), collection);
 }
 
-export function contentResponse(collection: string, slug: string) {
-  return contentResponseFor(publicationPackage, collection, slug);
+export async function contentResponse(collection: string, slug: string) {
+  return contentResponseFor(await loadPublicationPackage(), collection, slug);
 }
 
-export function relationshipsResponse(collection: string, slug: string) {
-  return relationshipsResponseFor(publicationPackage, collection, slug);
+export async function relationshipsResponse(collection: string, slug: string) {
+  return relationshipsResponseFor(await loadPublicationPackage(), collection, slug);
 }
