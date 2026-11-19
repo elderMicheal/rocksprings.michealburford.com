@@ -1,5 +1,11 @@
 import { expect, test } from "@playwright/test";
 
+import publicationFixture from "../../src/content/generated/publication-package.json" with { type: "json" };
+
+test.beforeEach(async ({ page }) => {
+  await page.route("**/api/publication", route => route.fulfill({ json: publicationFixture }));
+});
+
 const partOnePath = "/read/jackies-window/part-1";
 
 test("lists the complete approved Part 1 sequence without horizontal overflow", async ({
@@ -58,15 +64,14 @@ test("serves a readable chapter by direct refresh-safe URL", async ({ page }) =>
   expect(readingGeometry.documentOverflow).toBeLessThanOrEqual(1);
 });
 
-test("keeps the current Chapter 7 source readable and navigable", async ({ page }) => {
+test("keeps an empty approved chapter identifiable and navigable", async ({ page }) => {
   await page.goto(`${partOnePath}/chapter-07`);
 
   await expect(
     page.getByRole("heading", { name: "Chapter 7", exact: true }),
   ).toBeVisible();
-  await expect(page.locator(".chapter-prose")).toBeVisible();
-  expect(await page.locator(".chapter-prose p").count()).toBeGreaterThan(5);
-  await expect(page.locator(".chapter-prose p").first()).not.toBeEmpty();
+  await expect(page.locator(".chapter-empty-state")).toBeVisible();
+  await expect(page.locator(".chapter-prose")).toHaveCount(0);
   await expect(page.getByRole("link", { name: /Previous.*Chapter 6/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /Next.*Chapter 8/ })).toBeVisible();
 });
@@ -75,7 +80,7 @@ test("provides visible keyboard focus without unsupported collection navigation"
   page,
 }) => {
   await page.goto(partOnePath);
-  await page.locator(".chronicle-seal").focus();
+  await page.locator(".series-brand").focus();
 
   const focus = await page.evaluate(() => {
     const active = document.activeElement as HTMLElement;
@@ -93,9 +98,9 @@ test("provides visible keyboard focus without unsupported collection navigation"
   const primaryNavigation = page.getByRole("navigation", {
     name: "Chronicle sections",
   });
-  await expect(primaryNavigation.getByRole("link", { name: "Front Page" })).toBeVisible();
+  await expect(primaryNavigation.getByRole("link", { name: "Home" })).toBeVisible();
   await expect(
-    primaryNavigation.getByRole("link", { name: "Part One", exact: true }),
+    primaryNavigation.getByRole("link", { name: "The books", exact: true }),
   ).toBeVisible();
   await expect(primaryNavigation.getByRole("link", { name: "People" })).toHaveCount(0);
   await expect(primaryNavigation.getByRole("link", { name: "Places" })).toHaveCount(0);
