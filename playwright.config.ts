@@ -20,6 +20,7 @@ export default defineConfig({
   },
   use: {
     baseURL: devServerUrl,
+    channel: process.env.PLAYWRIGHT_CHANNEL,
     colorScheme: "light",
     locale: "en-US",
     screenshot: "only-on-failure",

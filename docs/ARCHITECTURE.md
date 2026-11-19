@@ -79,3 +79,7 @@ Current presentation seams:
 - `src/adapters/rock-springs-toolchain.ts` — website-facing boundary for map/scene outputs.
 
 `npm run boundary:check` enforces these seams and prevents presentation/Worker code from reaching around them.
+
+## Public presentation
+
+The author site and Rock Springs share a navy, cool-white, blue, and restrained amber visual system. The Rock Springs front page presents the series, approved book library, and existing source-derived town exhibit. Reader routes and the publication API remain unchanged. When no works are approved in the API, the site displays a publication-pending state and links to public writing progress.

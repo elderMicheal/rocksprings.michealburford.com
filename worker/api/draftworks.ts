@@ -100,7 +100,8 @@ function entryKind(value: string): EntryKind {
 function workKind(documents: DraftworksDocumentSummary[]): WorkKind {
   if (
     documents.length > 0 &&
-    documents.every((document) => document.kind === "chapter")
+    documents.some((document) => document.kind === "chapter") &&
+    documents.every((document) => ["chapter", "interlude", "prologue"].includes(document.kind))
   ) {
     return "novel";
   }
